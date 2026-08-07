@@ -1,0 +1,24 @@
+[project]
+name = "copilotkit-claude-sdk-python-testsuite-backend"
+version = "0.1.0"
+description = "Claude Agent SDK agent server for the CopilotKit + Claude Agent SDK (Python) test suite"
+requires-python = ">=3.11"
+
+# The Quickstart's install line, verbatim:
+#   uv add claude-agent-sdk ag-ui-claude-sdk ag-ui-protocol anthropic fastapi uvicorn python-dotenv
+dependencies = [
+    "claude-agent-sdk>=0.2.132",
+    "ag-ui-claude-sdk>=0.1.5",
+    "ag-ui-protocol>=0.1.19",
+    "anthropic>=0.68.0",
+    "fastapi>=0.115.2",
+    "uvicorn>=0.35.0",
+    "python-dotenv>=1.0.1",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agents"]
