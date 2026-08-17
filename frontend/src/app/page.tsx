@@ -1,7 +1,12 @@
 import Link from "next/link";
 
 import { Callout, KeyValue, Panel } from "@/components/ui";
-import { ALL_ROUTES, DOCS_ROOT, DOC_SYNC_DATE } from "@/lib/nav-config";
+import { ALL_ROUTES, DOCS_ROOT } from "@/lib/nav-config";
+import { DocSyncedAt } from "@/components/doc-synced-at";
+import { DocDriftPanel } from "@/components/doc-drift-panel";
+
+/** Dynamic: the doc-sync readouts below read the snapshot off disk. */
+export const dynamic = "force-dynamic";
 
 const COUNT = (status: string) =>
   ALL_ROUTES.filter((r) => r.status === status).length;
@@ -30,6 +35,9 @@ export default function Page() {
         </p>
       </header>
 
+
+      <DocDriftPanel />
+
       <Panel title="What this is">
         <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           Twenty-six doc pages, twenty-five agents, one Python process. Each
@@ -51,7 +59,7 @@ export default function Page() {
                   {DOCS_ROOT}
                 </a>,
               ],
-              ["Last synced", DOC_SYNC_DATE],
+              ["Docs synced", <DocSyncedAt key="docs-synced" withPages />],
               ["Backend", "Python · FastAPI · ClaudeAgentAdapter (ag-ui-claude-sdk)"],
               [
                 "Route status",
