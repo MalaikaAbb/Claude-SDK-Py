@@ -1,17 +1,3 @@
-"""Shared State — the backend half, as published.
-
-Source: https://docs.copilotkit.ai/claude-sdk-python/shared-state
-        (block titled `shared_state_read_write_agent.py`)
-
-Copied verbatim. Nothing imports it — see this package's docstring.
-
-`SYSTEM_PROMPT` below is reproduced in `agents/prompts.py`, which the live
-`shared-state-read-write` adapter does use, minus its `set_notes` paragraph.
-`set_notes` is a backend tool with no registration path, so instructing the
-model to call it would only produce a hallucinated call. The adapter ships its
-own `ag_ui_update_state` tool whenever `input_data.state` is present, and that
-is what actually writes notes back on the live route.
-"""
 
 from textwrap import dedent
 from typing import Any

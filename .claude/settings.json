@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(.venv/bin/python -c ' *)",
+      "Bash(PYTHONPATH=src .venv/bin/python -c ' *)",
+      "Bash(PYTHONPATH=src .venv/bin/python /tmp/claude-1000/-home-malaika-fiqros-copilotkit-optimizations-claude-sdk-python/874296d2-e90b-4805-acc9-6af1d2221d6b/scratchpad/test_bridge.py)",
+      "Bash(npx tsc *)",
+      "Bash(npx next *)",
+      "Bash(git checkout *)",
+      "Bash(.venv_x)",
+      "Bash(backend/.venv/bin/python -)"
+    ]
+  }
+}

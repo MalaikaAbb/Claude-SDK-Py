@@ -1,15 +1,4 @@
-"""Tool Call Rendering — the backend half, as published.
 
-Source: https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-rendering
-        (block titled `src/app/demos/tool-rendering/weather_tool.snippet.py`)
-
-Copied verbatim. Nothing imports it — see this package's docstring.
-
-The page's frontend registers renderers for two tools, `get_weather` and
-`search_flights`, but only publishes the backend definition for the first.
-`search_flights`, `get_stock_price` and `roll_dice` are named by the page and
-never defined anywhere, so they are not reproduced here.
-"""
 
 from typing import Any
 
