@@ -2,6 +2,7 @@
 
 > Run a Claude Agent SDK Python agent behind CopilotKit.
 
+
 This quickstart gives you two working paths:
 
 - **Start from scratch** to scaffold the full Claude Agent SDK Python showcase.
@@ -153,7 +154,7 @@ Before you begin, you'll need the following:
           from ag_ui.encoder import EventEncoder
           from ag_ui_claude_sdk import ClaudeAgentAdapter
           from dotenv import load_dotenv
-          from fastapi import FastAPI, Request
+          from fastapi import FastAPI
           from fastapi.responses import StreamingResponse
 
           load_dotenv()
@@ -181,18 +182,16 @@ Before you begin, you'll need the following:
               return {"status": "ok"}
 
           @app.post("/")
-          async def run_agent(request: Request) -> StreamingResponse:
+          async def run_agent(input_data: RunAgentInput) -> StreamingResponse:
               encoder = EventEncoder()
 
               async def event_stream() -> AsyncIterator[str]:
                   try:
-                      input_data = RunAgentInput(**(await request.json()))
                       async for event in adapter.run(input_data):
                           yield encoder.encode(event)
                   except Exception as error:
-                      # Every failure — malformed request body or streaming —
-                      # becomes a graceful RUN_ERROR, and the full detail is
-                      # logged server-side rather than only sent to the client.
+                      # Agent and streaming failures become a graceful RUN_ERROR,
+                      # with the full detail logged server-side.
                       logger.exception("Claude agent run failed")
                       yield encoder.encode(
                           RunErrorEvent(
@@ -337,6 +336,20 @@ Before you begin, you'll need the following:
       </Accordion>
     </Accordions>
   </Step>
+
+    <Step>
+        ### Open Inspector and confirm setup
+
+On localhost, click the Inspector button in the corner of the app.
+
+1. Open **Agents**, then **Agent**. Your agent is listed.
+2. Send a chat message. Open **Agents**, then **AG-UI Events**. Events are moving.
+3. Open **Threads**. The list is unlocked (Intelligence is on), or locked with Enable Intelligence (Intelligence is off).
+
+More detail: [Inspector](/claude-sdk-python/inspector).
+
+    </Step>
+
 </Steps>
 
 ## Backend tools and state
