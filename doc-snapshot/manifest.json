@@ -1,20 +1,20 @@
 {
   "schema": 1,
   "docsRoot": "https://docs.copilotkit.ai/claude-sdk-python",
-  "syncedAt": "2026-08-21T15:16:06.288Z",
+  "syncedAt": "2026-08-24T10:56:29.033Z",
   "pages": {
     "/claude-sdk-python": {
       "file": "claude-sdk-python.md",
-      "sha256": "0d7325ab7b080954ca490d0b137fc1485ff203709aa1da361355099f50293642",
-      "bytes": 13646,
-      "lines": 444,
+      "sha256": "58c30174438c082491250b963bdf27dd9ee435be54214543e80a4868f20a8303",
+      "bytes": 13498,
+      "lines": 441,
       "routes": [
         "/",
         "/doc-sync"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:11 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:29 GMT"
     },
     "/claude-sdk-python/agent-config": {
       "file": "claude-sdk-python__agent-config.md",
@@ -26,7 +26,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:11 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:29 GMT"
     },
     "/claude-sdk-python/custom-look-and-feel/css": {
       "file": "claude-sdk-python__custom-look-and-feel__css.md",
@@ -38,7 +38,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:11 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:29 GMT"
     },
     "/claude-sdk-python/custom-look-and-feel/headless-ui": {
       "file": "claude-sdk-python__custom-look-and-feel__headless-ui.md",
@@ -50,7 +50,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:11 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:29 GMT"
     },
     "/claude-sdk-python/custom-look-and-feel/reasoning-messages": {
       "file": "claude-sdk-python__custom-look-and-feel__reasoning-messages.md",
@@ -62,7 +62,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:11 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:29 GMT"
     },
     "/claude-sdk-python/custom-look-and-feel/slots": {
       "file": "claude-sdk-python__custom-look-and-feel__slots.md",
@@ -74,7 +74,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:11 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:29 GMT"
     },
     "/claude-sdk-python/frontend-tools": {
       "file": "claude-sdk-python__frontend-tools.md",
@@ -86,7 +86,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/generative-ui/a2ui/dynamic-schema": {
       "file": "claude-sdk-python__generative-ui__a2ui__dynamic-schema.md",
@@ -98,7 +98,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:11 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/generative-ui/a2ui/fixed-schema": {
       "file": "claude-sdk-python__generative-ui__a2ui__fixed-schema.md",
@@ -110,7 +110,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:11 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/generative-ui/reasoning": {
       "file": "claude-sdk-python__generative-ui__reasoning.md",
@@ -122,7 +122,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:11 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/generative-ui/state-rendering": {
       "file": "claude-sdk-python__generative-ui__state-rendering.md",
@@ -134,7 +134,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:11 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/generative-ui/tool-based": {
       "file": "claude-sdk-python__generative-ui__tool-based.md",
@@ -146,7 +146,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:11 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/generative-ui/tool-rendering": {
       "file": "claude-sdk-python__generative-ui__tool-rendering.md",
@@ -158,7 +158,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/human-in-the-loop": {
       "file": "claude-sdk-python__human-in-the-loop.md",
@@ -170,7 +170,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/multi-agent/subagents": {
       "file": "claude-sdk-python__multi-agent__subagents.md",
@@ -182,7 +182,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/multimodal-attachments": {
       "file": "claude-sdk-python__multimodal-attachments.md",
@@ -194,7 +194,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/prebuilt-components/chat": {
       "file": "claude-sdk-python__prebuilt-components__chat.md",
@@ -206,7 +206,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/prebuilt-components/chat-controls": {
       "file": "claude-sdk-python__prebuilt-components__chat-controls.md",
@@ -218,7 +218,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/prebuilt-components/popup": {
       "file": "claude-sdk-python__prebuilt-components__popup.md",
@@ -230,7 +230,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/prebuilt-components/sidebar": {
       "file": "claude-sdk-python__prebuilt-components__sidebar.md",
@@ -242,7 +242,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/programmatic-control": {
       "file": "claude-sdk-python__programmatic-control.md",
@@ -254,19 +254,19 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/quickstart": {
       "file": "claude-sdk-python__quickstart.md",
-      "sha256": "0d7325ab7b080954ca490d0b137fc1485ff203709aa1da361355099f50293642",
-      "bytes": 13646,
-      "lines": 444,
+      "sha256": "58c30174438c082491250b963bdf27dd9ee435be54214543e80a4868f20a8303",
+      "bytes": 13498,
+      "lines": 441,
       "routes": [
         "/quickstart"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/shared-state": {
       "file": "claude-sdk-python__shared-state.md",
@@ -278,7 +278,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/shared-state/agent-readonly": {
       "file": "claude-sdk-python__shared-state__agent-readonly.md",
@@ -290,7 +290,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:30 GMT"
     },
     "/claude-sdk-python/shared-state/rendering-in-app": {
       "file": "claude-sdk-python__shared-state__rendering-in-app.md",
@@ -302,7 +302,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:31 GMT"
     },
     "/claude-sdk-python/shared-state/streaming": {
       "file": "claude-sdk-python__shared-state__streaming.md",
@@ -314,7 +314,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:31 GMT"
     },
     "/claude-sdk-python/voice": {
       "file": "claude-sdk-python__voice.md",
@@ -326,11 +326,11 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Fri, 21 Aug 2026 15:16:12 GMT"
+      "date": "Mon, 24 Aug 2026 10:56:31 GMT"
     }
   },
   "sitemap": {
-    "fetchedAt": "2026-08-21T15:16:06.288Z",
+    "fetchedAt": "2026-08-24T10:56:29.033Z",
     "urlsUnderRoot": 128,
     "knownUnmapped": [
       "https://docs.copilotkit.ai/claude-sdk-python/agent-spec",
