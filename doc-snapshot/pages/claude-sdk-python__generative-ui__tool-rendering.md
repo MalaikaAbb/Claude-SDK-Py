@@ -3,6 +3,7 @@
 > Render your agent's tool calls with custom UI components.
 
 
+
 <!-- interactive demo: tool-rendering -->
 
 
@@ -16,7 +17,11 @@ result). This is the **Generative UI** variant CopilotKit calls **tool
 rendering**.
 
 <Callout type="info">
-  **Free course:** See this pattern built end-to-end in [Build Interactive Agents with Generative UI](https://www.deeplearning.ai/short-courses/build-interactive-agents-with-generative-ui/) — a free DeepLearning.AI short course taught by CopilotKit's CEO covering the full Generative UI spectrum (Controlled, Declarative, and Open-Ended).
+  **Free course:** See this pattern built end-to-end in [Build Interactive
+  Agents with Generative
+  UI](https://www.deeplearning.ai/short-courses/build-interactive-agents-with-generative-ui/)
+  — a free DeepLearning.AI short course taught by CopilotKit's CEO covering the
+  full Generative UI spectrum (Controlled, Declarative, and Open-Ended).
 </Callout>
 
 ## When should I use this?
@@ -95,112 +100,122 @@ The most expressive path is one renderer per tool name. The primary
 receives the tool's parsed arguments, a live `status`, and (once the agent
 returns) the `result`:
 
-```typescript
-// src/app/demos/tool-rendering/page.tsx
-import React from "react";
-import {
-  CopilotKit,
-  CopilotChat,
-  useRenderTool,
-  useDefaultRenderTool,
-} from "@copilotkit/react-core/v2";
-import { z } from "zod";
-import { WeatherCard } from "./weather-card";
-import { FlightListCard } from "./flight-list-card";
-import type { Flight } from "./flight-list-card";
-import { StockCard } from "./stock-card";
-import { D20Card } from "./d20-card";
-import { CustomCatchallRenderer } from "./custom-catchall-renderer";
-import type { CatchallToolStatus } from "./custom-catchall-renderer";
-import { parseJsonResult } from "../_shared/parse-json-result";
-import { useSuggestions } from "./suggestions";
+The frontend pattern is the same for every backend. This shared, docs-only
+example includes every component, type, and helper that its renderers use:
 
-interface WeatherResult {
-  city?: string;
+```tsx title="components/weather-card.tsx"
+export interface WeatherCardProps {
+  loading: boolean;
+  location: string;
   temperature?: number;
   humidity?: number;
-  wind_speed?: number;
+  windSpeed?: number;
   conditions?: string;
 }
 
-interface FlightSearchResult {
-  origin?: string;
-  destination?: string;
-  flights?: Flight[];
-}
-
-interface StockResult {
-  ticker?: string;
-  price_usd?: number;
-  change_pct?: number;
-}
-
-interface D20Result {
-  value?: number;
-  result?: number;
-  sides?: number;
-}
-
-export default function ToolRenderingDemo() {
+export function WeatherCard({
+  loading,
+  location,
+  temperature,
+  humidity,
+  windSpeed,
+  conditions,
+}: WeatherCardProps) {
   return (
-    <CopilotKit runtimeUrl="/api/copilotkit" agent="tool-rendering">
-      <div className="flex justify-center items-center h-screen w-full">
-        <div className="h-full w-full max-w-4xl">
-          <Chat />
-        </div>
-      </div>
-    </CopilotKit>
+    <article className="rounded-xl border p-4">
+      <h3 className="font-semibold">{location || "Weather"}</h3>
+      {loading ? (
+        <p>Fetching weather...</p>
+      ) : (
+        <dl>
+          <div>
+            <dt>Conditions</dt>
+            <dd>{conditions ?? "--"}</dd>
+          </div>
+          <div>
+            <dt>Temperature</dt>
+            <dd>{temperature ?? "--"}&deg;F</dd>
+          </div>
+          <div>
+            <dt>Humidity</dt>
+            <dd>{humidity ?? "--"}%</dd>
+          </div>
+          <div>
+            <dt>Wind</dt>
+            <dd>{windSpeed ?? "--"} mph</dd>
+          </div>
+        </dl>
+      )}
+    </article>
   );
 }
-
-function Chat() {
-  // Per-tool renderer #1: get_weather → branded WeatherCard.
-  useRenderTool(
-    {
-      name: "get_weather",
-      parameters: z.object({
-        location: z.string(),
-      }),
-      render: ({ parameters, result, status }) => {
-        const loading = status !== "complete";
-        const parsed = parseJsonResult<WeatherResult>(result);
-        return (
-          <WeatherCard
-            loading={loading}
-            location={parameters?.location ?? parsed.city ?? ""}
-            temperature={parsed.temperature}
-            humidity={parsed.humidity}
-            windSpeed={parsed.wind_speed}
-            conditions={parsed.conditions}
-          />
-        );
-      },
-    },
-    [],
-  );
 ```
 
-The flight renderer follows the same pattern with a different component and schema:
+```tsx title="components/flight-list-card.tsx"
+export interface Flight {
+  airline?: string;
+  flight?: string;
+  depart?: string;
+  arrive?: string;
+  price_usd?: number;
+}
 
-```typescript
-// src/app/demos/tool-rendering/page.tsx
-import React from "react";
-import {
-  CopilotKit,
-  CopilotChat,
-  useRenderTool,
-  useDefaultRenderTool,
-} from "@copilotkit/react-core/v2";
+export interface FlightListCardProps {
+  loading: boolean;
+  origin: string;
+  destination: string;
+  flights: Flight[];
+}
+
+export function FlightListCard({
+  loading,
+  origin,
+  destination,
+  flights,
+}: FlightListCardProps) {
+  return (
+    <article className="rounded-xl border p-4">
+      <h3 className="font-semibold">
+        {origin || "?"} → {destination || "?"}
+      </h3>
+      {loading ? (
+        <p>Searching...</p>
+      ) : (
+        <ul>
+          {flights.map((flight, index) => (
+            <li key={`${flight.flight ?? "flight"}-${index}`}>
+              {flight.airline ?? "--"} {flight.flight ?? ""}:{" "}
+              {flight.depart ?? "?"} → {flight.arrive ?? "?"}
+              {flight.price_usd !== undefined ? ` ($${flight.price_usd})` : ""}
+            </li>
+          ))}
+        </ul>
+      )}
+    </article>
+  );
+}
+```
+
+```ts title="lib/parse-json-result.ts"
+export function parseJsonResult<T>(result: unknown): T {
+  if (!result) return {} as T;
+
+  try {
+    return (typeof result === "string" ? JSON.parse(result) : result) as T;
+  } catch {
+    return {} as T;
+  }
+}
+```
+
+```tsx title="app/tool-renderers.tsx"
+"use client";
+
+import { useRenderTool } from "@copilotkit/react-core/v2";
 import { z } from "zod";
-import { WeatherCard } from "./weather-card";
-import { FlightListCard } from "./flight-list-card";
-import type { Flight } from "./flight-list-card";
-import { StockCard } from "./stock-card";
-import { D20Card } from "./d20-card";
-import { CustomCatchallRenderer } from "./custom-catchall-renderer";
-import type { CatchallToolStatus } from "./custom-catchall-renderer";
-import { parseJsonResult } from "../_shared/parse-json-result";
-import { useSuggestions } from "./suggestions";
+import { WeatherCard } from "../components/weather-card";
+import { FlightListCard, type Flight } from "../components/flight-list-card";
+import { parseJsonResult } from "../lib/parse-json-result";
 
 interface WeatherResult {
   city?: string;
@@ -216,44 +231,16 @@ interface FlightSearchResult {
   flights?: Flight[];
 }
 
-interface StockResult {
-  ticker?: string;
-  price_usd?: number;
-  change_pct?: number;
-}
-
-interface D20Result {
-  value?: number;
-  result?: number;
-  sides?: number;
-}
-
-export default function ToolRenderingDemo() {
-  return (
-    <CopilotKit runtimeUrl="/api/copilotkit" agent="tool-rendering">
-      <div className="flex justify-center items-center h-screen w-full">
-        <div className="h-full w-full max-w-4xl">
-          <Chat />
-        </div>
-      </div>
-    </CopilotKit>
-  );
-}
-
-function Chat() {
-  // Per-tool renderer #1: get_weather → branded WeatherCard.
+export function ToolRenderers() {
   useRenderTool(
     {
       name: "get_weather",
-      parameters: z.object({
-        location: z.string(),
-      }),
+      parameters: z.object({ location: z.string() }),
       render: ({ parameters, result, status }) => {
-        const loading = status !== "complete";
         const parsed = parseJsonResult<WeatherResult>(result);
         return (
           <WeatherCard
-            loading={loading}
+            loading={status !== "complete"}
             location={parameters?.location ?? parsed.city ?? ""}
             temperature={parsed.temperature}
             humidity={parsed.humidity}
@@ -266,7 +253,6 @@ function Chat() {
     [],
   );
 
-  // Per-tool renderer #2: search_flights → branded FlightListCard.
   useRenderTool(
     {
       name: "search_flights",
@@ -275,11 +261,10 @@ function Chat() {
         destination: z.string(),
       }),
       render: ({ parameters, result, status }) => {
-        const loading = status !== "complete";
         const parsed = parseJsonResult<FlightSearchResult>(result);
         return (
           <FlightListCard
-            loading={loading}
+            loading={status !== "complete"}
             origin={parameters?.origin ?? parsed.origin ?? ""}
             destination={parameters?.destination ?? parsed.destination ?? ""}
             flights={parsed.flights ?? []}
@@ -289,7 +274,31 @@ function Chat() {
     },
     [],
   );
+
+  return null;
+}
 ```
+
+Mount the renderers anywhere beneath the same `CopilotKit` provider as your
+chat. The renderer component returns no layout of its own; it registers the
+two named renderers for tool calls in the chat:
+
+```tsx title="app/page.tsx"
+"use client";
+
+import { CopilotChat, CopilotKit } from "@copilotkit/react-core/v2";
+import { ToolRenderers } from "./tool-renderers";
+
+export default function Page() {
+  return (
+    <CopilotKit runtimeUrl="/api/copilotkit" agent="tool-rendering">
+      <ToolRenderers />
+      <CopilotChat agentId="tool-rendering" />
+    </CopilotKit>
+  );
+}
+```
+
 
 <Callout type="info">
   The `name` you pass to `useRenderTool` must match the tool name the agent
@@ -368,5 +377,142 @@ def get_weather(location: str) -> dict[str, Any]:
 
 
 ```
+
+The agent must also register this schema as an executable backend tool. This
+setup shows the connection.
+
+<Steps>
+  <Step>
+    ### Register the backend tools
+
+    `run_with_claude_agent_sdk` receives the tool schemas from the agent. It
+    converts each schema to an SDK tool and creates an in-process MCP server.
+    The adapter receives this server through `mcp_servers`. The matching
+    `allowed_tools` entries give Claude permission to call the tools.
+
+    
+~~~~python title="claude_agent_sdk_adapter.py"
+async def run_with_claude_agent_sdk(
+    input_data: RunAgentInput,
+    *,
+    system_prompt: str,
+    tools: list[dict[str, Any]],
+    state: Any,
+    model: str,
+    execute_tool: ExecuteTool,
+    max_turns: int = 10,
+) -> AsyncIterator[str]:
+    """Run through the official AG-UI Claude adapter and emit SSE chunks."""
+
+    encoder = EventEncoder()
+    state_box = {"state": state}
+    pending_state_snapshots: list[Any] = []
+    sdk_tools = _build_sdk_tools(
+        tools,
+        execute_tool=execute_tool,
+        get_state=lambda: state_box["state"],
+        set_state=lambda next_state: _set_state(
+            next_state,
+            state_box,
+            pending_state_snapshots,
+        ),
+    )
+
+    options: dict[str, Any] = {
+        "model": _normalize_claude_agent_sdk_model(model),
+        "system_prompt": system_prompt,
+        "tools": [],
+        "permission_mode": "dontAsk",
+        "max_turns": max_turns,
+    }
+
+    if sdk_tools:
+        options["mcp_servers"] = {
+            COPILOTKIT_MCP_SERVER_NAME: create_sdk_mcp_server(
+                COPILOTKIT_MCP_SERVER_NAME,
+                "1.0.0",
+                tools=sdk_tools,
+            )
+        }
+        options["allowed_tools"] = [
+            f"{COPILOTKIT_TOOL_PREFIX}{schema['name']}" for schema in tools
+        ]
+
+    adapter = ClaudeAgentAdapter(
+        name="claude-sdk-python",
+        options=options,
+    )
+    run_input = _with_initial_state(input_data, state)
+
+    async for event in adapter.run(run_input):
+        if event.type == EventType.TOOL_CALL_RESULT and pending_state_snapshots:
+            yield encoder.encode(
+                StateSnapshotEvent(
+                    type=EventType.STATE_SNAPSHOT,
+                    snapshot=pending_state_snapshots.pop(0),
+                )
+            )
+        yield encoder.encode(event)
+
+
+~~~~
+
+  </Step>
+
+  <Step>
+    ### Call the CopilotKit tool handler
+
+    Each `sdk_tool_handler` calls the executable CopilotKit handler for its
+    schema. It returns the handler result to Claude as MCP tool content.
+
+    
+~~~~python title="claude_agent_sdk_adapter.py"
+def _make_sdk_tool(
+    schema: dict[str, Any],
+    *,
+    execute_tool: ExecuteTool,
+    get_state: Callable[[], Any],
+    set_state: Callable[[Any], None],
+) -> Any:
+    name = schema["name"]
+    description = schema.get("description", "")
+    input_schema = schema.get("input_schema", {"type": "object", "properties": {}})
+
+    @sdk_tool(name, description, input_schema)
+    async def sdk_tool_handler(args: dict[str, Any]):
+        try:
+            # Offload to a worker thread: execute_tool may run a synchronous
+            # anthropic.Anthropic() LLM round-trip (the generate_a2ui branch),
+            # which would otherwise block the uvicorn event loop and wedge the
+            # :8000 /health endpoint under load.
+            result_text, next_state = await asyncio.to_thread(
+                execute_tool,
+                name,
+                dict(args or {}),
+                get_state(),
+                None,
+            )
+            if next_state is not None:
+                set_state(next_state)
+            return {"content": [{"type": "text", "text": result_text}]}
+        except Exception as exc:
+            return {
+                "content": [{"type": "text", "text": str(exc)}],
+                "is_error": True,
+            }
+
+    return sdk_tool_handler
+
+
+~~~~
+
+  </Step>
+</Steps>
+
+<Callout type="info">
+  This MCP path handles compatible requests that use backend tools only.
+  Requests with frontend tools or structured user content use the direct
+  Anthropic path. Requests with aimock transport also use this fallback.
+</Callout>
 
 <IntegrationGrid path="generative-ui/tool-rendering" />
