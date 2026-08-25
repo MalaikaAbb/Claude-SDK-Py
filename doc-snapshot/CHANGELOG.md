@@ -8,6 +8,46 @@ Holds the 3 most recent dated entries. When a change lands on a fourth
 date, the oldest entry is dropped. Entries are counted, not aged, so a gap of
 weeks between changes does not expire anything.
 
+## 2026-08-24
+
+### 09:52 UTC — 2 pages, highest severity high
+
+**High — Introduction**
+
+`/claude-sdk-python` · routes `/`, `/doc-sync` · under “Configure your environment” · in a `plaintext` block
+
+27 code lines changed.
+
+````diff
+- ANTHROPIC_MODEL=claude-sonnet-4-6
++ ANTHROPIC_MODEL=claude-opus-4-8
+- ANTHROPIC_MODEL=claude-sonnet-4-6
++ ANTHROPIC_MODEL=claude-opus-4-8
+- "model": os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6"),
++ "model": os.getenv("ANTHROPIC_MODEL", "claude-opus-4-8"),
+- ExperimentalEmptyAdapter,
+- copilotRuntimeNextJSAppRouterEndpoint,
+````
+
+**High — Quickstart**
+
+`/claude-sdk-python/quickstart` · route `/quickstart` · under “Configure your environment” · in a `plaintext` block
+
+27 code lines changed.
+
+````diff
+- ANTHROPIC_MODEL=claude-sonnet-4-6
++ ANTHROPIC_MODEL=claude-opus-4-8
+- ANTHROPIC_MODEL=claude-sonnet-4-6
++ ANTHROPIC_MODEL=claude-opus-4-8
+- "model": os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6"),
++ "model": os.getenv("ANTHROPIC_MODEL", "claude-opus-4-8"),
+- ExperimentalEmptyAdapter,
+- copilotRuntimeNextJSAppRouterEndpoint,
+````
+
+---
+
 ## 2026-08-21
 
 ### 15:16 UTC — 13 pages, highest severity high
@@ -228,6 +268,8 @@ weeks between changes does not expire anything.
 - </WhenFrameworkHas>
 + 
 ````
+
+---
 
 ---
 
