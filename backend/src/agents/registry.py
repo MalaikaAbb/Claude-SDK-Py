@@ -61,6 +61,21 @@ REGISTRY: dict[str, RegisteredAgent] = {
         "chat-controls", "/claude-sdk-python/prebuilt-components/chat-controls"
     ),
 
+    # Rich Threads — one agent per route so each keeps its own thread list.
+    # Nothing thread-specific lives here: threads are stored by CopilotKit
+    # Intelligence on the runtime side, and the agent only ever sees a
+    # thread_id on the run input.
+    "threads-drawer": _plain(
+        "threads-drawer",
+        "/claude-sdk-python/prebuilt-components/copilot-threads-drawer",
+    ),
+    "headless-threads": _plain(
+        "headless-threads", "/claude-sdk-python/headless-threads"
+    ),
+    "threads-lifecycle": _plain(
+        "threads-lifecycle", "/claude-sdk-python/threads-lifecycle"
+    ),
+
     # Custom look and feel
     "chat-customization-css": _plain(
         "chat-customization-css", "/claude-sdk-python/custom-look-and-feel/css"

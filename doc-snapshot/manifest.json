@@ -327,6 +327,42 @@
       "status": "ok",
       "age": 0,
       "date": "Wed, 26 Aug 2026 09:55:12 GMT"
+    },
+    "/claude-sdk-python/prebuilt-components/copilot-threads-drawer": {
+      "file": "claude-sdk-python__prebuilt-components__copilot-threads-drawer.md",
+      "sha256": "15eacefa5dc4826b2597bfd18f7f3725a7721902701c6085581c51d30db0daae",
+      "bytes": 6277,
+      "lines": 142,
+      "routes": [
+        "/prebuilt-components/copilot-threads-drawer"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Wed, 26 Aug 2026 09:55:11 GMT"
+    },
+    "/claude-sdk-python/headless-threads": {
+      "file": "claude-sdk-python__headless-threads.md",
+      "sha256": "28a779edb5186ae1a4ead081d009bf20b1dc9693d54d919e65431fae9005cc9b",
+      "bytes": 10236,
+      "lines": 210,
+      "routes": [
+        "/headless-threads"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Wed, 26 Aug 2026 09:55:11 GMT"
+    },
+    "/claude-sdk-python/threads-lifecycle": {
+      "file": "claude-sdk-python__threads-lifecycle.md",
+      "sha256": "1ae1b96515d51638857b4d28d1d0f81c773f79ac06f91e19f375ceb4a41da9ac",
+      "bytes": 15801,
+      "lines": 257,
+      "routes": [
+        "/threads-lifecycle"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Wed, 26 Aug 2026 09:55:11 GMT"
     }
   },
   "sitemap": {
