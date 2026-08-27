@@ -101,9 +101,30 @@ function buildRuntime(): CopilotRuntime {
     a2ui,
     ...(LICENSE_TOKEN ? { licenseToken: LICENSE_TOKEN } : {}),
     intelligence: new CopilotKitIntelligence({
-      // apiUrl and wsUrl default to the managed platform — leave them unset.
+      // apiUrl and wsUrl default to the managed platform. They are DIFFERENT
+      // hosts — api.intelligence… and realtime.intelligence… are deployed
+      // separately, so wsUrl cannot be derived by scheme-swapping apiUrl.
+      // Override both together or neither.
       apiKey: INTELLIGENCE_API_KEY,
     }),
+    // Off, because it cannot work through ClaudeAgentAdapter and costs three
+    // Claude runs per new thread to discover that.
+    //
+    // The runtime names a thread by cloning the agent and sending it two
+    // messages: a system message ("Return JSON only in this exact shape:
+    // {\"title\":\"...\"}") and a user message carrying the transcript. It then
+    // requires an assistant reply that is a plain string of at most 8 words.
+    //
+    // ClaudeAgentAdapter reads only `messages[-1]` — `get_user_message` in
+    // ag_ui_claude_sdk/utils.py says so outright ("we only use the last one").
+    // The system message is discarded, so the model answers the transcript
+    // prompt under THIS agent's system prompt and replies conversationally.
+    // normalizeGeneratedTitle then rejects it and the runtime logs "Thread name
+    // generation returned an empty or invalid title" three times before falling
+    // back to "Untitled".
+    //
+    // Set this to true to watch that happen; nothing else changes.
+    generateThreadNames: false,
     // Threads are per-user. Without this every visitor shares one history.
     // `Providers` sends these headers so the harness has a stable identity to
     // key threads on; a real app would read them from a verified session, which

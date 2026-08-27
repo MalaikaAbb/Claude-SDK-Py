@@ -428,15 +428,33 @@ It bites as soon as you build more than one thread view. Point them at different
 
 All three routes here share `agentId="threads"`.
 
-### 9.14 `useHumanInTheLoop` does not infer its args type
+### 9.14 Intelligence makes every run depend on a WebSocket, with no opt-out
+
+`IntelligenceAgentRunner` opens a Phoenix socket per run and joins `ingestion:{runId}`. If that channel cannot be joined the run fails with `Timed out joining channel` — **on every route in the harness**, not just the three thread ones. Chat is entirely gated on a WebSocket to a third-party host the moment `INTELLIGENCE_API_KEY` is set.
+
+There is no way to keep threads and opt runs out. `CopilotRuntimeOptions` is a two-member union: the SSE variant takes `runner?` and declares `intelligence?: undefined`; the Intelligence variant requires `intelligence` and has no `runner` field at all. You get both planes or neither.
+
+Worth knowing when diagnosing: the API plane and the realtime plane are **separate hosts** (`api.intelligence.copilotkit.ai` vs `realtime.intelligence.copilotkit.ai`), deployed independently — the config comments say `wsUrl` "cannot be derived by scheme-swapping `apiUrl`". So REST can authenticate perfectly, threads can be created and listed, and the socket can still fail to join. If you see threads appear while runs fail, that is the split you are looking at, and the fallback is to unset the key.
+
+### 9.15 Thread names cannot be generated through ClaudeAgentAdapter
+
+The runtime names a new thread by cloning the agent and sending it two messages: a system message instructing `Return JSON only in this exact shape: {"title":"..."}`, and a user message carrying the transcript. `selectGeneratedTitleFromMessages` then requires an assistant reply that is a plain string, and `normalizeGeneratedTitle` rejects anything over 8 words.
+
+`ClaudeAgentAdapter` reads **only the last message**. `get_user_message` in `ag_ui_claude_sdk/utils.py` says so in a comment — *"Extract content from the LAST message (any role) … we just need the latest input"*. The injected system message is discarded, so the model answers the transcript prompt under whatever `system_prompt` the adapter was constructed with and replies conversationally. The title is rejected, three attempts are burned, and the thread falls back to `Untitled`.
+
+This repo therefore sets `generateThreadNames: false` — three Claude runs per new thread, each spawning a CLI subprocess turn, for a guaranteed-useless result. Flip it back to `true` to observe the failure; nothing else changes.
+
+The same root cause is worth holding on to generally: **any runtime feature that works by injecting a system message will be silently dropped by this adapter.**
+
+### 9.16 `useHumanInTheLoop` does not infer its args type
 
 The page annotates its render callback `any`, which hides the cause: unlike `useRenderTool`, the hook does not infer from `parameters`, so `args` falls back to `Record<string, unknown>` and `args.topic` is `unknown`. This repo passes the generic explicitly instead of silencing it.
 
-### 9.15 Cross-framework content on Claude pages
+### 9.17 Cross-framework content on Claude pages
 
 Several pages carry blocks from other integrations: A2UI dynamic-schema's opt-out section imports `get_a2ui_tools` from `ag_ui_langgraph` and `ChatOpenAI` from `langchain_openai`; Agent Config's third block is LangGraph (`RunnableConfig`, `my_agent_node`); Programmatic Control's long interrupt example is LangGraph-only; Voice carries a `WhenFrameworkHas` block describing the Google ADK agent hop; A2UI fixed-schema's action-handler pointer links into `/integrations/langgraph/`. The Shared State page also credits a `PreferencesInjectorMiddleware`, and Agent Read-Only Context a `CopilotKitMiddleware`, neither of which exists in this integration.
 
-### 9.16 Undefined helpers, throughout
+### 9.18 Undefined helpers, throughout
 
 Near-universal across the frontend snippets: `createMessageId`, `parseJsonResult`, `useAgenticChatSuggestions`, `useReasoningDefaultSuggestions`, `useReasoningCustomSuggestions`, `useFrontendToolsSuggestions`, `MainContent`, `Suggestions`, `TimePickerCard`, `WeatherCard`, `FlightListCard`, `StockCard`, `D20Card`, `CustomCatchallRenderer`, `BarChart`, `barChartPropsSchema`, `NotesCard`'s shadcn wrappers, `DemoLayout`, `ACTIVITIES`, `SUB_AGENT_STYLE`, `useAttachmentsConfig`, `useAutoScroll`, `buildContent`, `createClaudeHttpAgent`, `analytics`, `toast`. Each is either written minimally in this repo — flagged in the file header and on the route page — or replaced by the real export it was standing in for.
 
@@ -467,6 +485,18 @@ The framework's doc sidebar has no Troubleshooting section, so these are this re
 **Two inspectors / a runaway console.** Two `CopilotKitInspector` elements on one page spin lit-html into an unbounded assert loop that can take out the tab and the dev server. `frontend/src/lib/inspector.ts` guarantees only one mounts — if you add a nested `<CopilotKit>`, add its route to `NESTED_PROVIDER_ROUTES` there. `NEXT_PUBLIC_COPILOTKIT_INSPECTOR=off` disables it entirely.
 
 **The thread list is empty but chat works.** No `INTELLIGENCE_API_KEY`, so the runtime fell back to SSE with an in-memory runner. That fallback is deliberate — chat keeps working on all 25 agents — but nothing is persisted to list.
+
+**Every route fails with `Timed out joining channel`.** The Intelligence
+realtime socket cannot join, and runs are ingested over it — so this breaks all
+chat, not just threads. Check that `wss://realtime.intelligence.copilotkit.ai`
+is reachable and that the key is valid for the realtime plane; the API plane
+authenticating (threads get created) does **not** imply the socket will join,
+because they are separate hosts. To get chat back immediately, unset
+`INTELLIGENCE_API_KEY` and restart — the runtime falls back to SSE. See §9.14.
+
+**Thread names are all "Untitled".** Expected. `generateThreadNames` is off
+because the adapter drops the runtime's injected system message and the title
+can never be valid. See §9.15.
 
 **Each thread route shows a different list, and Lifecycle's picker is empty.**
 `useThreads({ agentId })` scopes the list per agent, so three routes pointed at

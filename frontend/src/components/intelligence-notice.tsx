@@ -32,6 +32,18 @@ export function IntelligenceNotice() {
         Free developer accounts cover both — this repo has no mocked-out
         substitute, because a faked thread list would be a false pass.
       </p>
+      <p className="mt-2 leading-relaxed">
+        <strong>Turning Intelligence on makes every run in the harness depend
+        on a WebSocket.</strong> <code>IntelligenceAgentRunner</code> opens a
+        Phoenix socket per run and joins{" "}
+        <code>ingestion:&#123;runId&#125;</code>, so if{" "}
+        <code>wss://realtime.intelligence.copilotkit.ai</code> cannot be joined,
+        runs fail with <em>Timed out joining channel</em> — on every route, not
+        just these three. There is no opt-out: the runtime options are a union,
+        and the Intelligence variant has no <code>runner</code> field. Unset{" "}
+        <code>INTELLIGENCE_API_KEY</code> to fall back to SSE if you need chat
+        back.
+      </p>
     </Callout>
   );
 }
