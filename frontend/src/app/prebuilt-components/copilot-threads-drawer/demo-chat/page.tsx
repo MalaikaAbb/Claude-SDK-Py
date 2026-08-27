@@ -8,7 +8,9 @@ import {
 
 import { DemoFrame } from "@/components/demo-frame";
 
-const AGENT_ID = "threads-drawer";
+// Shared by all three Rich Threads routes. `useThreads` scopes its list by
+// agentId, so a per-route id would give this page its own disjoint list.
+const AGENT_ID = "threads";
 
 /**
  * The doc's whole integration: a drawer and a chat inside one shared

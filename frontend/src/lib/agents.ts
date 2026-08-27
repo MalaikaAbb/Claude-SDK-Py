@@ -19,9 +19,9 @@ export const AGENT_IDS = [
   "prebuilt-sidebar",
   "prebuilt-popup",
   "chat-controls",
-  "threads-drawer",
-  "headless-threads",
-  "threads-lifecycle",
+  // One agent for all three Rich Threads routes — `useThreads` scopes its list
+  // by agentId, so separate ids would mean three disjoint thread lists.
+  "threads",
   "chat-customization-css",
   "chat-slots",
   "headless-simple",

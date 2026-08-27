@@ -61,20 +61,19 @@ REGISTRY: dict[str, RegisteredAgent] = {
         "chat-controls", "/claude-sdk-python/prebuilt-components/chat-controls"
     ),
 
-    # Rich Threads — one agent per route so each keeps its own thread list.
-    # Nothing thread-specific lives here: threads are stored by CopilotKit
-    # Intelligence on the runtime side, and the agent only ever sees a
-    # thread_id on the run input.
-    "threads-drawer": _plain(
-        "threads-drawer",
-        "/claude-sdk-python/prebuilt-components/copilot-threads-drawer",
-    ),
-    "headless-threads": _plain(
-        "headless-threads", "/claude-sdk-python/headless-threads"
-    ),
-    "threads-lifecycle": _plain(
-        "threads-lifecycle", "/claude-sdk-python/threads-lifecycle"
-    ),
+    # Rich Threads — ONE agent shared by all three routes, deliberately.
+    #
+    # `useThreads({ agentId })` puts that id into the thread store's fetch
+    # context, so the thread list is scoped per agent. Giving each route its own
+    # agent therefore gives each route its own disjoint list: a conversation
+    # started in the drawer is invisible to the headless list, and the
+    # lifecycle page's "known conversation" picker has nothing to pick.
+    #
+    # These three pages are three views of the SAME store, so they share one
+    # agent. Nothing thread-specific lives here either way: threads are stored
+    # by CopilotKit Intelligence on the runtime side, and the agent only ever
+    # sees a thread_id on the run input.
+    "threads": _plain("threads", "/claude-sdk-python/threads"),
 
     # Custom look and feel
     "chat-customization-css": _plain(

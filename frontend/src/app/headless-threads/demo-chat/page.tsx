@@ -5,7 +5,9 @@ import { useState } from "react";
 
 import { DemoFrame } from "@/components/demo-frame";
 
-const AGENT_ID = "headless-threads";
+// Shared by all three Rich Threads routes. `useThreads` scopes its list by
+// agentId, so a per-route id would give this page its own disjoint list.
+const AGENT_ID = "threads";
 
 /**
  * The doc's `ThreadSidebar` and its `App` wiring, in one file.

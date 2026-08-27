@@ -136,7 +136,7 @@ export const NAV: NavGroup[] = [
       {
         path: "/prebuilt-components/copilot-threads-drawer",
         hasDemo: true,
-        agentId: "threads-drawer",
+        agentId: "threads",
         title: "Threads Drawer",
         docPath: "/claude-sdk-python/prebuilt-components/copilot-threads-drawer",
         summary:
@@ -148,7 +148,7 @@ export const NAV: NavGroup[] = [
       {
         path: "/headless-threads",
         hasDemo: true,
-        agentId: "headless-threads",
+        agentId: "threads",
         title: "Headless Threads",
         docPath: "/claude-sdk-python/headless-threads",
         summary:
@@ -160,7 +160,7 @@ export const NAV: NavGroup[] = [
       {
         path: "/threads-lifecycle",
         hasDemo: true,
-        agentId: "threads-lifecycle",
+        agentId: "threads",
         title: "Thread & History Lifecycle",
         docPath: "/claude-sdk-python/threads-lifecycle",
         summary:

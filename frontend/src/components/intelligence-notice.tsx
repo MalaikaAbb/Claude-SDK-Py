@@ -35,3 +35,32 @@ export function IntelligenceNotice() {
     </Callout>
   );
 }
+
+/**
+ * The other precondition, and the one that is easy to get wrong.
+ *
+ * All three Rich Threads routes are views of one store, so they must name one
+ * agent. Shown on each of them because the symptom of getting it wrong — three
+ * lists that never agree — looks like a sync bug rather than a config mistake.
+ */
+export function SharedThreadStoreNotice() {
+  return (
+    <Callout tone="info" title="All three routes share one agent, on purpose">
+      <p className="leading-relaxed">
+        <code>useThreads(&#123; agentId &#125;)</code> puts that id into the
+        thread store&apos;s fetch context, so <strong>the thread list is scoped
+        per agent</strong>. Point these three routes at three different agents
+        and you get three disjoint lists: a conversation started in the drawer
+        never appears in the headless list, and the Lifecycle page&apos;s
+        &quot;known conversation&quot; picker stays empty because nothing was
+        ever created under its agent.
+      </p>
+      <p className="mt-2 leading-relaxed">
+        They therefore all use <code>agentId=&quot;threads&quot;</code>. That is
+        also what makes the three pages worth reading together — start a
+        conversation in the drawer, rename it from the headless list, then open
+        it from the Lifecycle picker.
+      </p>
+    </Callout>
+  );
+}

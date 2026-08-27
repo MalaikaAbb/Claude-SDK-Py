@@ -1,6 +1,9 @@
 import Link from "next/link";
 
-import { IntelligenceNotice } from "@/components/intelligence-notice";
+import {
+  IntelligenceNotice,
+  SharedThreadStoreNotice,
+} from "@/components/intelligence-notice";
 import { RouteHeader } from "@/components/route-header";
 import { SourceCode } from "@/components/source-code";
 import { Callout, Panel, TryIt } from "@/components/ui";
@@ -11,6 +14,8 @@ export default function Page() {
       <RouteHeader path="/threads-lifecycle" />
 
       <IntelligenceNotice />
+
+      <SharedThreadStoreNotice />
 
       <Panel title="What it demonstrates">
         <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">

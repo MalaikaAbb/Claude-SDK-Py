@@ -10,7 +10,9 @@ import { useState } from "react";
 
 import { DemoFrame } from "@/components/demo-frame";
 
-const AGENT_ID = "threads-lifecycle";
+// Shared by all three Rich Threads routes. `useThreads` scopes its list by
+// agentId, so a per-route id would give this page its own disjoint list.
+const AGENT_ID = "threads";
 
 /**
  * The doc's `ThreadControls`, plus a readout of the id they are moving.

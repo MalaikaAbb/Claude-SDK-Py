@@ -30,7 +30,7 @@ Browser
   │  chat surface from @copilotkit/react-core/v2
   ▼
 Next.js  ·  localhost:3000
-  │  /api/copilotkit/[[...slug]]        → all 27 agents · Intelligence · threads
+  │  /api/copilotkit/[[...slug]]        → all 25 agents · Intelligence · threads
   │  /api/copilotkit-voice/[[...slug]]  → voice only, v2 runtime + TranscriptionService
   │  /api/copilotkit-declarative-gen-ui → A2UI dynamic-schema only
   │  CopilotRuntime resolves agentId → HttpAgent(`${AGENT_URL}/${agentId}`)
@@ -101,7 +101,7 @@ There are **two** env files because there are two processes.
 | Variable | Required | What it does |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | ✅ | Read by the Claude Agent SDK. Without it every run returns an authentication error. |
-| `ANTHROPIC_MODEL` | — | Model for all 27 agents. Defaults to `claude-opus-4-8`, the Quickstart's current value. |
+| `ANTHROPIC_MODEL` | — | Model for all 25 agents. Defaults to `claude-opus-4-8`, the Quickstart's current value. |
 | `AGENT_HOST` / `AGENT_PORT` | — | Where the agent server listens. Default `localhost:8000`. Change together with `AGENT_URL` or not at all. |
 | `LOG_LEVEL` | — | `DEBUG` shows the adapter assembling its MCP server from frontend tools each run — useful when debugging tool routes. |
 
@@ -132,7 +132,7 @@ uv run --directory backend python src/agent_server.py
 Successful startup:
 
 ```
-INFO:__main__:Mounted 27 agents: a2ui-fixed-schema, agent-config, agentic_chat, …
+INFO:__main__:Mounted 25 agents: a2ui-fixed-schema, agent-config, agentic_chat, …
 INFO:     Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
 ```
 
@@ -153,7 +153,7 @@ Smoke test both at once:
 
 ```bash
 curl -s http://localhost:8000/health | python3 -m json.tool
-# {"status": "ok", "agents": [...], "count": 27}
+# {"status": "ok", "agents": [...], "count": 25}
 ```
 
 Then open **<http://localhost:3000>** and go to `/quickstart` first — it is the shortest confirmation the two processes are talking.
@@ -420,15 +420,23 @@ So a runtime can serve threads perfectly while every drawer in the app shows an 
 
 The drawer page also passes `publicLicenseKey` on `CopilotKitProvider` — a browser-visible credential. This repo sets the licence on the runtime instead.
 
-### 9.13 `useHumanInTheLoop` does not infer its args type
+### 9.13 The thread list is scoped per agent, which no page states
+
+`useThreads({ agentId })` writes that id into the thread store's fetch context, so the list it returns is per-agent. Neither [Threads Drawer](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/copilot-threads-drawer), [Headless Threads](https://docs.copilotkit.ai/claude-sdk-python/headless-threads) nor [Thread & History Lifecycle](https://docs.copilotkit.ai/claude-sdk-python/threads-lifecycle) says so — the drawer page lists `agentId` as "agent whose threads to list (defaults to the chat configuration's agent)" and leaves it there, and all three samples use one agent throughout, so the constraint never comes up.
+
+It bites as soon as you build more than one thread view. Point them at different agents and you get lists that never agree: a conversation started in the drawer is invisible to a headless list, and a lifecycle picker reading a third agent stays empty forever. The symptom reads like a sync failure — the one thing the docs promise Rich Threads *do* handle — rather than a configuration mistake.
+
+All three routes here share `agentId="threads"`.
+
+### 9.14 `useHumanInTheLoop` does not infer its args type
 
 The page annotates its render callback `any`, which hides the cause: unlike `useRenderTool`, the hook does not infer from `parameters`, so `args` falls back to `Record<string, unknown>` and `args.topic` is `unknown`. This repo passes the generic explicitly instead of silencing it.
 
-### 9.14 Cross-framework content on Claude pages
+### 9.15 Cross-framework content on Claude pages
 
 Several pages carry blocks from other integrations: A2UI dynamic-schema's opt-out section imports `get_a2ui_tools` from `ag_ui_langgraph` and `ChatOpenAI` from `langchain_openai`; Agent Config's third block is LangGraph (`RunnableConfig`, `my_agent_node`); Programmatic Control's long interrupt example is LangGraph-only; Voice carries a `WhenFrameworkHas` block describing the Google ADK agent hop; A2UI fixed-schema's action-handler pointer links into `/integrations/langgraph/`. The Shared State page also credits a `PreferencesInjectorMiddleware`, and Agent Read-Only Context a `CopilotKitMiddleware`, neither of which exists in this integration.
 
-### 9.15 Undefined helpers, throughout
+### 9.16 Undefined helpers, throughout
 
 Near-universal across the frontend snippets: `createMessageId`, `parseJsonResult`, `useAgenticChatSuggestions`, `useReasoningDefaultSuggestions`, `useReasoningCustomSuggestions`, `useFrontendToolsSuggestions`, `MainContent`, `Suggestions`, `TimePickerCard`, `WeatherCard`, `FlightListCard`, `StockCard`, `D20Card`, `CustomCatchallRenderer`, `BarChart`, `barChartPropsSchema`, `NotesCard`'s shadcn wrappers, `DemoLayout`, `ACTIVITIES`, `SUB_AGENT_STYLE`, `useAttachmentsConfig`, `useAutoScroll`, `buildContent`, `createClaudeHttpAgent`, `analytics`, `toast`. Each is either written minimally in this repo — flagged in the file header and on the route page — or replaced by the real export it was standing in for.
 
@@ -458,7 +466,13 @@ The framework's doc sidebar has no Troubleshooting section, so these are this re
 
 **Two inspectors / a runaway console.** Two `CopilotKitInspector` elements on one page spin lit-html into an unbounded assert loop that can take out the tab and the dev server. `frontend/src/lib/inspector.ts` guarantees only one mounts — if you add a nested `<CopilotKit>`, add its route to `NESTED_PROVIDER_ROUTES` there. `NEXT_PUBLIC_COPILOTKIT_INSPECTOR=off` disables it entirely.
 
-**The thread list is empty but chat works.** No `INTELLIGENCE_API_KEY`, so the runtime fell back to SSE with an in-memory runner. That fallback is deliberate — chat keeps working on all 27 agents — but nothing is persisted to list.
+**The thread list is empty but chat works.** No `INTELLIGENCE_API_KEY`, so the runtime fell back to SSE with an in-memory runner. That fallback is deliberate — chat keeps working on all 25 agents — but nothing is persisted to list.
+
+**Each thread route shows a different list, and Lifecycle's picker is empty.**
+`useThreads({ agentId })` scopes the list per agent, so three routes pointed at
+three agents get three disjoint lists. All three Rich Threads routes here share
+`agentId="threads"` for that reason. If you add a fourth thread view, give it
+the same id or it will not see anything the others created.
 
 **The drawer shows a locked panel.** `COPILOTKIT_LICENSE_TOKEN` is unset or invalid. Independent of whether threads work; see §9.12.
 
@@ -511,7 +525,7 @@ claude-sdk-python/
 │       └── agents/
 │           ├── chat_agents.py the Quickstart's options dict → build_adapter()
 │           ├── prompts.py     per-route system prompts, with doc provenance noted
-│           ├── registry.py    the 27 agents; id = AG-UI agent id = mount path
+│           ├── registry.py    the 25 agents; id = AG-UI agent id = mount path
 │           └── doc_reference/ published doc code that cannot be wired — never imported
 │               ├── __init__.py             ← why this directory exists
 │               ├── claude_agent_sdk_adapter.py   the incomplete tool bridge
@@ -530,7 +544,7 @@ claude-sdk-python/
         ├── page.tsx           landing
         ├── status/            the status table
         ├── api/
-        │   ├── copilotkit/[[...slug]]/route.ts        all 27 agents · Intelligence · A2UI
+        │   ├── copilotkit/[[...slug]]/route.ts        all 25 agents · Intelligence · A2UI
         │   ├── copilotkit-voice/[[...slug]]/route.ts  v2 runtime + TranscriptionService
         │   └── copilotkit-declarative-gen-ui/route.ts A2UI dynamic-schema
         └── <one directory per doc route>/
