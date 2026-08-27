@@ -6,9 +6,9 @@ A navigable, working test harness for the CopilotKit ↔ Claude Agent SDK (Pytho
 |---|---|
 | **Doc sync date** | Machine-maintained — `doc-snapshot/manifest.json` → `syncedAt`, rewritten on every sync |
 | **Doc root tracked** | <https://docs.copilotkit.ai/claude-sdk-python> |
-| **Frontend packages** | `@copilotkit/react-core` `@copilotkit/runtime` `@copilotkit/a2ui-renderer` `@copilotkit/voice` `^1.66.2` · `@ag-ui/client` `@ag-ui/core` `^0.0.57` · Next `16.3.0` · React `19.2.8` |
+| **Frontend packages** | `@copilotkit/react-core` `@copilotkit/runtime` `@copilotkit/a2ui-renderer` `@copilotkit/voice` `^1.69.0` · `@ag-ui/client` `@ag-ui/core` `^0.0.57` · Next `16.3.0` · React `19.2.8` |
 | **Backend packages** | `ag-ui-claude-sdk>=0.1.5` · `claude-agent-sdk>=0.2.132` · `ag-ui-protocol>=0.1.19` · `anthropic>=0.68.0` |
-| **Routes** | 27 total — 18 ✅ working · 2 ⚠️ partial · 6 ❌ broken · 1 reference |
+| **Routes** | 31 total — 18 ✅ working · 5 ⚠️ partial · 6 ❌ broken · 2 reference |
 | **CI** | none |
 
 ---
@@ -30,7 +30,7 @@ Browser
   │  chat surface from @copilotkit/react-core/v2
   ▼
 Next.js  ·  localhost:3000
-  │  /api/copilotkit                    → all 24 agents
+  │  /api/copilotkit/[[...slug]]        → all 27 agents · Intelligence · threads
   │  /api/copilotkit-voice/[[...slug]]  → voice only, v2 runtime + TranscriptionService
   │  /api/copilotkit-declarative-gen-ui → A2UI dynamic-schema only
   │  CopilotRuntime resolves agentId → HttpAgent(`${AGENT_URL}/${agentId}`)
@@ -64,8 +64,13 @@ What it has **no** documented path for is registering a tool the *backend* owns 
 | npm | bundled with Node | the lockfile in `frontend/` is npm's |
 | Anthropic API key | — | <https://console.anthropic.com/settings/keys> · **required** |
 | OpenAI API key | — | **optional**, mic transcription on `/voice` only |
+| CopilotKit Intelligence account | — | **optional**, the three Rich Threads routes only. Free developer tier. |
 
-No CopilotKit Cloud account is needed; nothing in this repo is premium.
+Everything except Rich Threads runs with no CopilotKit account. Threads are
+stored and synced server-side, so those three routes need an Intelligence
+project — and they are marked ⚠️ Partial rather than ✅ Working for exactly that
+reason. Nothing in this repo mocks a thread list: a faked one would be a false
+pass.
 
 The Claude Agent SDK spawns the Claude CLI as a subprocess. `claude-agent-sdk` vendors what it needs, so there is no separate CLI install step — but the first run of each agent is slower while that subprocess starts.
 
@@ -96,7 +101,7 @@ There are **two** env files because there are two processes.
 | Variable | Required | What it does |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | ✅ | Read by the Claude Agent SDK. Without it every run returns an authentication error. |
-| `ANTHROPIC_MODEL` | — | Model for all 24 agents. Defaults to `claude-sonnet-4-6`, the Quickstart's value. |
+| `ANTHROPIC_MODEL` | — | Model for all 27 agents. Defaults to `claude-opus-4-8`, the Quickstart's current value. |
 | `AGENT_HOST` / `AGENT_PORT` | — | Where the agent server listens. Default `localhost:8000`. Change together with `AGENT_URL` or not at all. |
 | `LOG_LEVEL` | — | `DEBUG` shows the adapter assembling its MCP server from frontend tools each run — useful when debugging tool routes. |
 
@@ -106,6 +111,9 @@ There are **two** env files because there are two processes.
 |---|---|---|
 | `AGENT_URL` | — | Where the Next runtime forwards runs. Defaults to `http://localhost:8000`. |
 | `OPENAI_API_KEY` | — | Whisper transcription for the `/voice` mic. Everything else works without it. |
+| `INTELLIGENCE_API_KEY` | — | Puts the runtime in Intelligence mode. This is what makes threads **work**. Not `NEXT_PUBLIC_` — it must stay server-side. |
+| `COPILOTKIT_LICENSE_TOKEN` | — | A **separate** credential. `/info` reports a licence status from it, and `<CopilotThreadsDrawer>` renders its locked view unless that status is valid. Set both or the drawer shows a locked panel over a working thread store. |
+| `NEXT_PUBLIC_DEMO_USER_ID` / `_NAME` | — | The identity `identifyUser` keys threads on. Change it in a second browser profile to watch two thread lists diverge. |
 | `NEXT_PUBLIC_COPILOTKIT_INSPECTOR` | — | Set to `off` to disable the inspector overlay app-wide. On for localhost otherwise. |
 
 **Ports:** frontend `3000`, backend `8000`.
@@ -124,7 +132,7 @@ uv run --directory backend python src/agent_server.py
 Successful startup:
 
 ```
-INFO:__main__:Mounted 24 agents: a2ui-fixed-schema, agent-config, agentic_chat, …
+INFO:__main__:Mounted 27 agents: a2ui-fixed-schema, agent-config, agentic_chat, …
 INFO:     Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
 ```
 
@@ -145,7 +153,7 @@ Smoke test both at once:
 
 ```bash
 curl -s http://localhost:8000/health | python3 -m json.tool
-# {"status": "ok", "agents": [...], "count": 24}
+# {"status": "ok", "agents": [...], "count": 27}
 ```
 
 Then open **<http://localhost:3000>** and go to `/quickstart` first — it is the shortest confirmation the two processes are talking.
@@ -178,6 +186,34 @@ Every route has a notes page at its path and a chrome-free live surface at `<pat
 
 **`/prebuilt-components/chat-controls`** — `useCopilotChatConfiguration` for modal state, plus thumbs-up/down callbacks.
 *Try:* "Say something I can rate", then thumb it. *Pass:* the two buttons toggle the sidebar and track `isModalOpen`; ratings append to the on-page log. *Fail:* buttons render but do nothing — no provider in the tree owns modal state.
+
+### Rich Threads
+
+All three need CopilotKit Intelligence — see Prerequisites. Without it chat
+still works and the thread list has nothing to list.
+
+**`/prebuilt-components/copilot-threads-drawer`** — ⚠️ **Partial.** The drop-in
+switcher: a drawer and a chat inside one shared configuration provider, with no
+active-thread state of your own.
+*Try:* send a message, press New Conversation, send another, then click back to
+the first row. *Pass:* two auto-named rows; clicking one replays that
+conversation. *Fail:* a locked panel means no valid licence token; an empty list
+with a working chat means no API key.
+
+**`/headless-threads`** — ⚠️ **Partial.** The same store behind your own list,
+including the rename action the drawer does not surface.
+*Try:* send a message, press Rename, then Archive, then New conversation.
+*Pass:* the row title becomes "Renamed", archiving hides it, and New
+conversation clears the chat. *Fail:* if New conversation appears to do nothing,
+the chat is reusing its mount-time id — the route explains the two-step reset.
+
+**`/threads-lifecycle`** — ⚠️ **Partial.** Where a `threadId` comes from and what
+moves it, with the live id and its `explicit` flag on screen.
+*Try:* send a message, press New chat, then pick a conversation and compare Open
+conversation against Set id, no replay. *Pass:* the id changes on New chat;
+`explicit: true` replays history and `explicit: false` shows the welcome screen.
+*Fail:* buttons that log a warning and move nothing mean something is passing an
+authoritative `threadId` prop — the setters no-op when the id is prop-controlled.
 
 ### Custom Look and Feel
 
@@ -270,6 +306,9 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference
 | [CopilotSidebar](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/sidebar) | `/prebuilt-components/sidebar` | ✅ | Off-sidebar. `MainContent`/`Suggestions` supplied locally. |
 | [CopilotPopup](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/popup) | `/prebuilt-components/popup` | ✅ | Off-sidebar. |
 | [Chat controls](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/chat-controls) | `/prebuilt-components/chat-controls` | ✅ | Off-sidebar. Doc's `analytics.track` replaced by an on-page log. |
+| [Threads Drawer](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/copilot-threads-drawer) | `/prebuilt-components/copilot-threads-drawer` | ⚠️ | Needs Intelligence + a licence token. Locked view without one. |
+| [Headless Threads](https://docs.copilotkit.ai/claude-sdk-python/headless-threads) | `/headless-threads` | ⚠️ | Same precondition. The two-step "New conversation" reset joins two doc fragments. |
+| [Thread & History Lifecycle](https://docs.copilotkit.ai/claude-sdk-python/threads-lifecycle) | `/threads-lifecycle` | ⚠️ | Same precondition. User-scoping, first-message thread creation and the checkpointer comparison are out of scope locally. |
 | [CSS customization](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/css) | `/custom-look-and-feel/css` | ✅ | Off-sidebar. One doc snippet is v1 and not implemented — see §9. |
 | [Slots](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/slots) | `/custom-look-and-feel/slots` | ✅ | Off-sidebar. The three slot components are declared by the doc, not defined. |
 | [Headless UI](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/headless-ui) | `/custom-look-and-feel/headless-ui` | ✅ | Off-sidebar. `headless-simple` only; `headless-complete` is not published in full. |
@@ -291,6 +330,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference
 | [Agent Read-Only Context](https://docs.copilotkit.ai/claude-sdk-python/shared-state/agent-readonly) | `/shared-state/agent-readonly` | ✅ | The adapter does the doc's context loop for you. |
 | [Sub-Agents](https://docs.copilotkit.ai/claude-sdk-python/multi-agent/subagents) | `/multi-agent/subagents` | ❌ | Delegation tools unreachable; the delegation-flow region is unpublished. |
 | [Agent Config](https://docs.copilotkit.ai/claude-sdk-python/agent-config) | `/agent-config` | ⚠️ | Frontend half works; the published backend half reads a channel the frontend never writes. |
+| [Doc root](https://docs.copilotkit.ai/claude-sdk-python) | `/doc-sync` | 📖 | Not a doc page. Reports drift between `doc-snapshot/` and the live docs. |
 
 Pages in the framework's doc sidebar that this repo does **not** track: CLI, Build with agents, the four Concepts pages, Agentic Protocols, the six Threads pages, MCP Apps, the seven Runtime pages, Deploy to any runtime, Authentication, Inspector, VS Code Extension, the four Intelligence Platform pages, AWS AgentCore, Telemetry.
 
@@ -364,15 +404,31 @@ The fix is to accept `ComponentProps<typeof CopilotChatView.WelcomeScreen>` and 
 
 The page's other two overrides are safe for different reasons: `assistantMessage` wraps the default and spreads its props through, and `input.disclaimer` is leaf text with no children to forward. The hazard is specific to container slots.
 
-### 9.11 `useHumanInTheLoop` does not infer its args type
+### 9.11 The Quickstart's runtime mode cannot serve threads
+
+[The Quickstart](https://docs.copilotkit.ai/claude-sdk-python/quickstart?agent=bring-your-own) now builds the runtime on `@copilotkit/runtime/v2`, keeps the file at `app/api/copilotkit/route.ts`, and passes `mode: "single-route"` — one POST carrying a `{ method, params, body }` envelope. That is enough for chat and nothing else.
+
+Rich Threads are REST: list, rename, archive and delete are separate verbs on separate paths, and `/info` is what tells the client whether Intelligence is on. Those live in `mode: "multi-route"` (the default), which needs a catch-all segment. This repo therefore puts the route at `[[...slug]]/route.ts` and omits `mode`.
+
+The failure mode if you follow the Quickstart literally and then add threads is quiet: `/info` keeps returning 200 so the app looks connected, while every thread call 404s. The same trap exists on the client — pinning `useSingleEndpoint={true}` against a multi-route handler produces the identical symptom, which is why the provider leaves it unset (`auto`).
+
+### 9.12 Threads need two credentials, and only one of them makes threads work
+
+`INTELLIGENCE_API_KEY` puts the runtime in Intelligence mode: it is what makes the thread endpoints return real rows. `COPILOTKIT_LICENSE_TOKEN` is a separate credential, and it is what `/info` reports a licence status from. `<CopilotThreadsDrawer>` reads that status and renders its locked view unless it is valid.
+
+So a runtime can serve threads perfectly while every drawer in the app shows an upgrade panel — the drawer never checks whether threads actually work. Neither the [Threads Drawer](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/copilot-threads-drawer) page nor [Headless Threads](https://docs.copilotkit.ai/claude-sdk-python/headless-threads) draws that distinction: the drawer page says only "without a license key, the drawer shows a locked view", and the headless page's runtime snippet sets `intelligence` and no licence at all.
+
+The drawer page also passes `publicLicenseKey` on `CopilotKitProvider` — a browser-visible credential. This repo sets the licence on the runtime instead.
+
+### 9.13 `useHumanInTheLoop` does not infer its args type
 
 The page annotates its render callback `any`, which hides the cause: unlike `useRenderTool`, the hook does not infer from `parameters`, so `args` falls back to `Record<string, unknown>` and `args.topic` is `unknown`. This repo passes the generic explicitly instead of silencing it.
 
-### 9.12 Cross-framework content on Claude pages
+### 9.14 Cross-framework content on Claude pages
 
 Several pages carry blocks from other integrations: A2UI dynamic-schema's opt-out section imports `get_a2ui_tools` from `ag_ui_langgraph` and `ChatOpenAI` from `langchain_openai`; Agent Config's third block is LangGraph (`RunnableConfig`, `my_agent_node`); Programmatic Control's long interrupt example is LangGraph-only; Voice carries a `WhenFrameworkHas` block describing the Google ADK agent hop; A2UI fixed-schema's action-handler pointer links into `/integrations/langgraph/`. The Shared State page also credits a `PreferencesInjectorMiddleware`, and Agent Read-Only Context a `CopilotKitMiddleware`, neither of which exists in this integration.
 
-### 9.13 Undefined helpers, throughout
+### 9.15 Undefined helpers, throughout
 
 Near-universal across the frontend snippets: `createMessageId`, `parseJsonResult`, `useAgenticChatSuggestions`, `useReasoningDefaultSuggestions`, `useReasoningCustomSuggestions`, `useFrontendToolsSuggestions`, `MainContent`, `Suggestions`, `TimePickerCard`, `WeatherCard`, `FlightListCard`, `StockCard`, `D20Card`, `CustomCatchallRenderer`, `BarChart`, `barChartPropsSchema`, `NotesCard`'s shadcn wrappers, `DemoLayout`, `ACTIVITIES`, `SUB_AGENT_STYLE`, `useAttachmentsConfig`, `useAutoScroll`, `buildContent`, `createClaudeHttpAgent`, `analytics`, `toast`. Each is either written minimally in this repo — flagged in the file header and on the route page — or replaced by the real export it was standing in for.
 
@@ -401,6 +457,14 @@ The framework's doc sidebar has no Troubleshooting section, so these are this re
 **Mic returns an error.** `OPENAI_API_KEY` is unset. The guard in the voice route says so explicitly. Use the sample-audio button meanwhile.
 
 **Two inspectors / a runaway console.** Two `CopilotKitInspector` elements on one page spin lit-html into an unbounded assert loop that can take out the tab and the dev server. `frontend/src/lib/inspector.ts` guarantees only one mounts — if you add a nested `<CopilotKit>`, add its route to `NESTED_PROVIDER_ROUTES` there. `NEXT_PUBLIC_COPILOTKIT_INSPECTOR=off` disables it entirely.
+
+**The thread list is empty but chat works.** No `INTELLIGENCE_API_KEY`, so the runtime fell back to SSE with an in-memory runner. That fallback is deliberate — chat keeps working on all 27 agents — but nothing is persisted to list.
+
+**The drawer shows a locked panel.** `COPILOTKIT_LICENSE_TOKEN` is unset or invalid. Independent of whether threads work; see §9.12.
+
+**Threads work but every visitor sees the same history.** `identifyUser` is returning one id for everyone. The harness keys on the `x-user-id` header the root provider sends, which is a fixed demo identity — change `NEXT_PUBLIC_DEMO_USER_ID` to watch the lists separate. A real app resolves this from a verified session.
+
+**Thread calls 404 while `/info` returns 200.** The runtime is in single-route mode, or the client pinned `useSingleEndpoint={true}`. See §9.11.
 
 **Shared state resets.** Sessions are in-process. Restarting the Python server clears every conversation and every state object.
 
@@ -447,7 +511,7 @@ claude-sdk-python/
 │       └── agents/
 │           ├── chat_agents.py the Quickstart's options dict → build_adapter()
 │           ├── prompts.py     per-route system prompts, with doc provenance noted
-│           ├── registry.py    the 24 agents; id = AG-UI agent id = mount path
+│           ├── registry.py    the 27 agents; id = AG-UI agent id = mount path
 │           └── doc_reference/ published doc code that cannot be wired — never imported
 │               ├── __init__.py             ← why this directory exists
 │               ├── claude_agent_sdk_adapter.py   the incomplete tool bridge
@@ -466,7 +530,7 @@ claude-sdk-python/
         ├── page.tsx           landing
         ├── status/            the status table
         ├── api/
-        │   ├── copilotkit/route.ts                    all 24 agents + A2UI config
+        │   ├── copilotkit/[[...slug]]/route.ts        all 27 agents · Intelligence · A2UI
         │   ├── copilotkit-voice/[[...slug]]/route.ts  v2 runtime + TranscriptionService
         │   └── copilotkit-declarative-gen-ui/route.ts A2UI dynamic-schema
         └── <one directory per doc route>/
@@ -491,6 +555,11 @@ Grouped as this repo's nav groups them. Pages marked ◦ resolve but are absent 
 - ◦ [CopilotSidebar](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/sidebar)
 - ◦ [CopilotPopup](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/popup)
 - ◦ [Open, close, and feedback](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/chat-controls)
+
+**Rich Threads**
+- [Threads Drawer](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/copilot-threads-drawer)
+- [Headless Threads](https://docs.copilotkit.ai/claude-sdk-python/headless-threads)
+- [Thread & History Lifecycle](https://docs.copilotkit.ai/claude-sdk-python/threads-lifecycle)
 
 **Custom Look and Feel**
 - ◦ [CSS Customization](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/css)
