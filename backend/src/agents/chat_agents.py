@@ -21,7 +21,7 @@ import os
 from ag_ui_claude_sdk import ClaudeAgentAdapter
 
 #: The Quickstart's default, used whenever `ANTHROPIC_MODEL` is unset.
-DEFAULT_ANTHROPIC_MODEL = "claude-sonnet-4-6"
+DEFAULT_ANTHROPIC_MODEL = "claude-opus-4-8"
 
 #: The Quickstart's system prompt, used by every route that does not need
 #: something more specific.
