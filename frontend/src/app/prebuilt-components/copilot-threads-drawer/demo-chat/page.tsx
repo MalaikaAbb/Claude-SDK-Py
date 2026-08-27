@@ -7,6 +7,7 @@ import {
 } from "@copilotkit/react-core/v2";
 
 import { DemoFrame } from "@/components/demo-frame";
+import { useAutoThreadName } from "@/lib/use-auto-thread-name";
 
 // Shared by all three Rich Threads routes. `useThreads` scopes its list by
 // agentId, so a per-route id would give this page its own disjoint list.
@@ -42,6 +43,10 @@ export default function Page() {
       subtitle={`agent: ${AGENT_ID} · CopilotThreadsDrawer + CopilotChat`}
     >
       <CopilotChatConfigurationProvider agentId={AGENT_ID}>
+        {/* Repo-authored: the runtime's own naming cannot work through
+            ClaudeAgentAdapter, so the title comes from the first user message.
+            See lib/use-auto-thread-name.ts and README §9.15. */}
+        <AutoThreadName />
         <div style={{ display: "flex", height: "100%" }}>
           <CopilotThreadsDrawer />
           <div style={{ flex: 1, minWidth: 0 }}>
@@ -51,4 +56,9 @@ export default function Page() {
       </CopilotChatConfigurationProvider>
     </DemoFrame>
   );
+}
+
+function AutoThreadName() {
+  useAutoThreadName(AGENT_ID);
+  return null;
 }

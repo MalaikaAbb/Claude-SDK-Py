@@ -4,6 +4,7 @@ import { CopilotChat, useThreads } from "@copilotkit/react-core/v2";
 import { useState } from "react";
 
 import { DemoFrame } from "@/components/demo-frame";
+import { useAutoThreadName } from "@/lib/use-auto-thread-name";
 
 // Shared by all three Rich Threads routes. `useThreads` scopes its list by
 // agentId, so a per-route id would give this page its own disjoint list.
@@ -157,6 +158,10 @@ function ThreadSidebar({
 }
 
 export default function Page() {
+  // Repo-authored auto-naming; see lib/use-auto-thread-name.ts. Rename by hand
+  // still works from the row buttons below — this only fills in the blank.
+  useAutoThreadName(AGENT_ID);
+
   const [activeThreadId, setActiveThreadId] = useState<string | undefined>();
   // Bumped by "New conversation" to remount the chat, which is what re-runs its
   // minted-id memo. Clearing `activeThreadId` alone reuses the mount-time id.

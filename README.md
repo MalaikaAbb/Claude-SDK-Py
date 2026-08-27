@@ -442,7 +442,7 @@ The runtime names a new thread by cloning the agent and sending it two messages:
 
 `ClaudeAgentAdapter` reads **only the last message**. `get_user_message` in `ag_ui_claude_sdk/utils.py` says so in a comment — *"Extract content from the LAST message (any role) … we just need the latest input"*. The injected system message is discarded, so the model answers the transcript prompt under whatever `system_prompt` the adapter was constructed with and replies conversationally. The title is rejected, three attempts are burned, and the thread falls back to `Untitled`.
 
-This repo therefore sets `generateThreadNames: false` — three Claude runs per new thread, each spawning a CLI subprocess turn, for a guaranteed-useless result. Flip it back to `true` to observe the failure; nothing else changes.
+This repo therefore sets `generateThreadNames: false` and names threads client-side instead, in `frontend/src/lib/use-auto-thread-name.ts` — the first few words of the first user message, written through `renameThread`, with no second model call. That file is repo-authored and flagged as such; it is the only not-from-docs code in the Rich Threads routes. Turning the flag back on — three Claude runs per new thread, each spawning a CLI subprocess turn, for a guaranteed-useless result. Flip it back to `true` to observe the failure; nothing else changes.
 
 The same root cause is worth holding on to generally: **any runtime feature that works by injecting a system message will be silently dropped by this adapter.**
 
@@ -494,9 +494,13 @@ authenticating (threads get created) does **not** imply the socket will join,
 because they are separate hosts. To get chat back immediately, unset
 `INTELLIGENCE_API_KEY` and restart — the runtime falls back to SSE. See §9.14.
 
-**Thread names are all "Untitled".** Expected. `generateThreadNames` is off
-because the adapter drops the runtime's injected system message and the title
-can never be valid. See §9.15.
+**Thread names are all "Untitled" or blank.** `generateThreadNames` is off
+because the adapter drops the runtime's injected system message, so the runtime
+can only ever write its `Untitled` fallback. Names now come from
+`lib/use-auto-thread-name.ts` instead — the first few words of the first user
+message. Rows created before that landed keep their old name until renamed;
+`Untitled` is treated as unnamed, so re-opening such a thread fixes it. See
+§9.15.
 
 **Each thread route shows a different list, and Lifecycle's picker is empty.**
 `useThreads({ agentId })` scopes the list per agent, so three routes pointed at

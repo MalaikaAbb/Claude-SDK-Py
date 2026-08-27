@@ -9,6 +9,7 @@ import {
 import { useState } from "react";
 
 import { DemoFrame } from "@/components/demo-frame";
+import { useAutoThreadName } from "@/lib/use-auto-thread-name";
 
 // Shared by all three Rich Threads routes. `useThreads` scopes its list by
 // agentId, so a per-route id would give this page its own disjoint list.
@@ -28,6 +29,9 @@ const AGENT_ID = "threads";
  * everything from React state instead.
  */
 function ThreadControls() {
+  // Repo-authored auto-naming; see lib/use-auto-thread-name.ts.
+  useAutoThreadName(AGENT_ID);
+
   const config = useCopilotChatConfiguration();
   const { threads } = useThreads({ agentId: AGENT_ID });
   const [picked, setPicked] = useState<string>("");

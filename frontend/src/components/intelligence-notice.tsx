@@ -73,6 +73,16 @@ export function SharedThreadStoreNotice() {
         conversation in the drawer, rename it from the headless list, then open
         it from the Lifecycle picker.
       </p>
+      <p className="mt-2 leading-relaxed">
+        <strong>Thread names here are this repo&apos;s, not the
+        runtime&apos;s.</strong> The runtime&apos;s own naming cannot work
+        through <code>ClaudeAgentAdapter</code> — it sends the title
+        instruction as a <em>system</em> message and the adapter reads only the
+        last message — so <code>generateThreadNames</code> is off and{" "}
+        <code>lib/use-auto-thread-name.ts</code> derives a title from the first
+        user message instead, with no second model call. It is the one
+        not-from-docs piece in these three routes.
+      </p>
     </Callout>
   );
 }
