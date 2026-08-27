@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  CopilotKit,
   CopilotChat,
   CopilotChatConfigurationProvider,
   useCopilotChatConfiguration,
@@ -9,10 +10,19 @@ import {
 import { useState } from "react";
 
 import { DemoFrame } from "@/components/demo-frame";
+import { nestedInspectorSetting } from "@/lib/inspector";
 import { useAutoThreadName } from "@/lib/use-auto-thread-name";
 
 // Shared by all three Rich Threads routes. `useThreads` scopes its list by
 // agentId, so a per-route id would give this page its own disjoint list.
+/**
+ * Wrapped in its own provider pointed at `/api/copilotkit-threads`.
+ *
+ * The app-wide provider talks to `/api/copilotkit`, which registers 25 agents
+ * and runs in SSE mode. Intelligence must sit on a runtime advertising as few
+ * agents as possible, because the client opens a realtime thread channel per
+ * advertised agent — see the threads endpoint for the full story.
+ */
 const AGENT_ID = "threads";
 
 /**
@@ -136,16 +146,22 @@ export default function Page() {
       parentPath="/threads-lifecycle"
       subtitle={`agent: ${AGENT_ID} · setActiveThreadId vs startNewThread`}
     >
-      <CopilotChatConfigurationProvider agentId={AGENT_ID}>
-        <div className="grid h-full grid-cols-1 lg:grid-cols-[22rem_1fr]">
-          <div className="min-h-0 overflow-y-auto border-b border-slate-200 lg:border-b-0 lg:border-r dark:border-slate-800">
-            <ThreadControls />
+      <CopilotKit
+        runtimeUrl="/api/copilotkit-threads"
+        agent={AGENT_ID}
+        enableInspector={nestedInspectorSetting}
+      >
+        <CopilotChatConfigurationProvider agentId={AGENT_ID}>
+          <div className="grid h-full grid-cols-1 lg:grid-cols-[22rem_1fr]">
+            <div className="min-h-0 overflow-y-auto border-b border-slate-200 lg:border-b-0 lg:border-r dark:border-slate-800">
+              <ThreadControls />
+            </div>
+            <div className="min-h-0">
+              <CopilotChat />
+            </div>
           </div>
-          <div className="min-h-0">
-            <CopilotChat />
-          </div>
-        </div>
-      </CopilotChatConfigurationProvider>
+        </CopilotChatConfigurationProvider>
+      </CopilotKit>
     </DemoFrame>
   );
 }

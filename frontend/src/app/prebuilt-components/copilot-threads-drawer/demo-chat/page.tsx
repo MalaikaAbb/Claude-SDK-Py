@@ -1,16 +1,26 @@
 "use client";
 
 import {
+  CopilotKit,
   CopilotChat,
   CopilotChatConfigurationProvider,
   CopilotThreadsDrawer,
 } from "@copilotkit/react-core/v2";
 
 import { DemoFrame } from "@/components/demo-frame";
+import { nestedInspectorSetting } from "@/lib/inspector";
 import { useAutoThreadName } from "@/lib/use-auto-thread-name";
 
 // Shared by all three Rich Threads routes. `useThreads` scopes its list by
 // agentId, so a per-route id would give this page its own disjoint list.
+/**
+ * Wrapped in its own provider pointed at `/api/copilotkit-threads`.
+ *
+ * The app-wide provider talks to `/api/copilotkit`, which registers 25 agents
+ * and runs in SSE mode. Intelligence must sit on a runtime advertising as few
+ * agents as possible, because the client opens a realtime thread channel per
+ * advertised agent — see the threads endpoint for the full story.
+ */
 const AGENT_ID = "threads";
 
 /**
@@ -42,18 +52,24 @@ export default function Page() {
       parentPath="/prebuilt-components/copilot-threads-drawer"
       subtitle={`agent: ${AGENT_ID} · CopilotThreadsDrawer + CopilotChat`}
     >
-      <CopilotChatConfigurationProvider agentId={AGENT_ID}>
-        {/* Repo-authored: the runtime's own naming cannot work through
-            ClaudeAgentAdapter, so the title comes from the first user message.
-            See lib/use-auto-thread-name.ts and README §9.15. */}
-        <AutoThreadName />
-        <div style={{ display: "flex", height: "100%" }}>
-          <CopilotThreadsDrawer />
-          <div style={{ flex: 1, minWidth: 0 }}>
-            <CopilotChat />
+      <CopilotKit
+        runtimeUrl="/api/copilotkit-threads"
+        agent={AGENT_ID}
+        enableInspector={nestedInspectorSetting}
+      >
+        <CopilotChatConfigurationProvider agentId={AGENT_ID}>
+          {/* Repo-authored: the runtime's own naming cannot work through
+              ClaudeAgentAdapter, so the title comes from the first user message.
+              See lib/use-auto-thread-name.ts and README §9.15. */}
+          <AutoThreadName />
+          <div style={{ display: "flex", height: "100%" }}>
+            <CopilotThreadsDrawer />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <CopilotChat />
+            </div>
           </div>
-        </div>
-      </CopilotChatConfigurationProvider>
+        </CopilotChatConfigurationProvider>
+      </CopilotKit>
     </DemoFrame>
   );
 }

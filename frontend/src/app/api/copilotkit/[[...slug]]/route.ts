@@ -1,6 +1,5 @@
 import { HttpAgent } from "@ag-ui/client";
 import {
-  CopilotKitIntelligence,
   CopilotRuntime,
   InMemoryAgentRunner,
   createCopilotRuntimeHandler,
@@ -42,12 +41,6 @@ const agents = Object.fromEntries(
 );
 
 /**
- * Server-side only, and deliberately not `NEXT_PUBLIC_`. A project key
- * prefixed for the browser would ship in the client bundle.
- */
-const INTELLIGENCE_API_KEY = process.env.INTELLIGENCE_API_KEY;
-
-/**
  * A SECOND, SEPARATE credential — and the one that unlocks the Threads Drawer.
  *
  * `INTELLIGENCE_API_KEY` authorizes the runtime against the platform: it is
@@ -77,67 +70,29 @@ const LICENSE_TOKEN = process.env.COPILOTKIT_LICENSE_TOKEN;
 const a2ui = { injectA2UITool: false, agents: [A2UI_FIXED_AGENT_ID] };
 
 /**
- * `CopilotRuntimeOptions` is a union, not one object with optional fields:
- * Intelligence mode requires both `intelligence` and `identifyUser`, and the
- * SSE shape declares both as `undefined`. So the two are built separately
- * rather than spread conditionally into one literal.
+ * SSE mode, deliberately — Intelligence is NOT attached to this runtime.
  *
- * Without a key the runtime falls back to SSE with an in-memory runner. Chat
- * still works on all 24 agents; the three Rich Threads routes and the
- * Inspector's Threads tab stay locked, and the key is never read.
+ * When a provider connects to an Intelligence runtime, the client starts a
+ * thread adapter for EVERY agent that runtime advertises on `/info`: a
+ * `GET /threads?agentId=…`, a `POST /threads/subscribe`, and a WebSocket that
+ * retries on failure (`MAX_SOCKET_RETRIES = 5`, 15s timeout) — on every page,
+ * whether or not it mounts a chat. This runtime advertises 25, so attaching
+ * Intelligence here meant ~25 list fetches and 25 retrying sockets per page
+ * load. That is enough to lock up a machine in dev, where Next also mirrors
+ * every browser warning back to the server.
+ *
+ * The Rich Threads routes use `/api/copilotkit-threads`, which registers
+ * exactly one agent. See that file.
  */
-function buildRuntime(): CopilotRuntime {
-  if (!INTELLIGENCE_API_KEY) {
-    return new CopilotRuntime({
-      agents,
-      a2ui,
-      runner: new InMemoryAgentRunner(),
-      ...(LICENSE_TOKEN ? { licenseToken: LICENSE_TOKEN } : {}),
-    });
-  }
-
-  return new CopilotRuntime({
-    agents,
-    a2ui,
-    ...(LICENSE_TOKEN ? { licenseToken: LICENSE_TOKEN } : {}),
-    intelligence: new CopilotKitIntelligence({
-      // apiUrl and wsUrl default to the managed platform. They are DIFFERENT
-      // hosts — api.intelligence… and realtime.intelligence… are deployed
-      // separately, so wsUrl cannot be derived by scheme-swapping apiUrl.
-      // Override both together or neither.
-      apiKey: INTELLIGENCE_API_KEY,
-    }),
-    // Off, because it cannot work through ClaudeAgentAdapter and costs three
-    // Claude runs per new thread to discover that.
-    //
-    // The runtime names a thread by cloning the agent and sending it two
-    // messages: a system message ("Return JSON only in this exact shape:
-    // {\"title\":\"...\"}") and a user message carrying the transcript. It then
-    // requires an assistant reply that is a plain string of at most 8 words.
-    //
-    // ClaudeAgentAdapter reads only `messages[-1]` — `get_user_message` in
-    // ag_ui_claude_sdk/utils.py says so outright ("we only use the last one").
-    // The system message is discarded, so the model answers the transcript
-    // prompt under THIS agent's system prompt and replies conversationally.
-    // normalizeGeneratedTitle then rejects it and the runtime logs "Thread name
-    // generation returned an empty or invalid title" three times before falling
-    // back to "Untitled".
-    //
-    // Set this to true to watch that happen; nothing else changes.
-    generateThreadNames: false,
-    // Threads are per-user. Without this every visitor shares one history.
-    // `Providers` sends these headers so the harness has a stable identity to
-    // key threads on; a real app would read them from a verified session, which
-    // is what the Thread & History Lifecycle page shows.
-    identifyUser: (request) => ({
-      id: request.headers.get("x-user-id") ?? "anonymous",
-      name: request.headers.get("x-user-name") ?? "Anonymous",
-    }),
-  });
-}
+const runtime = new CopilotRuntime({
+  agents,
+  a2ui,
+  runner: new InMemoryAgentRunner(),
+  ...(LICENSE_TOKEN ? { licenseToken: LICENSE_TOKEN } : {}),
+});
 
 const handler = createCopilotRuntimeHandler({
-  runtime: buildRuntime(),
+  runtime,
   basePath: "/api/copilotkit",
 });
 

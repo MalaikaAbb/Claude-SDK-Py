@@ -50,3 +50,10 @@ export const AGENT_URL = process.env.AGENT_URL ?? "http://localhost:8000";
 
 /** The one agent the A2UI fixed-schema route scopes its runtime middleware to. */
 export const A2UI_FIXED_AGENT_ID = "a2ui-fixed-schema";
+
+/**
+ * The one agent the Rich Threads routes bind to, and the only agent on the
+ * Intelligence-mode runtime — the client opens a realtime thread channel per
+ * advertised agent, so that runtime must advertise as few as possible.
+ */
+export const THREADS_AGENT_ID = "threads";
