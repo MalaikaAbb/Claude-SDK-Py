@@ -19,6 +19,9 @@ export const AGENT_IDS = [
   "prebuilt-sidebar",
   "prebuilt-popup",
   "chat-controls",
+  // One agent for all three Rich Threads routes — `useThreads` scopes its list
+  // by agentId, so separate ids would mean three disjoint thread lists.
+  "threads",
   "chat-customization-css",
   "chat-slots",
   "headless-simple",
@@ -47,3 +50,10 @@ export const AGENT_URL = process.env.AGENT_URL ?? "http://localhost:8000";
 
 /** The one agent the A2UI fixed-schema route scopes its runtime middleware to. */
 export const A2UI_FIXED_AGENT_ID = "a2ui-fixed-schema";
+
+/**
+ * The one agent the Rich Threads routes bind to, and the only agent on the
+ * Intelligence-mode runtime — the client opens a realtime thread channel per
+ * advertised agent, so that runtime must advertise as few as possible.
+ */
+export const THREADS_AGENT_ID = "threads";

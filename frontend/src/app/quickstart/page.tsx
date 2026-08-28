@@ -41,9 +41,91 @@ export default function Page() {
           files={[
             { file: "backend/src/agents/chat_agents.py", region: "build-adapter" },
             { file: "backend/src/agent_server.py", region: "mount" },
-            { file: "frontend/src/app/api/copilotkit/route.ts" },
+            { file: "frontend/src/app/api/copilotkit/[[...slug]]/route.ts" },
           ]}
         />
+      </Panel>
+
+      <Panel
+        title="What changed when the doc moved to the v2 runtime"
+        description="The runtime route above is the piece that was rewritten. These are the four differences worth knowing before you diff it."
+      >
+        <ul className="space-y-3 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          <li>
+            <strong>The import moved.</strong>{" "}
+            <code>@copilotkit/runtime/v2</code>, not{" "}
+            <code>@copilotkit/runtime</code>. There is no{" "}
+            <code>serviceAdapter</code> on this surface at all —{" "}
+            <code>ExperimentalEmptyAdapter</code> belonged to the v1 GraphQL
+            runtime and has no counterpart, so the older sample no longer
+            compiles against it.
+          </li>
+          <li>
+            <strong>The handler shape changed.</strong>{" "}
+            <code>createCopilotRuntimeHandler</code> returns a plain fetch
+            handler rather than a <code>&#123; handleRequest &#125;</code>{" "}
+            wrapper, so the route is just its verb exports.
+          </li>
+          <li>
+            <strong>The model default changed</strong> — the page now names{" "}
+            <code>claude-opus-4-8</code> where it used to name{" "}
+            <code>claude-sonnet-4-6</code>. That value is{" "}
+            <code>DEFAULT_ANTHROPIC_MODEL</code> in{" "}
+            <code>chat_agents.py</code> above, and it applies to all 27 agents.
+          </li>
+          <li>
+            <strong>The Quickstart added an Inspector step</strong> whose third
+            check is whether the Threads tab is unlocked. That is the same
+            Intelligence switch the Rich Threads routes depend on, which is why
+            this repo now configures it — see below.
+          </li>
+        </ul>
+      </Panel>
+
+      <Panel
+        title="Intelligence, and the one place this repo departs from the page"
+        description="The runtime route in full. Everything the three Rich Threads routes need is configured here."
+      >
+        <Callout tone="warn" title="single-route serves chat and nothing else">
+          <p className="leading-relaxed">
+            The Quickstart keeps the file at <code>route.ts</code> and passes{" "}
+            <code>mode: &quot;single-route&quot;</code>, which serves one POST
+            carrying a <code>&#123; method, params, body &#125;</code> envelope.
+            That is enough for a chat and nothing more.
+          </p>
+          <p className="mt-2 leading-relaxed">
+            Rich Threads are REST: listing, renaming, archiving and deleting a
+            thread are separate verbs on separate paths, and{" "}
+            <code>/info</code> is what tells the client whether Intelligence is
+            on at all. Those live in <code>mode: &quot;multi-route&quot;</code>,
+            the default — which is why this file sits at{" "}
+            <code>[[...slug]]/route.ts</code>. A single-segment route would 404
+            everything except the bare URL, while <code>/info</code> kept
+            returning 200, so the app would look connected and every thread call
+            would fail.
+          </p>
+          <p className="mt-2 leading-relaxed">
+            Three routes in this harness break under the Quickstart&apos;s
+            literal config, so the deviation is deliberate rather than drift.
+          </p>
+        </Callout>
+        <div className="mt-4">
+          <SourceCode file="frontend/src/app/api/copilotkit/[[...slug]]/route.ts" />
+        </div>
+        <p className="mt-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          Note the two credentials.{" "}
+          <code>INTELLIGENCE_API_KEY</code> is what makes threads{" "}
+          <em>work</em>; <code>COPILOTKIT_LICENSE_TOKEN</code> is what{" "}
+          <code>/info</code> reports a licence status from, and what the
+          prebuilt drawer reads before deciding whether to render its locked
+          view. A runtime can serve threads perfectly while every drawer in the
+          app shows an upgrade panel. Neither is required for chat: with no key
+          the runtime falls back to SSE with an in-memory runner and all 27
+          agents keep working.
+        </p>
+        <div className="mt-4">
+          <SourceCode file="frontend/src/components/providers.tsx" />
+        </div>
       </Panel>
 
       {/* <Panel title="Where this repo deviates from the page">

@@ -1,0 +1,214 @@
+"use client";
+
+import { CopilotKit, CopilotChat, useThreads } from "@copilotkit/react-core/v2";
+import { useState } from "react";
+
+import { DemoFrame } from "@/components/demo-frame";
+import { nestedInspectorSetting } from "@/lib/inspector";
+import { useAutoThreadName } from "@/lib/use-auto-thread-name";
+
+// Shared by all three Rich Threads routes. `useThreads` scopes its list by
+// agentId, so a per-route id would give this page its own disjoint list.
+/**
+ * Wrapped in its own provider pointed at `/api/copilotkit-threads`.
+ *
+ * The app-wide provider talks to `/api/copilotkit`, which registers 25 agents
+ * and runs in SSE mode. Intelligence must sit on a runtime advertising as few
+ * agents as possible, because the client opens a realtime thread channel per
+ * advertised agent — see the threads endpoint for the full story.
+ */
+const AGENT_ID = "threads";
+
+/**
+ * The doc's `ThreadSidebar` and its `App` wiring, in one file.
+ *
+ * Two things the prebuilt drawer does not give you and this does:
+ *
+ *   - **Rename.** `renameThread` is a `useThreads` action the drawer's row menu
+ *     omits entirely, which the doc names as the main reason to go headless.
+ *   - **The `threadId` handoff.** The drawer shares state through a
+ *     `CopilotChatConfigurationProvider`; here the selected id is ordinary
+ *     React state passed to `<CopilotChat threadId={...}>`, which is the doc's
+ *     own `App.tsx` sample.
+ *
+ * `limit` turns on cursor pagination, so `hasMoreThreads` / `fetchMoreThreads`
+ * have something to do.
+ *
+ * "New conversation" is the fiddly part, and it takes two steps.
+ * `useThreads().startNewThread()` clears the list selection and nothing else —
+ * it never touches the chat's `threadId`. The chat's own setter is on
+ * `CopilotChatConfigurationValue`, which is unavailable here on two counts:
+ * this demo mounts no configuration provider, and the chat is prop-controlled,
+ * which the Lifecycle page says makes those setters no-op and warn.
+ *
+ * So the second step is ours, and clearing the prop to `undefined` is not
+ * enough on its own: with no prop the chat falls back to an id minted with
+ * `useMemo` at mount, so clearing returns to the SAME id every time and the
+ * button appears dead. Bumping a React `key` forces the remount that re-runs
+ * that memo — which the Lifecycle page documents as a footgun ("a changed React
+ * key ... produces a new id and silently starts a new conversation"). Here it
+ * is the intended effect.
+ */
+function ThreadSidebar({
+  onSelectThread,
+  onNewThread,
+  activeThreadId,
+}: {
+  onSelectThread: (threadId: string) => void;
+  onNewThread: () => void;
+  activeThreadId?: string;
+}) {
+  const {
+    threads,
+    isLoading,
+    error,
+    renameThread,
+    archiveThread,
+    deleteThread,
+    startNewThread,
+    hasMoreThreads,
+    isFetchingMoreThreads,
+    fetchMoreThreads,
+  } = useThreads({ agentId: AGENT_ID, limit: 20 });
+
+  // Step 1 is the store's; step 2 is the parent's. Same split as the drawer.
+  const handleNewThread = () => {
+    startNewThread();
+    onNewThread();
+  };
+
+  if (isLoading) {
+    return <div className="p-4 text-sm text-slate-500">Loading…</div>;
+  }
+
+  return (
+    <div className="flex h-full flex-col">
+      <div className="shrink-0 border-b border-slate-200 p-3 dark:border-slate-800">
+        <button
+          type="button"
+          onClick={handleNewThread}
+          className="w-full rounded-md bg-[var(--accent)] px-3 py-1.5 text-sm font-medium text-white"
+        >
+          New conversation
+        </button>
+      </div>
+
+      {error && (
+        <p className="shrink-0 border-b border-rose-300 bg-rose-50 px-3 py-2 text-xs text-rose-800 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-200">
+          {error.message}
+        </p>
+      )}
+
+      <div className="min-h-0 flex-1 overflow-y-auto p-2">
+        {threads.length === 0 && (
+          <p className="p-2 text-sm text-slate-500">
+            No threads yet. Send a message in the chat.
+          </p>
+        )}
+
+        {threads.map((thread) => (
+          <div
+            key={thread.id}
+            className={`mb-1 rounded-md border p-2 ${
+              thread.id === activeThreadId
+                ? "border-[var(--accent)]"
+                : "border-transparent hover:border-slate-300 dark:hover:border-slate-700"
+            }`}
+          >
+            <button
+              type="button"
+              onClick={() => onSelectThread(thread.id)}
+              className="block w-full truncate text-left text-sm text-slate-800 dark:text-slate-100"
+            >
+              {thread.name ?? "New conversation"}
+              {thread.archived && (
+                <span className="ml-1 text-xs text-slate-500">(archived)</span>
+              )}
+            </button>
+            <div className="mt-1.5 flex flex-wrap gap-1.5">
+              <button
+                type="button"
+                onClick={() => renameThread(thread.id, "Renamed")}
+                className="rounded border border-slate-300 px-1.5 py-0.5 text-xs dark:border-slate-600"
+              >
+                Rename
+              </button>
+              <button
+                type="button"
+                onClick={() => archiveThread(thread.id)}
+                className="rounded border border-slate-300 px-1.5 py-0.5 text-xs dark:border-slate-600"
+              >
+                Archive
+              </button>
+              <button
+                type="button"
+                onClick={() => deleteThread(thread.id)}
+                className="rounded border border-rose-300 px-1.5 py-0.5 text-xs text-rose-600"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        ))}
+
+        {hasMoreThreads && (
+          <button
+            type="button"
+            onClick={fetchMoreThreads}
+            disabled={isFetchingMoreThreads}
+            className="mt-2 w-full rounded-md border border-slate-300 px-3 py-1.5 text-sm disabled:opacity-40 dark:border-slate-600"
+          >
+            {isFetchingMoreThreads ? "Loading…" : "Load more"}
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function Page() {
+  // Repo-authored auto-naming; see lib/use-auto-thread-name.ts. Rename by hand
+  // still works from the row buttons below — this only fills in the blank.
+  useAutoThreadName(AGENT_ID);
+
+  const [activeThreadId, setActiveThreadId] = useState<string | undefined>();
+  // Bumped by "New conversation" to remount the chat, which is what re-runs its
+  // minted-id memo. Clearing `activeThreadId` alone reuses the mount-time id.
+  const [chatEpoch, setChatEpoch] = useState(0);
+
+  const startFreshConversation = () => {
+    setActiveThreadId(undefined);
+    setChatEpoch((n) => n + 1);
+  };
+
+  return (
+    <DemoFrame
+      parentPath="/headless-threads"
+      subtitle={`agent: ${AGENT_ID} · useThreads + threadId handoff`}
+    >
+      <CopilotKit
+        runtimeUrl="/api/copilotkit-threads"
+        agent={AGENT_ID}
+        enableInspector={nestedInspectorSetting}
+      >
+        <div className="grid h-full grid-cols-1 lg:grid-cols-[18rem_1fr]">
+          <div className="min-h-0 border-b border-slate-200 lg:border-b-0 lg:border-r dark:border-slate-800">
+            <ThreadSidebar
+              onSelectThread={setActiveThreadId}
+              onNewThread={startFreshConversation}
+              activeThreadId={activeThreadId}
+            />
+          </div>
+
+          <div className="min-h-0">
+            <CopilotChat
+              key={chatEpoch}
+              agentId={AGENT_ID}
+              threadId={activeThreadId}
+            />
+          </div>
+        </div>
+      </CopilotKit>
+    </DemoFrame>
+  );
+}
