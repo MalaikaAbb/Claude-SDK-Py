@@ -141,7 +141,7 @@ export const NAV: NavGroup[] = [
         docPath: "/claude-sdk-python/prebuilt-components/copilot-threads-drawer",
         summary:
           "The drop-in conversation switcher: a drawer and a chat sharing one configuration provider, with no active-thread state of your own.",
-        status: "partial",
+        status: "working",
         statusNote:
           "Needs CopilotKit Intelligence. Without INTELLIGENCE_API_KEY the runtime falls back to SSE and the list has nothing to show; without a licence token the drawer renders its locked view.",
       },
@@ -153,7 +153,7 @@ export const NAV: NavGroup[] = [
         docPath: "/claude-sdk-python/headless-threads",
         summary:
           "The same thread store behind your own list UI, including the rename action the prebuilt drawer does not surface.",
-        status: "partial",
+        status: "working",
         statusNote:
           "Same Intelligence precondition as the drawer. The two-step 'New conversation' reset is this repo's, joining two doc fragments.",
       },
@@ -165,7 +165,7 @@ export const NAV: NavGroup[] = [
         docPath: "/claude-sdk-python/threads-lifecycle",
         summary:
           "Where a threadId comes from and what moves it: mint, run, hydrate, switch — with the live id and its explicit flag on screen.",
-        status: "partial",
+        status: "working",
         statusNote:
           "Same Intelligence precondition. Scoping to a signed-in user, first-message thread creation and the checkpointer comparison are out of scope for a local harness.",
       },
