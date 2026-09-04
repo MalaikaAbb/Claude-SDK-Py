@@ -10,8 +10,10 @@ Ids follow the doc pages' own demo ids wherever a page names one
 which is why the casing is inconsistent — that inconsistency is the docs'.
 
 Every entry is the Quickstart's adapter with a different name and prompt.
-There is no per-agent tool configuration because the docs publish no way to
-give the adapter a backend tool; the tool code those pages do publish sits
+The docs publish no way to give the adapter a backend tool, so the two routes
+that have one (`tool-rendering`, `a2ui-fixed-schema`) reach it through
+repo-authored MCP bridges in `weather_mcp_server.py` and
+`flights_mcp_server.py` — README §9.1. The other backend-tool snippets sit
 unwired in `agents/doc_reference/`, and that package's docstring explains why.
 """
 
@@ -26,6 +28,16 @@ from agents.chat_agents import (
     DEFAULT_SYSTEM_PROMPT,
     REASONING_THINKING_TOKENS,
     build_adapter,
+)
+from agents.flights_mcp_server import (
+    DISPLAY_FLIGHT_ALLOWED_TOOLS,
+    FLIGHTS_MCP_SERVER_NAME,
+    display_flight_mcp_server,
+)
+from agents.weather_mcp_server import (
+    WEATHER_ALLOWED_TOOLS,
+    WEATHER_MCP_SERVER_NAME,
+    weather_mcp_server,
 )
 
 
@@ -115,16 +127,33 @@ REGISTRY: dict[str, RegisteredAgent] = {
     "voice": _plain("voice", "/claude-sdk-python/voice"),
 
     # Generative UI
+    #
+    # `get_weather` is registered through a repo-authored MCP bridge, not doc
+    # code — README §9.1. The adapter strips the `mcp__weather__` prefix on the
+    # way out, so the page's `useRenderTool({ name: "get_weather" })` matches.
     "tool-rendering": RegisteredAgent(
-        build_adapter("tool-rendering", prompts.TOOL_RENDERING_SYSTEM_PROMPT),
+        build_adapter(
+            "tool-rendering",
+            prompts.TOOL_RENDERING_SYSTEM_PROMPT,
+            mcp_servers={WEATHER_MCP_SERVER_NAME: weather_mcp_server},
+            allowed_tools=WEATHER_ALLOWED_TOOLS,
+        ),
         "/claude-sdk-python/generative-ui/tool-rendering",
     ),
     "gen-ui-tool-based": RegisteredAgent(
         build_adapter("gen-ui-tool-based", prompts.FRONTEND_TOOL_SYSTEM_PROMPT),
         "/claude-sdk-python/generative-ui/tool-based",
     ),
+    # `display_flight` likewise rides a repo-authored MCP bridge — README §9.1.
+    # Its result is the page's `a2ui_operations` container, which the runtime's
+    # A2UI middleware picks out of the TOOL_CALL_RESULT.
     "a2ui-fixed-schema": RegisteredAgent(
-        build_adapter("a2ui-fixed-schema", prompts.A2UI_FIXED_SYSTEM_PROMPT),
+        build_adapter(
+            "a2ui-fixed-schema",
+            prompts.A2UI_FIXED_SYSTEM_PROMPT,
+            mcp_servers={FLIGHTS_MCP_SERVER_NAME: display_flight_mcp_server},
+            allowed_tools=DISPLAY_FLIGHT_ALLOWED_TOOLS,
+        ),
         "/claude-sdk-python/generative-ui/a2ui/fixed-schema",
     ),
     "declarative-gen-ui": RegisteredAgent(

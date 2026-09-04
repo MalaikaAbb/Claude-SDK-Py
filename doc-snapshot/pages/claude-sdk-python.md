@@ -3,6 +3,11 @@
 > Run a Claude Agent SDK Python agent behind CopilotKit.
 
 
+<IntelligenceOnboardingPrompt
+  feature="learning"
+  surface="docs_claude_sdk_python_quickstart"
+/>
+
 This quickstart gives you two working paths:
 
 - **Start from scratch** to scaffold the full Claude Agent SDK Python showcase.

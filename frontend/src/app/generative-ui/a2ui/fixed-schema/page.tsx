@@ -19,29 +19,36 @@ export default function Page() {
     <>
       <RouteHeader path="/generative-ui/a2ui/fixed-schema" />
 
-      <Callout tone="warn" title="No card is drawn, and three separate things are missing">
+      <Callout tone="warn" title="Works, but three pieces are repo-supplied rather than doc code">
         <ul className="mt-1 list-disc space-y-1 pl-5 leading-relaxed">
           <li>
             <code>display_flight</code> is a <strong>backend</strong> tool with
-            no registration path — the blocker shared with four other routes.
+            no published registration path. This repo bridges it in{" "}
+            <code>backend/src/agents/flights_mcp_server.py</code>: the
+            published tool wrapped by <code>tool()</code> +{" "}
+            <code>create_sdk_mcp_server()</code>, passed to the adapter via{" "}
+            <code>mcp_servers</code> / <code>allowed_tools</code>. See README
+            §9.1.
           </li>
           <li>
             <code>flight_schema.json</code> is loaded by the published code and
-            never published. Neither is its sibling{" "}
-            <code>booked_schema.json</code>. Without the schema there is no
-            component tree to render.
+            never published, nor is <code>booked_schema.json</code>. The copies
+            in <code>doc_reference/a2ui_schemas/</code> come from the Google
+            ADK harness and match the tree this page diagrams.
           </li>
           <li>
             <code>SURFACE_ID</code> and <code>CATALOG_ID</code> are used by{" "}
             <code>_display_flight_operations</code> and defined on neither side
-            of the page. <code>CATALOG_ID</code> can be recovered from the
-            page&apos;s own <code>catalog.ts</code>;{" "}
-            <code>SURFACE_ID</code> has no published value anywhere.
+            of the page. <code>CATALOG_ID</code> is taken from the page&apos;s
+            own <code>catalog.ts</code>; <code>SURFACE_ID</code> has no
+            published value, so <code>&quot;flight-fixed-schema&quot;</code> is
+            this repo&apos;s. Both are marked <code>NOT DOC CODE</code> in the
+            file.
           </li>
         </ul>
       </Callout>
 
-      <Panel title="What it would demonstrate">
+      <Panel title="What it demonstrates">
         <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           The opposite trade to dynamic schemas: design the component tree once,
           up front, and let the tool supply only the data. Nothing is generated
@@ -59,8 +66,8 @@ export default function Page() {
         <div className="mt-4">
           <TryIt
             prompts={["Find me a flight from SFO to JFK."]}
-            expect="Currently: a one-sentence prose reply and no card. The catalog is registered and the runtime is configured; the tool that would emit the operations cannot be reached."
-            fail="A rendered flight card would mean the backend tool bridge landed upstream — raise this route to Working and add the schema JSON."
+            expect="A flight card mounts in the chat: Flight Details, SFO → JFK, an airline badge and a price, plus a Book flight button, followed by a one-sentence reply."
+            fail="A prose-only reply with no card. Check the backend log for the flights MCP server; if the tool fired but nothing drew, compare CATALOG_ID in catalog.ts with the createSurface operation."
           />
         </div>
       </Panel>
@@ -83,10 +90,16 @@ export default function Page() {
       </Panel>
 
       <Panel
-        title="The backend half, as published"
-        description="With the one line that cannot run marked in the header rather than reproduced."
+        title="The backend half, as published — and the bridge that carries it"
+        description="The doc's module with its three repo-supplied values marked, the schema it loads, and the repo-authored MCP server that puts display_flight in front of Claude."
       >
-        <SourceCode file="backend/src/agents/doc_reference/a2ui_fixed.py" />
+        <SourceCodeGroup
+          files={[
+            { file: "backend/src/agents/doc_reference/a2ui_fixed.py" },
+            { file: "backend/src/agents/doc_reference/a2ui_schemas/flight_schema.json" },
+            { file: "backend/src/agents/flights_mcp_server.py" },
+          ]}
+        />
       </Panel>
 
       <Panel title="Registering the runtime">
@@ -137,7 +150,9 @@ export default function Page() {
             <code>a2ui.render</code> in the Python SDK does not yet accept{" "}
             <code>action_handlers</code>. The renderer keeps the button for
             visual fidelity and does nothing on click, which is what the
-            published renderer does too.
+            published renderer does too. <code>booked_schema.json</code> is
+            shipped alongside the flight schema for completeness and is never
+            loaded.
           </li>
           <li>
             The page&apos;s closing pointer for the full action-handler pattern

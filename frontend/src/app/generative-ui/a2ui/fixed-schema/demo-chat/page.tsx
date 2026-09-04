@@ -18,12 +18,13 @@ const AGENT_ID = "a2ui-fixed-schema";
  * operations container itself, so it must not also be handed a `generate_a2ui`
  * tool.
  *
- * On this integration no card is ever drawn. `display_flight` is a backend
- * tool, and the docs publish no way to register one against
- * ClaudeAgentAdapter, so nothing returns an operations container for the
- * middleware to detect. Both halves of the wiring that do not depend on the
- * missing bridge — the catalog here, `injectA2UITool: false` on the runtime —
- * are in place. See the notes page.
+ * `display_flight` is a backend tool, and the docs publish no way to register
+ * one against ClaudeAgentAdapter. This repo bridges that itself:
+ * `backend/src/agents/flights_mcp_server.py` wraps the published tool in an
+ * in-process MCP server whose result is the `a2ui_operations` container the
+ * runtime's A2UI middleware detects. The catalog here and
+ * `injectA2UITool: false` on the runtime are the page's own wiring. See the
+ * notes page and README §9.1 / §9.4.
  */
 export default function Page() {
   return (

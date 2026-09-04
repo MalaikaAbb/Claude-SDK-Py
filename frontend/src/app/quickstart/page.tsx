@@ -154,8 +154,9 @@ export default function Page() {
             The page&apos;s closing section, <em>Backend tools and state</em>,
             is what every tool-driven page in this integration depends on. It
             publishes one function, and that function opens by calling six
-            things the docs never define. Five routes in this harness are Broken
-            because of it.
+            things the docs never define. Four routes in this harness are Broken
+            because of it, and two more run only through a repo-authored bridge
+            that stands in for it.
           </p>
         </Callout>
         <div className="mt-4">

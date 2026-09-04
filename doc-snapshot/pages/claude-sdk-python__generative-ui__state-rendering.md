@@ -46,6 +46,38 @@ that as middleware; direct SDK adapters can emit `STATE_SNAPSHOT` events from
 their streaming loop. Either way, the UI can watch the answer assemble
 token-by-token rather than appearing in one burst between checkpoints.
 
+<Steps>
+  <Step>
+    ### Stream partial state updates while Claude responds
+
+    For streaming state, parse the agent's structured deltas as they arrive and
+    emit CopilotKit state updates before the final message is complete. This
+    branch runs inside the streamed tool-argument handler.
+
+    
+~~~~python title="agent.py"
+                            if current_tool_name == "write_document":
+                                streamed_document = _partial_json_string_property(
+                                    current_tool_args,
+                                    "document",
+                                )
+                                if (
+                                    streamed_document is not None
+                                    and streamed_document != last_streamed_document
+                                ):
+                                    state.document = streamed_document
+                                    last_streamed_document = streamed_document
+                                    yield encoder.encode(
+                                        StateSnapshotEvent(
+                                            type=EventType.STATE_SNAPSHOT,
+                                            snapshot=state.model_dump(),
+                                        )
+                                    )
+~~~~
+
+  </Step>
+</Steps>
+
 ```python
 # src/app/demos/shared-state-streaming/state_streaming_backend.snippet.py
 import json

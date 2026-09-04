@@ -39,13 +39,14 @@ function parseJsonResult<T>(result: unknown): Partial<T> {
 }
 
 /**
- * The renderers are live; nothing calls them.
- *
  * `useRenderTool` and `useDefaultRenderTool` register *renderers* — they do not
  * register tools. They wait for a tool call named `get_weather` to arrive from
- * the agent, and on this integration one never will: `get_weather` is a backend
- * tool, and the docs publish no way to register a backend tool against
- * ClaudeAgentAdapter. See the notes page.
+ * the agent. On this integration that call comes from a repo-authored bridge:
+ * the docs publish `get_weather` as a schema plus a handler but no way to
+ * register a backend tool against ClaudeAgentAdapter, so
+ * `backend/src/agents/weather_mcp_server.py` wraps the published pair in an
+ * in-process MCP server. The adapter strips the `mcp__weather__` prefix, so
+ * the name below matches unchanged. See the notes page and README §9.1.
  *
  * Everything below is the doc's, minus the two renderers whose backends the
  * page never defines at all (`get_stock_price`, `roll_dice`) and the

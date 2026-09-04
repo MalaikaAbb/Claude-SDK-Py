@@ -18,20 +18,23 @@ export default function Page() {
     <>
       <RouteHeader path="/generative-ui/tool-rendering" />
 
-      <Callout tone="warn" title="This route does not work, and the reason is upstream">
+      <Callout tone="warn" title="Works through a repo-authored bridge, not doc code">
         <p className="leading-relaxed">
-          Everything on the frontend is wired and correct. The problem is that{" "}
           <code>useRenderTool</code> registers a <em>renderer</em>, not a tool —
           it waits for a tool call named <code>get_weather</code> to come back
-          from the agent. On this integration one never will.{" "}
-          <code>get_weather</code> is a <strong>backend</strong> tool, and no
-          page in the framework shows how to register a backend tool against{" "}
-          <code>ClaudeAgentAdapter</code>. Ask for weather and Claude answers in
-          prose; no card is drawn.
+          from the agent. <code>get_weather</code> is a <strong>backend</strong>{" "}
+          tool, and no page in the framework shows how to register a backend
+          tool against <code>ClaudeAgentAdapter</code>. This repo closes that
+          gap itself: <code>backend/src/agents/weather_mcp_server.py</code>{" "}
+          wraps the published schema and handler in an in-process MCP server
+          (<code>tool()</code> + <code>create_sdk_mcp_server()</code>) and the
+          registry passes it to the adapter via <code>mcp_servers</code> /{" "}
+          <code>allowed_tools</code>. That bridge is this repo&apos;s, so the
+          route is marked partial. See README §9.1.
         </p>
       </Callout>
 
-      <Panel title="What it would demonstrate">
+      <Panel title="What it demonstrates">
         <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           One renderer per tool name, plus a wildcard for everything else. Each
           renderer receives the tool&apos;s parsed arguments, a live{" "}
@@ -42,8 +45,8 @@ export default function Page() {
         <div className="mt-4">
           <TryIt
             prompts={["What's the weather in San Francisco?"]}
-            expect="Currently: a prose reply that opens by saying it has no weather tool to call. That is this route passing — it is reporting the gap, not hiding it."
-            fail="A WeatherCard would mean the backend tool bridge landed upstream and this route's status should be raised to Working."
+            expect="A WeatherCard appears in the chat, first in its loading state from the parsed location, then filled with 68°, 55% humidity, 10 wind and Sunny once the result lands, followed by a one-sentence summary."
+            fail="A prose-only answer with no card means the bridge is not reaching Claude — check the backend log for the weather MCP server, or that the tool name arrived without its mcp__weather__ prefix."
           />
         </div>
       </Panel>
@@ -53,10 +56,15 @@ export default function Page() {
       </Panel>
 
       <Panel
-        title="The backend half, as published"
-        description="A schema and a handler, with nothing to carry either to the model."
+        title="The backend half, as published — and the bridge that carries it"
+        description="The doc's schema and handler, verbatim, followed by the repo-authored MCP server that puts them in front of Claude."
       >
-        <SourceCode file="backend/src/agents/doc_reference/tool_rendering.py" />
+        <SourceCodeGroup
+          files={[
+            { file: "backend/src/agents/doc_reference/tool_rendering.py" },
+            { file: "backend/src/agents/weather_mcp_server.py" },
+          ]}
+        />
         <p className="mt-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           The schema&apos;s own comment says it is &quot;passed via the{" "}
           <code>tools</code> parameter on{" "}
@@ -64,8 +72,9 @@ export default function Page() {
           <code>.stream(...)</code>&quot; — the raw Anthropic Messages API,
           which is a different backend from the{" "}
           <code>ClaudeAgentAdapter</code> the Quickstart builds. That loop is
-          never published in full, so there is no second server to drop this
-          into either. See{" "}
+          never published in full, so the bridge above is the repo&apos;s own:
+          the SDK&apos;s <code>tool()</code> accepts the JSON schema as-is and
+          the adapter merges the server with its <code>ag_ui</code> one. See{" "}
           <Link
             href="/quickstart"
             className="text-[var(--accent)] underline underline-offset-4"
