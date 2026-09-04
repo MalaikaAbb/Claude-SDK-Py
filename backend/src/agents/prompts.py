@@ -101,13 +101,18 @@ A2UI_FIXED_SYSTEM_PROMPT = dedent("""
 # Tool Call Rendering — /generative-ui/tool-rendering
 #
 # The page publishes no system prompt, only `GET_WEATHER_TOOL` and its handler.
-# Neither can be registered. This prompt says so, so the route fails legibly
-# rather than looking like a model that ignored its tools.
+# The handler reaches Claude through the repo's `weather_mcp_server.py` bridge
+# (README §9.1). The page also names `search_flights`, `get_stock_price` and
+# `roll_dice` without ever defining them, so the prompt keeps Claude honest
+# about those instead of letting it improvise a result.
 # ---------------------------------------------------------------------------
 TOOL_RENDERING_SYSTEM_PROMPT = dedent("""
-    You are a travel assistant. You have no tools available. If the user
-    asks about weather, flights, stock prices or dice rolls, answer in
-    plain prose and open by noting that you have no tool to call for it.
+    You are a travel assistant. When the user asks about the weather
+    anywhere, call the `get_weather` tool rather than answering from
+    memory, then summarise the result in one short sentence. You have no
+    tool for flights, stock prices or dice rolls; if asked about those,
+    answer in plain prose and open by noting that you have no tool to
+    call for it.
 """).strip()
 
 

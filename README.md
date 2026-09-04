@@ -19,7 +19,7 @@ The Claude Agent SDK integration runs a Python agent behind a FastAPI endpoint t
 
 This repo turns every page under [docs.copilotkit.ai/claude-sdk-python](https://docs.copilotkit.ai/claude-sdk-python) that it tracks into a route with a live surface, the repo code behind it, and a link to the page it is testing — so the published sample and the running implementation can be diffed on the spot.
 
-It is a QA tool, so it reports failures as findings rather than hiding them. **Six routes are marked ❌ Broken, and all six trace back to the same upstream reason** — see [§9](#9-known-issues--docvsimplementation-discrepancies). No missing doc code has been invented to paper over that; the published code sits in `backend/src/agents/doc_reference/` exactly as printed, unwired, with its gaps annotated.
+It is a QA tool, so it reports failures as findings rather than hiding them. **Four routes are marked ❌ Broken, and all four trace back to the same upstream reason** — see [§9](#9-known-issues--docvsimplementation-discrepancies). No missing doc code has been invented to paper over that; the published code sits in `backend/src/agents/doc_reference/` exactly as printed, unwired, with its gaps annotated.
 
 ---
 
@@ -245,8 +245,8 @@ authoritative `threadId` prop — the setters no-op when the id is prop-controll
 **`/generative-ui/tool-based`** — `useComponent` registering a React component as a tool.
 *Try:* "Chart quarterly revenue: Q1 120, Q2 145, Q3 138, Q4 190." *Pass:* a bar chart renders inline. *Fail:* a markdown table instead — the model answered in prose.
 
-**`/generative-ui/tool-rendering`** — ❌ **Broken.** Renderers are live; nothing calls them.
-*Try:* "What's the weather in San Francisco?" *Pass (as a report):* a prose reply opening by noting it has no weather tool. *Would-be-fail:* a `WeatherCard` would mean the tool bridge landed upstream — raise the status.
+**`/generative-ui/tool-rendering`** — ⚠️ **Partial.** `get_weather` reaches Claude through a repo-authored MCP bridge, not doc code (§9.1).
+*Try:* "What's the weather in San Francisco?" *Pass:* a `WeatherCard` renders — loading first, then 68° / Sunny — followed by a one-sentence summary. *Fail:* prose with no card; check the backend log for the `weather` MCP server.
 
 **`/generative-ui/state-rendering`** — ❌ **Broken.** Same cell and same gap as State Streaming.
 *Try:* "Draft a one-paragraph product brief for a habit tracker." *Pass (as a report):* empty canvas with a LIVE badge, then the whole brief at once. *Fail:* an empty canvas after the turn — the state write never happened at all.
@@ -254,8 +254,8 @@ authoritative `threadId` prop — the setters no-op when the id is prop-controll
 **`/generative-ui/a2ui/dynamic-schema`** — a bring-your-own-catalog dashboard designed per request by a secondary LLM.
 *Try:* "Build me a dashboard for a fictional SaaS: MRR, churn, active seats, and a bar chart of signups by month." *Pass:* a progress indicator, then Card / Metric / DataTable / PieChart / BarChart appearing one at a time. *Fail:* a markdown table, or raw JSON in the chat.
 
-**`/generative-ui/a2ui/fixed-schema`** — ❌ **Broken.** Catalog and runtime are wired; the tool is unreachable.
-*Try:* "Find me a flight from SFO to JFK." *Pass (as a report):* a one-sentence prose reply, no card.
+**`/generative-ui/a2ui/fixed-schema`** — ⚠️ **Partial.** `display_flight` reaches Claude through a repo-authored MCP bridge; the schema JSON and two constants are repo-supplied (§9.1, §9.4).
+*Try:* "Find me a flight from SFO to JFK." *Pass:* a flight card mounts — Flight Details, SFO → JFK, airline badge, price, Book button — then a one-sentence reply. *Fail:* prose with no card; check the backend log for the `flights` MCP server.
 
 ### App Control
 
@@ -317,10 +317,10 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference
 | [Voice](https://docs.copilotkit.ai/claude-sdk-python/voice) | `/voice` | ✅ | Mic needs `OPENAI_API_KEY`; sample-audio button works without it. |
 | [Reasoning](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/reasoning) | `/generative-ui/reasoning` | ✅ | `ReasoningBlock` is one of the few components published in full. |
 | [Components as Tools](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-based) | `/generative-ui/tool-based` | ✅ | Works because `useComponent` registers a *frontend* tool. |
-| [Tool Call Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-rendering) | `/generative-ui/tool-rendering` | ❌ | `get_weather` is a backend tool with no registration path. |
+| [Tool Call Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-rendering) | `/generative-ui/tool-rendering` | ⚠️ | `get_weather` works via a repo-authored in-process MCP bridge (`weather_mcp_server.py`), not doc code — §9.1. |
 | [State Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/state-rendering) | `/generative-ui/state-rendering` | ❌ | Same cell and gap as State Streaming. |
 | [A2UI · Dynamic Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/dynamic-schema) | `/generative-ui/a2ui/dynamic-schema` | ✅ | Catalog auto-injects `generate_a2ui` as a frontend tool. `renderers.tsx` has no imports — see §9. |
-| [A2UI · Fixed Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/fixed-schema) | `/generative-ui/a2ui/fixed-schema` | ❌ | `display_flight` unreachable; `flight_schema.json`, `SURFACE_ID`, `CATALOG_ID` unpublished. |
+| [A2UI · Fixed Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/fixed-schema) | `/generative-ui/a2ui/fixed-schema` | ⚠️ | `display_flight` works via a repo-authored MCP bridge (`flights_mcp_server.py`); `flight_schema.json`, `SURFACE_ID`, `CATALOG_ID` are repo-supplied — §9.1, §9.4. |
 | [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) | `/frontend-tools` | ✅ | |
 | [Human-in-the-Loop](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop) | `/human-in-the-loop` | ✅ | Pattern 1 only; `useInterrupt` needs LangGraph. |
 | [Programmatic Control](https://docs.copilotkit.ai/claude-sdk-python/programmatic-control) | `/programmatic-control` | ⚠️ | The page's promise-based section is a build placeholder — see §9. |
@@ -340,7 +340,7 @@ Pages in the framework's doc sidebar that this repo does **not** track: CLI, Bui
 
 ### 9.1 The backend tool bridge is incomplete — this is the big one
 
-Five routes fail for one reason. The Quickstart's `main.py` is the only complete backend the framework publishes, and it builds a `ClaudeAgentAdapter` with `"tools": []`. Five pages then publish a **backend** tool — an Anthropic schema plus a Python handler — and no page shows how to register one against that adapter.
+Four routes fail for one reason, and two more work only through a repo-authored bridge. The Quickstart's `main.py` is the only complete backend the framework publishes, and it builds a `ClaudeAgentAdapter` with `"tools": []`. Six pages then publish a **backend** tool — an Anthropic schema plus a Python handler — and no page shows how to register one against that adapter.
 
 The Quickstart's ["Backend tools and state"](https://docs.copilotkit.ai/claude-sdk-python/quickstart) section looks like the missing link. Its `run_with_claude_agent_sdk` excerpt opens by calling six things the docs never define:
 
@@ -348,7 +348,19 @@ The Quickstart's ["Backend tools and state"](https://docs.copilotkit.ai/claude-s
 
 ...plus the `ExecuteTool` type, and without any import block. The surrounding prose says the tools reach the model through `create_sdk_mcp_server`, so the shape is guessable — but guessing is not this harness's job.
 
-**Affected:** `/generative-ui/tool-rendering`, `/generative-ui/state-rendering`, `/shared-state`, `/shared-state/streaming`, `/generative-ui/a2ui/fixed-schema`, `/multi-agent/subagents`.
+**Affected:** `/generative-ui/state-rendering`, `/shared-state`, `/shared-state/streaming`, `/multi-agent/subagents`.
+
+**The two bridges this repo does ship.** `/generative-ui/tool-rendering` and `/generative-ui/a2ui/fixed-schema` are the exceptions, and both are marked ⚠️ rather than ✅ because the bridge is repo-authored. `backend/src/agents/weather_mcp_server.py` wraps the page's verbatim `GET_WEATHER_TOOL` / `get_weather` (still in `doc_reference/tool_rendering.py`, untouched) with the Claude Agent SDK's own primitives:
+
+- `tool(name, description, input_schema)` accepts the snippet's JSON Schema dict as-is; the handler unpacks `args["location"]`, calls `get_weather`, and returns the result as a JSON text block.
+- `create_sdk_mcp_server(name="weather", tools=[...])` makes it an in-process server. `build_adapter` passes it through as `mcp_servers`, and the adapter merges it with its own `ag_ui` server instead of replacing it.
+- The agent runs with `permission_mode: "dontAsk"`, so `mcp__weather__get_weather` must also be in `allowed_tools` or the call is denied silently.
+
+The adapter strips the `mcp__weather__` prefix before emitting `TOOL_CALL_START`, so the page's `useRenderTool({ name: "get_weather" })` matches unchanged.
+
+`backend/src/agents/flights_mcp_server.py` does the same for `display_flight`: it wraps the page's `DISPLAY_FLIGHT_TOOL` / `_display_flight_operations` from `doc_reference/a2ui_fixed.py` and returns the `a2ui_operations` container as a JSON text block. That text becomes the `TOOL_CALL_RESULT` content, which the runtime's A2UI middleware scans for an operations array, so the surface mounts with no further plumbing. This route needed three more repo-supplied values on top of the bridge — see §9.4.
+
+The same shape would unblock the other four routes; it is not applied there because those pages also have gaps beyond registration (state write-back, a raw Anthropic stream, unpublished delegation flow), and the point of this harness is to report what the docs ship.
 
 ### 9.2 The feature pages target a backend that is never published
 
@@ -363,6 +375,8 @@ Here the real CopilotKit exports are imported from `@copilotkit/a2ui-renderer`; 
 ### 9.4 A2UI fixed schema is missing three more pieces
 
 `flight_schema.json` is loaded by the published code and never published, and neither is `booked_schema.json`. `SURFACE_ID` and `CATALOG_ID` are used by `_display_flight_operations` and defined on neither side of the page — `CATALOG_ID` can be recovered from the page's own `catalog.ts`, `SURFACE_ID` cannot. The page also documents the Book button as inert: `a2ui.render` in the Python SDK does not yet accept `action_handlers`.
+
+Because the route now runs through the §9.1 bridge, all three are supplied in `doc_reference/a2ui_fixed.py` and marked `NOT DOC CODE`: `CATALOG_ID = "copilotkit://flight-fixed-catalog"` (from `catalog.ts`), `SURFACE_ID = "flight-fixed-schema"` (this repo's value, shared with the TypeScript harness), and the two JSON files under `doc_reference/a2ui_schemas/`, copied from the Google ADK harness whose schema matches the component tree the page diagrams. `booked_schema.json` is shipped for completeness and never loaded.
 
 ### 9.5 Programmatic Control ships a build placeholder
 
@@ -560,8 +574,11 @@ claude-sdk-python/
 │           ├── chat_agents.py the Quickstart's options dict → build_adapter()
 │           ├── prompts.py     per-route system prompts, with doc provenance noted
 │           ├── registry.py    the 25 agents; id = AG-UI agent id = mount path
-│           └── doc_reference/ published doc code that cannot be wired — never imported
+│           ├── weather_mcp_server.py   repo bridge: get_weather as an in-process MCP server (§9.1)
+│           ├── flights_mcp_server.py   repo bridge: display_flight, same shape
+│           └── doc_reference/ published doc code, as printed — only the two bridges above import it
 │               ├── __init__.py             ← why this directory exists
+│               ├── a2ui_schemas/           flight_schema.json, booked_schema.json — repo-supplied (§9.4)
 │               ├── claude_agent_sdk_adapter.py   the incomplete tool bridge
 │               ├── tool_rendering.py  state_streaming.py  shared_state.py
 │               ├── subagents.py  a2ui_fixed.py  agent_config.py

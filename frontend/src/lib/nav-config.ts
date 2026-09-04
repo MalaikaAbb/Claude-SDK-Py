@@ -7,14 +7,15 @@
  * `backend/src/agents/registry.py`, which is also the FastAPI path it is
  * mounted at — so a route, its doc page, and its agent line up in one place.
  *
- * On the statuses: five routes are `broken` for the same reason, and it is a
- * documentation gap rather than a bug in this repo. Their doc pages publish a
- * backend *tool* (get_weather, write_document, display_flight, the three
+ * On the statuses: several routes are `broken` for the same reason, and it is
+ * a documentation gap rather than a bug in this repo. Their doc pages publish
+ * a backend *tool* (get_weather, write_document, display_flight, the three
  * delegation tools) but no framework page shows how to register a backend tool
  * against `ClaudeAgentAdapter`. The Quickstart's `run_with_claude_agent_sdk`
  * bridge would, except it opens by calling six helpers it never defines. This
- * repo ships the doc's code as published and does not invent the bridge — see
- * README §9.
+ * repo ships the doc's code as published; the two places it adds a bridge of
+ * its own (`get_weather` on Tool Call Rendering, `display_flight` on A2UI
+ * Fixed Schema) are marked `partial` for that reason — see README §9.1.
  */
 
 /**
@@ -283,9 +284,9 @@ export const NAV: NavGroup[] = [
         docPath: "/claude-sdk-python/generative-ui/tool-rendering",
         summary:
           "Named renderers for get_weather and search_flights, plus the wildcard catch-all from useDefaultRenderTool.",
-        status: "broken",
+        status: "partial",
         statusNote:
-          "The renderers are live but nothing calls them: get_weather ships as a schema and a handler with no way to reach the model. Ask for weather and you get prose, not a card.",
+          "get_weather reaches Claude through a repo-authored in-process MCP bridge (backend/src/agents/weather_mcp_server.py), not doc code. Ask for weather and a WeatherCard renders.",
       },
       {
         path: "/generative-ui/state-rendering",
@@ -319,9 +320,9 @@ export const NAV: NavGroup[] = [
         docPath: "/claude-sdk-python/generative-ui/a2ui/fixed-schema",
         summary:
           "A flight card whose component tree is authored as JSON up front; the tool supplies only the data.",
-        status: "broken",
+        status: "partial",
         statusNote:
-          "display_flight is a backend tool, so it is unreachable. The doc also omits flight_schema.json and the SURFACE_ID/CATALOG_ID constants, and its renderers.tsx has no import block — see README §9.",
+          "display_flight reaches Claude through a repo-authored MCP bridge (backend/src/agents/flights_mcp_server.py). flight_schema.json and the SURFACE_ID/CATALOG_ID constants the doc omits are repo-supplied and marked as such; renderers.tsx has no import block — see README §9.1 and §9.4.",
       },
     ],
   },

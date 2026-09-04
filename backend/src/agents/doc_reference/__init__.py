@@ -1,8 +1,13 @@
 """Published doc code that this backend cannot wire up.
 
 Every module in here is copied from a docs.copilotkit.ai/claude-sdk-python page
-as published. None of them is imported by `agent_server.py`, and that is the
-point of the directory rather than an omission.
+as published. `agent_server.py` imports none of them directly, and that is the
+point of the directory rather than an omission. Two exceptions: the
+repo-authored bridges `agents/weather_mcp_server.py` and
+`agents/flights_mcp_server.py` wrap `tool_rendering.py`'s and
+`a2ui_fixed.py`'s published tool pairs in in-process MCP servers. The doc
+files stay verbatim, except that `a2ui_fixed.py` carries three repo-supplied
+values the page uses and never defines, each marked `NOT DOC CODE`.
 
 The reason is the same in every case. These pages publish a **backend** tool —
 an Anthropic tool schema plus a Python handler — and no page in the framework

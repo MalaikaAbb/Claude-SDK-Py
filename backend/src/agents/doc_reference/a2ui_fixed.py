@@ -3,25 +3,26 @@
 Source: https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/fixed-schema
         (blocks titled `src/agents/a2ui_fixed.py`)
 
-Copied verbatim, with one deliberate omission noted below. Nothing imports it —
-see this package's docstring.
+Copied verbatim, plus the three repo-supplied pieces marked `NOT DOC CODE`
+below. `flights_mcp_server.py` (also not doc code) wraps `DISPLAY_FLIGHT_TOOL`
+and `_display_flight_operations` in an in-process MCP server so the route can
+draw its card — README §9.1 and §9.4.
 
-Three gaps on this page beyond the missing tool bridge:
+Three gaps on this page beyond the missing tool bridge, and how each is filled:
 
   * `flight_schema.json` is loaded but never published. Neither is its sibling
-    `booked_schema.json`. The doc's module-level line
-
-        FLIGHT_SCHEMA = _load_schema("flight_schema.json")
-
-    is therefore the one line not reproduced here — it would raise
-    `FileNotFoundError` on import, and inventing the schema would mean
-    inventing the flight card this page is about. `_load_schema` itself is kept
-    exactly as published.
+    `booked_schema.json`. The copies in `a2ui_schemas/` are taken from the
+    sibling Google ADK harness; that schema matches the component tree this
+    page diagrams (Card > Column > [Title, Row(Airport, Arrow, Airport),
+    Row(AirlineBadge, PriceTag), Button]) and the page's own catalog. The
+    published `FLIGHT_SCHEMA = _load_schema("flight_schema.json")` line runs
+    against them.
   * `SURFACE_ID` and `CATALOG_ID` are referenced by
     `_display_flight_operations` and defined on neither the Python nor the
     TypeScript side of the page. `CATALOG_ID` is exported by the page's own
-    `catalog.ts` as `"copilotkit://flight-fixed-catalog"`; `SURFACE_ID` has no
-    published value at all.
+    `catalog.ts` as `"copilotkit://flight-fixed-catalog"` and must match it.
+    `SURFACE_ID` has no published value at all; `"flight-fixed-schema"` is
+    this repo's choice, shared with the TypeScript harness.
   * The page's own "Action handlers" section documents the Book button as
     inert: `a2ui.render` in the Python SDK does not yet accept
     `action_handlers`.
@@ -32,6 +33,12 @@ from pathlib import Path
 from textwrap import dedent
 from typing import Any
 
+# NOT DOC CODE — `_display_flight_operations` below uses both names and the
+# page defines neither. See this module's docstring for where the values come
+# from.
+CATALOG_ID = "copilotkit://flight-fixed-catalog"
+SURFACE_ID = "flight-fixed-schema"
+
 _SCHEMAS_DIR = Path(__file__).parent / "a2ui_schemas"
 
 
@@ -40,8 +47,8 @@ def _load_schema(filename: str) -> list[dict]:
         return json.load(fh)
 
 
-# The published module-level `FLIGHT_SCHEMA = _load_schema("flight_schema.json")`
-# goes here. See this module's docstring for why it is omitted.
+# Published line; the JSON it loads is NOT DOC CODE — see the docstring.
+FLIGHT_SCHEMA = _load_schema("flight_schema.json")
 
 
 SYSTEM_PROMPT = dedent("""

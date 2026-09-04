@@ -129,7 +129,115 @@ def _state_dict(state: dict[str, Any]) -> dict[str, Any]:
 ~~~~
 
   </Step>
+
+  <Step>
+    ### Register `set_notes` with Claude
+
+    This dedicated demo uses the Anthropic Messages API directly. Pass the
+    schema to `client.messages.stream` so Claude can call `set_notes`.
+
+    
+~~~~python title="shared_state_read_write_agent.py"
+        stream_request = client.messages.stream(
+            model=normalize_claude_model(
+                os.getenv("ANTHROPIC_MODEL", DEFAULT_ANTHROPIC_MODEL)
+            ),
+            max_tokens=2048,
+            system=system,
+            messages=messages,
+            tools=[SET_NOTES_TOOL],
+        )
+~~~~
+
+  </Step>
+
+  <Step>
+    ### Write the tool result back to shared state
+
+    When Claude calls `set_notes`, replace the notes array, emit a
+    `StateSnapshotEvent` for the UI, and return a `ToolCallResultEvent` to
+    Claude before the loop continues.
+
+    
+~~~~python title="shared_state_read_write_agent.py"
+        # Execute set_notes by mutating shared state and emitting a
+        # StateSnapshotEvent so the UI re-renders the agent-authored
+        # notes. This is the agent-side half of the WRITE direction.
+        tool_results: list[dict[str, Any]] = []
+        for tc in tool_calls:
+            if tc["name"] == "set_notes":
+                notes = tc["input"].get("notes") or []
+                if isinstance(notes, list):
+                    state["notes"] = [str(n) for n in notes]
+                result_text = json.dumps({"status": "ok", "count": len(state["notes"])})
+                yield encoder.encode(
+                    StateSnapshotEvent(type=EventType.STATE_SNAPSHOT, snapshot=state)
+                )
+            else:
+                result_text = json.dumps({"error": f"unknown tool {tc['name']}"})
+
+            yield encoder.encode(
+                ToolCallResultEvent(
+                    type=EventType.TOOL_CALL_RESULT,
+                    tool_call_id=tc["id"],
+                    message_id=f"{msg_id}-tool-result-{tc['id']}",
+                    content=result_text,
+                )
+            )
+            tool_results.append(
+                {
+                    "type": "tool_result",
+                    "tool_use_id": tc["id"],
+                    "content": result_text,
+                }
+            )
+        messages.append({"role": "user", "content": tool_results})
+~~~~
+
+  </Step>
+
+  <Step>
+    ### Serve the shared-state loop
+
+    Mount the dedicated runner on `/shared-state-read-write` and return its
+    AG-UI events as a streaming response.
+
+    
+~~~~python title="agent_server.py"
+@app.post("/shared-state-read-write")
+async def shared_state_read_write_endpoint(request: Request) -> StreamingResponse:
+    """Bidirectional shared state demo — UI writes preferences, agent writes notes.
+
+    Uses its own streaming loop (not the shared sales-assistant
+    ``run_agent``) because the state schema, tools, and prompt-injection
+    middleware are all demo-specific.
+    """
+    body = await request.json()
+    input_data = RunAgentInput(**body)
+
+    async def event_stream() -> AsyncIterator[str]:
+        async for chunk in run_shared_state_read_write_agent(input_data):
+            yield chunk
+
+    return StreamingResponse(
+        event_stream(),
+        media_type="text/event-stream",
+        headers={
+            "Cache-Control": "no-cache",
+            "X-Accel-Buffering": "no",
+        },
+    )
+
+
+~~~~
+
+  </Step>
 </Steps>
+
+<Callout type="info">
+  This Python route intentionally uses its own Messages API loop. It does not
+  use `ClaudeAgentAdapter` or an MCP server.
+</Callout>
 
 Subscribe a component to the agent's state with `useAgent`. Any time the agent
 mutates its state, for example via a tool call, the hook fires and your UI

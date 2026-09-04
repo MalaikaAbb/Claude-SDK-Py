@@ -100,14 +100,16 @@ export default function Page() {
       </Panel>
 
       <Panel title="Where the docs run out">
-        <Callout tone="warn" title="Five routes are Broken, for one shared reason">
+        <Callout tone="warn" title="Four routes are Broken, for one shared reason">
           <p className="leading-relaxed">
             The Quickstart&apos;s <code>main.py</code> is the only complete
             backend the framework publishes, and it builds a{" "}
             <code>ClaudeAgentAdapter</code> with <code>&quot;tools&quot;: []</code>.
-            Five doc pages then publish a <em>backend</em> tool — an Anthropic
+            Six doc pages then publish a <em>backend</em> tool — an Anthropic
             schema plus a Python handler — and no page shows how to register one
-            against that adapter.
+            against that adapter. Two of those routes (Tool Call Rendering and
+            A2UI Fixed Schema) run through a repo-authored MCP bridge and are
+            marked Partial for that reason; the other four stay Broken.
           </p>
           <p className="mt-2 leading-relaxed">
             The Quickstart&apos;s{" "}
