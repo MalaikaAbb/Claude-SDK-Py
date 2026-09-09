@@ -8,6 +8,46 @@ Holds the 3 most recent dated entries. When a change lands on a fourth
 date, the oldest entry is dropped. Entries are counted, not aged, so a gap of
 weeks between changes does not expire anything.
 
+## 2026-09-09
+
+### 04:53 UTC — 2 pages, highest severity high
+
+**High — Multimodal Attachments**
+
+`/claude-sdk-python/multimodal-attachments` · route `/multimodal-attachments` · under “Configuration”
+
+9 code lines, 1 heading, 11 prose lines changed. The number of fenced code blocks changed.
+
+````diff
++ | `maxConcurrentUploads` | `number` | `1` | How many files upload at the same time. See [Upload concurrency](#upload-concurrency). |
++ 
++ ## Upload concurrency
++ 
++ When a user attaches several files at once, they upload one at a time by default. Every picked file shows in the attachment queue immediately, whether or not its upload has started.
++ 
++ Set `maxConcurrentUploads` to upload several together — worth raising when your upload endpoint handles parallel requests:
++ 
+````
+
+**High — Open, close, and feedback**
+
+`/claude-sdk-python/prebuilt-components/chat-controls` · route `/prebuilt-components/chat-controls` · under “Control the open state from your own UI”
+
+20 code lines, 1 heading, 36 prose lines changed. The number of fenced code blocks changed.
+
+````diff
++ ## Control the open state from your own UI
++ 
++ Pass `open` and `onOpenChange` to `<CopilotSidebar>` or `<CopilotPopup>` to own
++ the open state yourself. This is the controlled pattern: the surface renders
++ whatever `open` says, and every request to open or close (the toggle button,
++ click-outside on the popup) arrives on `onOpenChange` instead of moving the
++ surface directly.
++ 
+````
+
+---
+
 ## 2026-09-04
 
 ### 12:16 UTC — 6 pages, highest severity high
@@ -101,6 +141,8 @@ weeks between changes does not expire anything.
 - [Advanced — Action Handlers](./advanced#action-handlers) for the
 + [Advanced — Action Handlers](/integrations/langgraph/generative-ui/a2ui/advanced#action-handlers) for the
 ````
+
+---
 
 ---
 
@@ -200,76 +242,6 @@ weeks between changes does not expire anything.
 + surface="docs_claude_sdk_python_quickstart"
 + />
 + 
-````
-
----
-
----
-
-## 2026-08-26
-
-### 09:55 UTC — 4 pages, highest severity high
-
-**High — Introduction** · _local snapshot edit, not an upstream change_
-
-`/claude-sdk-python` · routes `/`, `/doc-sync` · under “Configure your environment” · in a `plaintext` block
-
-27 code lines, 8 prose lines changed.
-
-````diff
-- ANTHROPIC_MODEL=claude-sonnet-4-6
-+ ANTHROPIC_MODEL=claude-opus-4-8
-- ANTHROPIC_MODEL=claude-sonnet-4-6
-+ ANTHROPIC_MODEL=claude-opus-4-8
-- "model": os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6"),
-+ "model": os.getenv("ANTHROPIC_MODEL", "claude-opus-4-8"),
-- ExperimentalEmptyAdapter,
-- copilotRuntimeNextJSAppRouterEndpoint,
-````
-
-**High — Quickstart** · _local snapshot edit, not an upstream change_
-
-`/claude-sdk-python/quickstart` · route `/quickstart` · under “Configure your environment” · in a `plaintext` block
-
-27 code lines, 8 prose lines changed.
-
-````diff
-- ANTHROPIC_MODEL=claude-sonnet-4-6
-+ ANTHROPIC_MODEL=claude-opus-4-8
-- ANTHROPIC_MODEL=claude-sonnet-4-6
-+ ANTHROPIC_MODEL=claude-opus-4-8
-- "model": os.getenv("ANTHROPIC_MODEL", "claude-sonnet-4-6"),
-+ "model": os.getenv("ANTHROPIC_MODEL", "claude-opus-4-8"),
-- ExperimentalEmptyAdapter,
-- copilotRuntimeNextJSAppRouterEndpoint,
-````
-
-**Low — Frontend Tools**
-
-`/claude-sdk-python/frontend-tools` · route `/frontend-tools` · under “Frontend Tools”
-
-12 prose lines changed.
-
-````diff
-+ <Callout type="info" title="See this in Inspector">
-+ Open Inspector on localhost. Go to **Inspect**, then **Event Snippets**.
-+ You can compile a tool call, reasoning, text, or activity, run it on the live
-+ agent, and save it. Saved snippets are grouped by recipe. On localhost chat,
-+ **Save as snippet** uses the recipe for the thing you click and fills the form.
-+ On a tool call, generative UI, or A2UI, the bookmark sits to the right of the
-+ block (or to the left if there is no room on the right).
-+ Run of a `generateSandboxedUi` tool call paints the sandbox UI in chat.
-````
-
-**Low — Shared State**
-
-`/claude-sdk-python/shared-state` · route `/shared-state` · under “When should I use this?”
-
-2 prose lines changed.
-
-````diff
-- body="Persistent threads ship with the Enterprise Intelligence Platform on the free Developer tier."
-+ body="Persistent threads ship with CopilotKit Intelligence on the free Developer tier."
 ````
 
 ---
