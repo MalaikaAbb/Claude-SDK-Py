@@ -52,6 +52,13 @@ export const AGENT_URL = process.env.AGENT_URL ?? "http://localhost:8000";
 export const A2UI_FIXED_AGENT_ID = "a2ui-fixed-schema";
 
 /**
+ * The one agent on the A2UI dynamic-schema runtime. That endpoint registers
+ * only this agent and, unlike /api/copilotkit, configures no `a2ui` block —
+ * the catalog on the provider is what enables A2UI and injects the tool.
+ */
+export const A2UI_DYNAMIC_AGENT_ID = "declarative-gen-ui";
+
+/**
  * The one agent the Rich Threads routes bind to, and the only agent on the
  * Intelligence-mode runtime — the client opens a realtime thread channel per
  * advertised agent, so that runtime must advertise as few as possible.

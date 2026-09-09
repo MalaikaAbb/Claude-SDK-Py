@@ -319,7 +319,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference
 | [Components as Tools](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-based) | `/generative-ui/tool-based` | ✅ | Works because `useComponent` registers a *frontend* tool. |
 | [Tool Call Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-rendering) | `/generative-ui/tool-rendering` | ⚠️ | `get_weather` works via a repo-authored in-process MCP bridge (`weather_mcp_server.py`), not doc code — §9.1. |
 | [State Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/state-rendering) | `/generative-ui/state-rendering` | ❌ | Same cell and gap as State Streaming. |
-| [A2UI · Dynamic Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/dynamic-schema) | `/generative-ui/a2ui/dynamic-schema` | ✅ | Catalog auto-injects `generate_a2ui` as a frontend tool. `renderers.tsx` has no imports — see §9. |
+| [A2UI · Dynamic Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/dynamic-schema) | `/generative-ui/a2ui/dynamic-schema` | ✅ | Catalog auto-injects `generate_a2ui` as a frontend tool. `renderers.tsx` has no imports, and its runtime route needs a catch-all segment — see §9. |
 | [A2UI · Fixed Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/fixed-schema) | `/generative-ui/a2ui/fixed-schema` | ⚠️ | `display_flight` works via a repo-authored MCP bridge (`flights_mcp_server.py`); `flight_schema.json`, `SURFACE_ID`, `CATALOG_ID` are repo-supplied — §9.1, §9.4. |
 | [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) | `/frontend-tools` | ✅ | |
 | [Human-in-the-Loop](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop) | `/human-in-the-loop` | ✅ | Pattern 1 only; `useInterrupt` needs LangGraph. |
@@ -474,6 +474,23 @@ Near-universal across the frontend snippets: `createMessageId`, `parseJsonResult
 
 Several pages also print the same file two or three times, cut at different points, which reads as duplication rather than progression: Tool Call Rendering, Slots, Human-in-the-Loop, Sub-Agents and A2UI fixed-schema all do this.
 
+### 9.19 A relative `runtimeUrl` crashes any single-route endpoint
+
+[The A2UI dynamic-schema page](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/dynamic-schema) publishes `runtimeUrl="/api/copilotkit-declarative-gen-ui"` — a relative path, as every CopilotKit page does. That is fine against a catch-all runtime route and fatal against a single-segment one.
+
+Transport detection in `@copilotkit/core` probes `GET {runtimeUrl}/info` and, when that 404s, falls back to a single-route `POST {runtimeUrl}` carrying an `{method:"info"}` envelope. A route exported at a fixed path answers only the second probe, so the client resolves the endpoint to `transport: "single"`. From then on every runtime fetch is routed through `createSingleRouteResourceRequest`, which opens with a bare `new URL(runtimeUrl)`. With no base argument that constructor requires an absolute URL, so a relative one throws before the request is built:
+
+```
+[CopilotKit] Agent error: Failed to construct 'URL': Invalid URL
+  Code: agent_run_failed
+  at createSingleRouteResourceRequest
+  at ProxiedCopilotRuntimeAgent.runtimeFetch
+```
+
+Chat dies at submit, not at connect, so the page looks healthy until you send a message. The omission is local to that one function — `ProxiedCopilotRuntimeAgent.abortRun`, two methods down in the same class, resolves the same field correctly with `new URL(this.runtimeUrl, window.location.origin)`.
+
+This repo keeps the doc's relative `runtimeUrl` verbatim and fixes it on the route side: `/api/copilotkit-declarative-gen-ui` now sits at `[[...slug]]/route.ts` on the `@copilotkit/runtime/v2` surface, like every other runtime route here. `/info` resolves, transport lands on `"rest"`, and the throwing code path is never entered. Passing an absolute `runtimeUrl` also works, but diverges from the published snippet.
+
 ---
 
 ## 10. Troubleshooting
@@ -597,7 +614,7 @@ claude-sdk-python/
         ├── api/
         │   ├── copilotkit/[[...slug]]/route.ts        all 25 agents · Intelligence · A2UI
         │   ├── copilotkit-voice/[[...slug]]/route.ts  v2 runtime + TranscriptionService
-        │   └── copilotkit-declarative-gen-ui/route.ts A2UI dynamic-schema
+        │   └── copilotkit-declarative-gen-ui/[[...slug]]/route.ts  A2UI dynamic-schema
         └── <one directory per doc route>/
             ├── page.tsx       notes, source, doc link, try-it
             └── demo-chat/     the chrome-free live surface

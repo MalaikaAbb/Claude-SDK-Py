@@ -53,7 +53,7 @@ export default function Page() {
       </Panel>
 
       <Panel title="The runtime">
-        <SourceCode file="frontend/src/app/api/copilotkit-declarative-gen-ui/route.ts" />
+        <SourceCode file="frontend/src/app/api/copilotkit-declarative-gen-ui/[[...slug]]/route.ts" />
       </Panel>
 
       <Panel title="Doc-vs-implementation notes">
