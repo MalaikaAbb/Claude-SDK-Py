@@ -2,6 +2,7 @@
 
 import {
   CopilotChatConfigurationProvider,
+  CopilotPopup,
   CopilotSidebar,
   useCopilotChatConfiguration,
 } from "@copilotkit/react-core/v2";
@@ -53,6 +54,7 @@ export default function Page() {
 
 function Demo() {
   const [feedback, setFeedback] = useState<FeedbackEntry[]>([]);
+   
 
   const record = (value: "up" | "down") => (message: { id: string }) => {
     setFeedback((prev) => [
@@ -77,6 +79,8 @@ function Demo() {
             <p className="mt-2 max-w-prose text-sm text-slate-600 dark:text-slate-400">
               The buttons below drive the sidebar from outside it. Send a
               message, then thumb the reply — every rating lands in the log.
+              <br/>
+              <b>RATINGS/FEEDBACK CONFIGURATION IS IN SIDEBAR</b>
             </p>
           </div>
 
@@ -103,6 +107,7 @@ function Demo() {
         </main>
 
         <CopilotSidebar
+          position="left"
           agentId={AGENT_ID}
           defaultOpen
           messageView={{
@@ -119,7 +124,7 @@ function Demo() {
 
 function ChatControls() {
   const config = useCopilotChatConfiguration();
-
+  const [chatOpen, setChatOpen] = useState(false);
   // The doc's guard, kept verbatim. Note what it does NOT mean: the prebuilt
   // Popup and Sidebar create modal state below themselves, not around
   // themselves, so this returns null for any button that is their sibling. An
@@ -129,18 +134,33 @@ function ChatControls() {
 
   return (
     <div className="flex flex-wrap gap-3">
-      <button
+      {/* <button
         onClick={() => config.setModalOpen(true)}
         className="rounded-md bg-[var(--accent)] px-3 py-1.5 text-sm font-medium text-white"
       >
         Ask the assistant
-      </button>
+      </button> */}
+      
       <button
         onClick={() => config.setModalOpen(!config.isModalOpen)}
         className="rounded-md border border-slate-300 px-3 py-1.5 text-sm font-medium text-slate-700 dark:border-slate-700 dark:text-slate-200"
       >
-        {config.isModalOpen ? "Close chat" : "Open chat"}
+        {config.isModalOpen ? "Close Sidebar" : "Open Sidebar"}
       </button>
+      <nav>
+        <button onClick={() => setChatOpen(!chatOpen)}
+          className="rounded-md bg-[var(--accent)] px-3 py-1.5 text-sm font-medium text-white"
+          >
+            Ask the assistant (Popup)
+          </button>
+      </nav>
+
+      <CopilotPopup
+          agentId={AGENT_ID}
+          defaultOpen
+          open={chatOpen} 
+          onOpenChange={setChatOpen} 
+        />
     </div>
   );
 }
