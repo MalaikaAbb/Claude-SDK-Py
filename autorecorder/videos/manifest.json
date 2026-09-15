@@ -1,0 +1,374 @@
+{
+  "generatedAt": "2026-09-15T08:06:38.477Z",
+  "framework": "Claude Agent SDK (Python)",
+  "videoPrefix": "CLAUDESDK-PY-react",
+  "clips": {
+    "quickstart": {
+      "order": 1,
+      "id": "quickstart",
+      "name": "Getting Started - Quickstart",
+      "file": "CLAUDESDK-PY-react-01-Quickstart.webm",
+      "sources": [
+        "frontend/package.json",
+        "frontend/src/app/quickstart/demo-chat/page.tsx",
+        "frontend/src/app/api/copilotkit/[[...slug]]/route.ts",
+        "backend/src/agent_server.py"
+      ],
+      "sourceSha": "d18ca6e022d8",
+      "recordedAt": "2026-09-15T07:35:22.412Z",
+      "bytes": 4509625,
+      "sha256": "65620ffa0c3d",
+      "status": "new"
+    },
+    "prebuilt-components-chat": {
+      "order": 2,
+      "id": "prebuilt-components-chat",
+      "name": "Prebuilt Components - CopilotChat",
+      "file": "CLAUDESDK-PY-react-02-CopilotChat.webm",
+      "sources": [
+        "frontend/src/app/prebuilt-components/chat/demo-chat/page.tsx"
+      ],
+      "sourceSha": "af66f29ac19b",
+      "recordedAt": "2026-09-15T07:36:17.391Z",
+      "bytes": 3759526,
+      "sha256": "98e69f758ca7",
+      "status": "new"
+    },
+    "prebuilt-components-sidebar": {
+      "order": 3,
+      "id": "prebuilt-components-sidebar",
+      "name": "Prebuilt Components - CopilotSidebar",
+      "file": "CLAUDESDK-PY-react-03-CopilotSidebar.webm",
+      "sources": [
+        "frontend/src/app/prebuilt-components/sidebar/demo-chat/page.tsx"
+      ],
+      "sourceSha": "843c8161ac3e",
+      "recordedAt": "2026-09-15T07:37:16.602Z",
+      "bytes": 5588200,
+      "sha256": "ec4a2892f831",
+      "status": "new"
+    },
+    "prebuilt-components-popup": {
+      "order": 4,
+      "id": "prebuilt-components-popup",
+      "name": "Prebuilt Components - CopilotPopup",
+      "file": "CLAUDESDK-PY-react-04-CopilotPopup.webm",
+      "sources": [
+        "frontend/src/app/prebuilt-components/popup/demo-chat/page.tsx"
+      ],
+      "sourceSha": "f9aaf861e5f6",
+      "recordedAt": "2026-09-15T07:38:20.633Z",
+      "bytes": 5095046,
+      "sha256": "d685ed080f0e",
+      "status": "new"
+    },
+    "prebuilt-components-chat-controls": {
+      "order": 5,
+      "id": "prebuilt-components-chat-controls",
+      "name": "Prebuilt Components - Open, close, and feedback",
+      "file": "CLAUDESDK-PY-react-05-OpenCloseAndFeedback.webm",
+      "sources": [
+        "frontend/src/app/prebuilt-components/chat-controls/demo-chat/page.tsx"
+      ],
+      "sourceSha": "5a541466e35c",
+      "recordedAt": "2026-09-15T07:39:16.821Z",
+      "bytes": 4088337,
+      "sha256": "6d1a7703f0c0",
+      "status": "new"
+    },
+    "custom-look-and-feel-css": {
+      "order": 6,
+      "id": "custom-look-and-feel-css",
+      "name": "Custom Look and Feel - CSS Customization",
+      "file": "CLAUDESDK-PY-react-06-CSSCustomization.webm",
+      "sources": [
+        "frontend/src/app/custom-look-and-feel/css/demo-chat/page.tsx"
+      ],
+      "sourceSha": "277f877dc787",
+      "recordedAt": "2026-09-15T07:40:01.590Z",
+      "bytes": 2786626,
+      "sha256": "8aa9e959b559",
+      "status": "new"
+    },
+    "custom-look-and-feel-slots": {
+      "order": 7,
+      "id": "custom-look-and-feel-slots",
+      "name": "Custom Look and Feel - Slots",
+      "file": "CLAUDESDK-PY-react-07-Slots.webm",
+      "sources": [
+        "frontend/src/app/custom-look-and-feel/slots/demo-chat/page.tsx"
+      ],
+      "sourceSha": "79dff4b7ef6f",
+      "recordedAt": "2026-09-15T08:00:36.821Z",
+      "bytes": 3028173,
+      "sha256": "541c1d3015e4",
+      "status": "new"
+    },
+    "custom-look-and-feel-headless-ui": {
+      "order": 8,
+      "id": "custom-look-and-feel-headless-ui",
+      "name": "Custom Look and Feel - Headless UI",
+      "file": "CLAUDESDK-PY-react-08-HeadlessUI.webm",
+      "sources": [
+        "frontend/src/app/custom-look-and-feel/headless-ui/demo-chat/page.tsx"
+      ],
+      "sourceSha": "15081899c5c8",
+      "recordedAt": "2026-09-15T07:41:38.096Z",
+      "bytes": 3156964,
+      "sha256": "6cfdb51f25a7",
+      "status": "new"
+    },
+    "custom-look-and-feel-reasoning-messages": {
+      "order": 9,
+      "id": "custom-look-and-feel-reasoning-messages",
+      "name": "Custom Look and Feel - Reasoning Messages",
+      "file": "CLAUDESDK-PY-react-09-ReasoningMessages.webm",
+      "sources": [
+        "frontend/src/app/custom-look-and-feel/reasoning-messages/demo-chat/page.tsx"
+      ],
+      "sourceSha": "2287b5756104",
+      "recordedAt": "2026-09-15T08:01:37.576Z",
+      "bytes": 3348021,
+      "sha256": "28462b36a0a2",
+      "status": "new"
+    },
+    "multimodal-attachments": {
+      "order": 10,
+      "id": "multimodal-attachments",
+      "name": "Input Modalities - Multimodal Attachments",
+      "file": "CLAUDESDK-PY-react-10-MultimodalAttachments.webm",
+      "sources": [
+        "frontend/src/app/multimodal-attachments/demo-chat/page.tsx"
+      ],
+      "sourceSha": "9bd7f3921942",
+      "recordedAt": "2026-09-15T07:59:37.228Z",
+      "bytes": 2844662,
+      "sha256": "6b527da4711d",
+      "status": "new"
+    },
+    "voice": {
+      "order": 11,
+      "id": "voice",
+      "name": "Input Modalities - Voice",
+      "file": "CLAUDESDK-PY-react-11-Voice.webm",
+      "sources": [
+        "frontend/src/app/voice/demo-chat/page.tsx"
+      ],
+      "sourceSha": "9cb712cca014",
+      "recordedAt": "2026-09-15T07:44:06.349Z",
+      "bytes": 4774736,
+      "sha256": "1783f2249b3b",
+      "status": "new"
+    },
+    "generative-ui-reasoning": {
+      "order": 12,
+      "id": "generative-ui-reasoning",
+      "name": "Generative UI - Reasoning",
+      "file": "CLAUDESDK-PY-react-12-Reasoning.webm",
+      "sources": [
+        "frontend/src/app/generative-ui/reasoning/demo-chat/page.tsx"
+      ],
+      "sourceSha": "0f1f312aba44",
+      "recordedAt": "2026-09-15T08:02:37.443Z",
+      "bytes": 3465225,
+      "sha256": "74ec28c4b1af",
+      "status": "new"
+    },
+    "generative-ui-tool-based": {
+      "order": 13,
+      "id": "generative-ui-tool-based",
+      "name": "Generative UI - Components as Tools",
+      "file": "CLAUDESDK-PY-react-13-ComponentsAsTools.webm",
+      "sources": [
+        "frontend/src/app/generative-ui/tool-based/demo-chat/page.tsx"
+      ],
+      "sourceSha": "3ee4dc7d1520",
+      "recordedAt": "2026-09-15T07:45:50.261Z",
+      "bytes": 3652408,
+      "sha256": "7784861a051f",
+      "status": "new"
+    },
+    "generative-ui-tool-rendering": {
+      "order": 14,
+      "id": "generative-ui-tool-rendering",
+      "name": "Generative UI - Tool Call Rendering",
+      "file": "CLAUDESDK-PY-react-14-ToolCallRendering.webm",
+      "sources": [
+        "frontend/src/app/generative-ui/tool-rendering/demo-chat/page.tsx"
+      ],
+      "sourceSha": "a811f8b4d406",
+      "recordedAt": "2026-09-15T07:46:39.961Z",
+      "bytes": 3684149,
+      "sha256": "b533fd2014e9",
+      "status": "new"
+    },
+    "generative-ui-state-rendering": {
+      "order": 15,
+      "id": "generative-ui-state-rendering",
+      "name": "Generative UI - State Rendering",
+      "file": "CLAUDESDK-PY-react-15-StateRendering.webm",
+      "sources": [
+        "frontend/src/app/generative-ui/state-rendering/demo-chat/page.tsx"
+      ],
+      "sourceSha": "c97b43b8dcd0",
+      "recordedAt": "2026-09-15T07:47:34.924Z",
+      "bytes": 3904620,
+      "sha256": "5bc4e65a2503",
+      "status": "new"
+    },
+    "generative-ui-a2ui-dynamic-schema": {
+      "order": 16,
+      "id": "generative-ui-a2ui-dynamic-schema",
+      "name": "Generative UI - A2UI · Dynamic Schema",
+      "file": "CLAUDESDK-PY-react-16-A2UIDynamicSchema.webm",
+      "sources": [
+        "frontend/src/app/generative-ui/a2ui/dynamic-schema/demo-chat/page.tsx"
+      ],
+      "sourceSha": "ab45907fb67c",
+      "recordedAt": "2026-09-15T07:48:09.570Z",
+      "bytes": 2788103,
+      "sha256": "ec4f832db97e",
+      "status": "new"
+    },
+    "generative-ui-a2ui-fixed-schema": {
+      "order": 17,
+      "id": "generative-ui-a2ui-fixed-schema",
+      "name": "Generative UI - A2UI · Fixed Schema",
+      "file": "CLAUDESDK-PY-react-17-A2UIFixedSchema.webm",
+      "sources": [
+        "frontend/src/app/generative-ui/a2ui/fixed-schema/demo-chat/page.tsx"
+      ],
+      "sourceSha": "42aa42b55f87",
+      "recordedAt": "2026-09-15T08:04:59.806Z",
+      "bytes": 2664090,
+      "sha256": "9cd28d4575ca",
+      "status": "new"
+    },
+    "frontend-tools": {
+      "order": 18,
+      "id": "frontend-tools",
+      "name": "App Control - Frontend Tools",
+      "file": "CLAUDESDK-PY-react-18-FrontendTools.webm",
+      "sources": [
+        "frontend/src/app/frontend-tools/demo-chat/page.tsx"
+      ],
+      "sourceSha": "58daa6df8c70",
+      "recordedAt": "2026-09-15T07:49:35.162Z",
+      "bytes": 4659749,
+      "sha256": "468007d55974",
+      "status": "new"
+    },
+    "human-in-the-loop": {
+      "order": 19,
+      "id": "human-in-the-loop",
+      "name": "App Control - Human in the Loop",
+      "file": "CLAUDESDK-PY-react-19-HumanInTheLoop.webm",
+      "sources": [
+        "frontend/src/app/human-in-the-loop/demo-chat/page.tsx"
+      ],
+      "sourceSha": "3ba9d2e027ae",
+      "recordedAt": "2026-09-15T07:50:32.482Z",
+      "bytes": 3809469,
+      "sha256": "4492ab9fd6d7",
+      "status": "new"
+    },
+    "programmatic-control": {
+      "order": 20,
+      "id": "programmatic-control",
+      "name": "App Control - Programmatic Control",
+      "file": "CLAUDESDK-PY-react-20-ProgrammaticControl.webm",
+      "sources": [
+        "frontend/src/app/programmatic-control/demo-chat/page.tsx"
+      ],
+      "sourceSha": "d2689ccbb592",
+      "recordedAt": "2026-09-15T07:51:18.823Z",
+      "bytes": 3292842,
+      "sha256": "757ab4d4cb31",
+      "status": "new"
+    },
+    "shared-state": {
+      "order": 21,
+      "id": "shared-state",
+      "name": "Shared State - Shared State",
+      "file": "CLAUDESDK-PY-react-21-SharedState.webm",
+      "sources": [
+        "frontend/src/app/shared-state/demo-chat/page.tsx"
+      ],
+      "sourceSha": "33e34c0236ab",
+      "recordedAt": "2026-09-15T07:52:32.022Z",
+      "bytes": 5813308,
+      "sha256": "974ed780adb4",
+      "status": "new"
+    },
+    "shared-state-rendering-in-app": {
+      "order": 22,
+      "id": "shared-state-rendering-in-app",
+      "name": "Shared State - Render state in your app",
+      "file": "CLAUDESDK-PY-react-22-RenderStateInYourApp.webm",
+      "sources": [
+        "frontend/src/app/shared-state/rendering-in-app/demo-chat/page.tsx"
+      ],
+      "sourceSha": "bc9903851761",
+      "recordedAt": "2026-09-15T07:53:23.806Z",
+      "bytes": 2824386,
+      "sha256": "d5f7f6ee63bf",
+      "status": "new"
+    },
+    "shared-state-streaming": {
+      "order": 23,
+      "id": "shared-state-streaming",
+      "name": "Shared State - State Streaming",
+      "file": "CLAUDESDK-PY-react-23-StateStreaming.webm",
+      "sources": [
+        "frontend/src/app/shared-state/streaming/demo-chat/page.tsx"
+      ],
+      "sourceSha": "e86285300686",
+      "recordedAt": "2026-09-15T07:54:26.628Z",
+      "bytes": 4938126,
+      "sha256": "b1fb9baa92b2",
+      "status": "new"
+    },
+    "shared-state-agent-readonly": {
+      "order": 24,
+      "id": "shared-state-agent-readonly",
+      "name": "Shared State - Agent Read-Only Context",
+      "file": "CLAUDESDK-PY-react-24-AgentReadOnlyContext.webm",
+      "sources": [
+        "frontend/src/app/shared-state/agent-readonly/demo-chat/page.tsx"
+      ],
+      "sourceSha": "8dd567e9087d",
+      "recordedAt": "2026-09-15T07:55:11.103Z",
+      "bytes": 3057479,
+      "sha256": "a1e6bbb4596b",
+      "status": "new"
+    },
+    "multi-agent-subagents": {
+      "order": 25,
+      "id": "multi-agent-subagents",
+      "name": "Multi-Agent - Sub-Agents",
+      "file": "CLAUDESDK-PY-react-25-SubAgents.webm",
+      "sources": [
+        "frontend/src/app/multi-agent/subagents/demo-chat/page.tsx"
+      ],
+      "sourceSha": "a9ee4409519d",
+      "recordedAt": "2026-09-15T08:03:54.298Z",
+      "bytes": 6058499,
+      "sha256": "2641f43d98da",
+      "status": "new"
+    },
+    "agent-config": {
+      "order": 26,
+      "id": "agent-config",
+      "name": "Agent Config - Agent Config",
+      "file": "CLAUDESDK-PY-react-26-AgentConfig.webm",
+      "sources": [
+        "frontend/src/app/agent-config/demo-chat/page.tsx"
+      ],
+      "sourceSha": "a8e3ae2429bf",
+      "recordedAt": "2026-09-15T07:57:13.979Z",
+      "bytes": 6890884,
+      "sha256": "791947e4ffca",
+      "status": "new"
+    }
+  }
+}
