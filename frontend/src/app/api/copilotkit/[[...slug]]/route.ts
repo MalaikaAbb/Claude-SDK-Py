@@ -76,7 +76,7 @@ const a2ui = { injectA2UITool: false, agents: [A2UI_FIXED_AGENT_ID] };
  * thread adapter for EVERY agent that runtime advertises on `/info`: a
  * `GET /threads?agentId=…`, a `POST /threads/subscribe`, and a WebSocket that
  * retries on failure (`MAX_SOCKET_RETRIES = 5`, 15s timeout) — on every page,
- * whether or not it mounts a chat. This runtime advertises 25, so attaching
+ * whether or not it mounts a chat. This runtime advertises 27, so attaching
  * Intelligence here meant ~25 list fetches and 25 retrying sockets per page
  * load. That is enough to lock up a machine in dev, where Next also mirrors
  * every browser warning back to the server.

@@ -63,6 +63,7 @@ import { runA2uiAction } from './a2ui.action';
 import { runAgentConfigAction } from './agent-config.action';
 import { runChatControlsAction } from './chat-controls.action';
 import { runFrontendToolsAction } from './frontend-tools.action';
+import { runGovernedActionsAction } from './governed-actions.action';
 import { runHeadlessUiAction } from './headless-ui.action';
 import { runHumanInTheLoopAction } from './human-in-the-loop.action';
 import { runMultimodalAction } from './multimodal.action';
@@ -100,6 +101,7 @@ export const ACTION_MAP: Record<string, PageActionHandler> = {
   // App control — each drives the page rather than the chat.
   'frontend-tools': runFrontendToolsAction,
   'human-in-the-loop': runHumanInTheLoopAction,
+  'human-in-the-loop-governed-actions': runGovernedActionsAction,
   'programmatic-control': runProgrammaticAction,
 
   // Shared state — the panel beside the chat is what has to change.

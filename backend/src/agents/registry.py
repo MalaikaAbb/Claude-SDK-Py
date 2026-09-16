@@ -19,8 +19,10 @@ unwired in `agents/doc_reference/`, and that package's docstring explains why.
 
 from __future__ import annotations
 
+from collections.abc import AsyncIterator, Callable
 from dataclasses import dataclass
 
+from ag_ui.core import BaseEvent, RunAgentInput
 from ag_ui_claude_sdk import ClaudeAgentAdapter
 
 from agents import prompts
@@ -34,6 +36,15 @@ from agents.flights_mcp_server import (
     FLIGHTS_MCP_SERVER_NAME,
     display_flight_mcp_server,
 )
+from agents.governance import (
+    GOVERNANCE_HITL_ALLOWED_TOOLS,
+    GOVERNANCE_INTERRUPT_ALLOWED_TOOLS,
+    HITL_MCP_SERVER_NAME,
+    INTERRUPT_MCP_SERVER_NAME,
+    governance_hitl_mcp_server,
+    governance_interrupt_mcp_server,
+)
+from agents.governance_bridge import run_with_interrupts, run_with_tool_approvals
 from agents.weather_mcp_server import (
     WEATHER_ALLOWED_TOOLS,
     WEATHER_MCP_SERVER_NAME,
@@ -43,10 +54,15 @@ from agents.weather_mcp_server import (
 
 @dataclass(frozen=True)
 class RegisteredAgent:
-    """An adapter plus the doc page it backs."""
+    """An adapter plus the doc page it backs.
+
+    `run`, when set, wraps `adapter.run` for the one route family whose page
+    needs more than the adapter speaks — AG-UI interrupts on Governed Actions.
+    """
 
     adapter: ClaudeAgentAdapter
     doc: str
+    run: Callable[[ClaudeAgentAdapter, RunAgentInput], AsyncIterator[BaseEvent]] | None = None
 
 
 def _plain(agent_id: str, doc: str, prompt: str = DEFAULT_SYSTEM_PROMPT) -> RegisteredAgent:
@@ -170,6 +186,30 @@ REGISTRY: dict[str, RegisteredAgent] = {
     "hitl-in-chat": RegisteredAgent(
         build_adapter("hitl-in-chat", prompts.FRONTEND_TOOL_SYSTEM_PROMPT),
         "/claude-sdk-python/human-in-the-loop",
+    ),
+    # Governed Action Approval — one agent per frontend pattern on the page.
+    # The side-effecting tools sit behind a repo-authored policy gate
+    # (agents/governance.py); the interrupt agent also needs the AG-UI
+    # interrupt bridge in agents/governance_bridge.py. README §9.20.
+    "governed-actions-interrupt": RegisteredAgent(
+        build_adapter(
+            "governed-actions-interrupt",
+            prompts.GOVERNED_ACTIONS_INTERRUPT_SYSTEM_PROMPT,
+            mcp_servers={INTERRUPT_MCP_SERVER_NAME: governance_interrupt_mcp_server},
+            allowed_tools=GOVERNANCE_INTERRUPT_ALLOWED_TOOLS,
+        ),
+        "/claude-sdk-python/human-in-the-loop/governed-actions",
+        run=run_with_interrupts,
+    ),
+    "governed-actions-hitl": RegisteredAgent(
+        build_adapter(
+            "governed-actions-hitl",
+            prompts.GOVERNED_ACTIONS_HITL_SYSTEM_PROMPT,
+            mcp_servers={HITL_MCP_SERVER_NAME: governance_hitl_mcp_server},
+            allowed_tools=GOVERNANCE_HITL_ALLOWED_TOOLS,
+        ),
+        "/claude-sdk-python/human-in-the-loop/governed-actions",
+        run=run_with_tool_approvals,
     ),
     "programmatic-control": _plain(
         "programmatic-control", "/claude-sdk-python/programmatic-control"

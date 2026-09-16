@@ -8,6 +8,97 @@ Holds the 3 most recent dated entries. When a change lands on a fourth
 date, the oldest entry is dropped. Entries are counted, not aged, so a gap of
 weeks between changes does not expire anything.
 
+## 2026-09-15
+
+### 11:31 UTC — 5 pages, highest severity high
+
+**High — Components as Tools**
+
+`/claude-sdk-python/generative-ui/tool-based` · route `/generative-ui/tool-based` · under “Forward browser tools to Claude”
+
+4 code lines, 4 prose lines changed. The number of fenced code blocks changed.
+
+````diff
++ Import the React hook and Zod in the component that registers the tool. This also
++ applies to the built-in agent, which needs no backend tool-registration step.
++ 
++ ```tsx
++ import { useComponent } from "@copilotkit/react-core/v2";
++ import { z } from "zod";
++ ```
++ 
+````
+
+**High — Headless Threads**
+
+`/claude-sdk-python/headless-threads` · route `/headless-threads` · under “Driving one agent per thread”
+
+7 code lines, 1 heading, 19 prose lines changed. The number of fenced code blocks changed.
+
+````diff
++ ## Driving one agent per thread
++ 
++ `useThreads` lists and switches threads. To read or run an agent **scoped to a
++ specific thread** — one open tab per thread, for instance — pass all three of
++ `agentId`, `runtimeAgentId` and `threadId` to `useAgent`:
++ 
++ ```tsx
++ const { agent } = useAgent({
+````
+
+**High — Threads Drawer**
+
+`/claude-sdk-python/prebuilt-components/copilot-threads-drawer` · route `/prebuilt-components/copilot-threads-drawer` · under “Set up the Threads Drawer” · in a `tsx` block
+
+2 code lines, 22 prose lines changed.
+
+````diff
+- <CopilotKitProvider runtimeUrl="/api/copilotkit" publicLicenseKey="ck_pub_...">
++ <CopilotKitProvider runtimeUrl="/api/copilotkit">
+- Threads require CopilotKit Intelligence. Without a license key, the drawer shows
+- a locked view in place of the list.
++ Threads require CopilotKit Intelligence. The drawer resolves its entitlement
++ through the Runtime, so the credential is server-side configuration rather than a
++ prop on the provider. Which credential you set depends on how you deploy.
++ 
+````
+
+**Medium — Tool Call Rendering**
+
+`/claude-sdk-python/generative-ui/tool-rendering` · route `/generative-ui/tool-rendering` · under “Tool inputs and results are separate”
+
+1 heading, 15 prose lines changed.
+
+````diff
++ ### Tool inputs and results are separate
++ 
++ In `useRenderTool`, `parameters` contains the **inputs** the agent sent to the
++ tool. It does not change into the tool's return value when `status` becomes
++ `"complete"`. The completed output arrives separately as `result`, a string.
++ For a tool that returns JSON, parse that string before reading its fields.
++ 
++ For example, `get_weather` might receive `{ "location": "Paris" }` and return
+````
+
+**Low — Voice**
+
+`/claude-sdk-python/voice` · route `/voice` · under “Next.js API route”
+
+24 prose lines changed.
+
+````diff
++ <Callout type="warn" title="Without a service, `/transcribe` answers 503">
++ A runtime with no `transcriptionService` still serves the route, and answers every request
++ `503` with `{ "error": "service_not_configured" }`. The mic button never appears, so the
++ symptom is a chat with no voice input rather than a visible server error — check `/info` for
++ `audioFileTranscriptionEnabled` when voice silently doesn't show up.
++ </Callout>
++ <Callout type="warn" title="Calling `/transcribe` yourself">
++ The chat handles this for you; these are the rules if you post to the route directly. As
+````
+
+---
+
 ## 2026-09-09
 
 ### 04:53 UTC — 2 pages, highest severity high
@@ -45,6 +136,8 @@ weeks between changes does not expire anything.
 + surface directly.
 + 
 ````
+
+---
 
 ---
 
@@ -140,108 +233,6 @@ weeks between changes does not expire anything.
 ````diff
 - [Advanced — Action Handlers](./advanced#action-handlers) for the
 + [Advanced — Action Handlers](/integrations/langgraph/generative-ui/a2ui/advanced#action-handlers) for the
-````
-
----
-
----
-
-## 2026-09-03
-
-### 09:49 UTC — 6 pages, highest severity high
-
-**High — State Rendering**
-
-`/claude-sdk-python/generative-ui/state-rendering` · route `/generative-ui/state-rendering` · under “How it works in code”
-
-19 code lines, 1 heading, 12 prose lines changed. The number of fenced code blocks changed.
-
-````diff
-+ <Steps>
-+ <Step>
-+ ### Stream partial state updates while Claude responds
-+ 
-+ For streaming state, parse the agent's structured deltas as they arrive and
-+ emit CopilotKit state updates before the final message is complete. This
-+ branch runs inside the streamed tool-argument handler.
-+ 
-````
-
-**Low — Introduction**
-
-`/claude-sdk-python` · routes `/`, `/doc-sync` · under “Quickstart”
-
-5 prose lines changed.
-
-````diff
-+ <IntelligenceOnboardingPrompt
-+ feature="learning"
-+ surface="docs_claude_sdk_python_quickstart"
-+ />
-+ 
-````
-
-**Low — Frontend Tools**
-
-`/claude-sdk-python/frontend-tools` · route `/frontend-tools` · under “Frontend Tools”
-
-12 prose lines changed.
-
-````diff
-- <Callout type="info" title="See this in Inspector">
-- Open Inspector on localhost. Go to **Inspect**, then **Event Snippets**.
-- You can compile a tool call, reasoning, text, or activity, run it on the live
-- agent, and save it. Saved snippets are grouped by recipe. On localhost chat,
-- **Save as snippet** uses the recipe for the thing you click and fills the form.
-- On a tool call, generative UI, or A2UI, the bookmark sits to the right of the
-- block (or to the left if there is no room on the right).
-- Run of a `generateSandboxedUi` tool call paints the sandbox UI in chat.
-````
-
-**Low — A2UI · Fixed Schema**
-
-`/claude-sdk-python/generative-ui/a2ui/fixed-schema` · route `/generative-ui/a2ui/fixed-schema` · under “Fixed Schema A2UI”
-
-12 prose lines changed.
-
-````diff
-+ <Callout type="info" title="The flight card is an illustrative domain">
-+ Everything below uses flight booking so the wiring has something concrete to
-+ render — `display_flight`, `flight-fixed-catalog`, and the airport/airline
-+ components are this page's example, not part of the API.
-+ 
-+ What transfers is the **shape**: a fixed catalog, a tool that returns data
-+ against it, and `a2ui.render(...)` with `createSurface` + `updateComponents` +
-+ `updateDataModel`. Keep your own application's domain and substitute your own
-````
-
-**Low — Headless Threads**
-
-`/claude-sdk-python/headless-threads` · route `/headless-threads` · under “What is this?”
-
-6 prose lines changed.
-
-````diff
-- <OpsPlatformCTA
-- variant="inline"
-- title="Threads run in CopilotKit Intelligence"
-- body="Get persistent threads and realtime sync on the free Developer tier."
-+ <IntelligenceOnboardingPrompt
-+ feature="threads"
-````
-
-**Low — Quickstart**
-
-`/claude-sdk-python/quickstart` · route `/quickstart` · under “Quickstart”
-
-5 prose lines changed.
-
-````diff
-+ <IntelligenceOnboardingPrompt
-+ feature="learning"
-+ surface="docs_claude_sdk_python_quickstart"
-+ />
-+ 
 ````
 
 ---

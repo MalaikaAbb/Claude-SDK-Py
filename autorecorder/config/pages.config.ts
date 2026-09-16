@@ -322,6 +322,31 @@ export const PAGES = definePages([
     waitAfterPromptMs: 4000,
   },
   {
+    id: "human-in-the-loop-governed-actions",
+    name: "App Control - Governed Action Approval",
+    videoName: "GovernedActionApproval",
+    docPath: "human-in-the-loop/governed-actions",
+    route: "human-in-the-loop/governed-actions",
+    ideFile: "frontend/src/app/human-in-the-loop/governed-actions/demo-chat/page.tsx",
+    // GovernedActionApproval — the page's useInterrupt block, which the first
+    // half of the recording drives. The tool-call block follows it.
+    startLine: 117,
+    endLine: 161,
+    extraTabs: [
+      { filePath: "frontend/src/app/human-in-the-loop/governed-actions/governed-action.tsx", startLine: 26, endLine: 45 },
+      { filePath: "backend/src/agents/governance.py", startLine: 100, endLine: 128 },
+      { filePath: "backend/src/agents/governance_bridge.py", startLine: 112, endLine: 170 },
+    ],
+    // One prompt per tab, both require_approval under the server policy:
+    // outside mail for useInterrupt, a 20% discount for useHumanInTheLoop.
+    prompt: "Email the Q3 pricing sheet to dana@globex.com.",
+    prompts: [
+      "Email the Q3 pricing sheet to dana@globex.com.",
+      "Give Initech a 20% discount on their next invoice.",
+    ],
+    waitAfterPromptMs: 4000,
+  },
+  {
     id: "programmatic-control",
     name: "App Control - Programmatic Control",
     videoName: "ProgrammaticControl",

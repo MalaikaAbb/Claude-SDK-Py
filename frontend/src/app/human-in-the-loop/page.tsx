@@ -67,6 +67,12 @@ export default function Page() {
             much in its own table, then links to a{" "}
             <code>/claude-sdk-python/human-in-the-loop/useInterrupt</code> deep
             dive anyway.
+            The{" "}
+            <a className="underline" href="/human-in-the-loop/governed-actions">
+              Governed Action Approval
+            </a>{" "}
+            route shows <code>useInterrupt</code> can work on this adapter,
+            through a repo-authored interrupt bridge.
           </li>
           <li>
             It also links to a <code>/human-in-the-loop/headless</code> guide

@@ -35,6 +35,8 @@ export const AGENT_IDS = [
   "declarative-gen-ui",
   "frontend_tools",
   "hitl-in-chat",
+  "governed-actions-interrupt",
+  "governed-actions-hitl",
   "programmatic-control",
   "shared-state-read-write",
   "shared-state-streaming",

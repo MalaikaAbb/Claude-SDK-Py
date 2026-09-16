@@ -350,6 +350,18 @@ export const NAV: NavGroup[] = [
         status: "working",
       },
       {
+        path: "/human-in-the-loop/governed-actions",
+        hasDemo: true,
+        agentId: "governed-actions-interrupt",
+        title: "Governed Action Approval",
+        docPath: "/claude-sdk-python/human-in-the-loop/governed-actions",
+        summary:
+          "Server policy gates every side effect; require_approval actions pause on a card via useInterrupt or useHumanInTheLoop.",
+        status: "partial",
+        statusNote:
+          "Both patterns work. The useInterrupt tab relies on a repo-authored interrupt bridge (backend/src/agents/governance_bridge.py), and the policy, store and audit log are repo code too: the page publishes no backend. See README §9.20.",
+      },
+      {
         path: "/programmatic-control",
         hasDemo: true,
         agentId: "programmatic-control",

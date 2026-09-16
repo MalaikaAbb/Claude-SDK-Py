@@ -8,7 +8,7 @@ A navigable, working test harness for the CopilotKit ↔ Claude Agent SDK (Pytho
 | **Doc root tracked** | <https://docs.copilotkit.ai/claude-sdk-python> |
 | **Frontend packages** | `@copilotkit/react-core` `@copilotkit/runtime` `@copilotkit/a2ui-renderer` `@copilotkit/voice` `^1.69.0` · `@ag-ui/client` `@ag-ui/core` `^0.0.57` · Next `16.3.0` · React `19.2.8` |
 | **Backend packages** | `ag-ui-claude-sdk>=0.1.5` · `claude-agent-sdk>=0.2.132` · `ag-ui-protocol>=0.1.19` · `anthropic>=0.68.0` |
-| **Routes** | 31 total — 18 ✅ working · 5 ⚠️ partial · 6 ❌ broken · 2 reference |
+| **Routes** | 32 total — 18 ✅ working · 6 ⚠️ partial · 6 ❌ broken · 2 reference |
 | **CI** | none |
 
 ---
@@ -30,7 +30,7 @@ Browser
   │  chat surface from @copilotkit/react-core/v2
   ▼
 Next.js  ·  localhost:3000
-  │  /api/copilotkit/[[...slug]]        → all 25 agents · Intelligence · threads
+  │  /api/copilotkit/[[...slug]]        → all 27 agents · Intelligence · threads
   │  /api/copilotkit-voice/[[...slug]]  → voice only, v2 runtime + TranscriptionService
   │  /api/copilotkit-declarative-gen-ui → A2UI dynamic-schema only
   │  CopilotRuntime resolves agentId → HttpAgent(`${AGENT_URL}/${agentId}`)
@@ -101,7 +101,7 @@ There are **two** env files because there are two processes.
 | Variable | Required | What it does |
 |---|---|---|
 | `ANTHROPIC_API_KEY` | ✅ | Read by the Claude Agent SDK. Without it every run returns an authentication error. |
-| `ANTHROPIC_MODEL` | — | Model for all 25 agents. Defaults to `claude-opus-4-8`, the Quickstart's current value. |
+| `ANTHROPIC_MODEL` | — | Model for all 27 agents. Defaults to `claude-opus-4-8`, the Quickstart's current value. |
 | `AGENT_HOST` / `AGENT_PORT` | — | Where the agent server listens. Default `localhost:8000`. Change together with `AGENT_URL` or not at all. |
 | `LOG_LEVEL` | — | `DEBUG` shows the adapter assembling its MCP server from frontend tools each run — useful when debugging tool routes. |
 
@@ -132,7 +132,7 @@ uv run --directory backend python src/agent_server.py
 Successful startup:
 
 ```
-INFO:__main__:Mounted 25 agents: a2ui-fixed-schema, agent-config, agentic_chat, …
+INFO:__main__:Mounted 27 agents: a2ui-fixed-schema, agent-config, agentic_chat, …
 INFO:     Uvicorn running on http://localhost:8000 (Press CTRL+C to quit)
 ```
 
@@ -265,6 +265,9 @@ authoritative `threadId` prop — the setters no-op when the id is prop-controll
 **`/human-in-the-loop`** — `useHumanInTheLoop` suspending the run behind a picker.
 *Try:* "Book an intro call with the sales team." *Pass:* a four-slot picker appears inline and the run visibly pauses; picking swaps it for a confirmation and the agent's next message names your time. *Fail:* the agent invents a time without asking, or picking does nothing.
 
+**`/human-in-the-loop/governed-actions`** — ⚠️ **Partial.** A server policy decides whether each side effect runs, is blocked, or waits for the user's approval. The page has two tabs, one per pattern in the doc: `useInterrupt` and `useHumanInTheLoop`. The right-hand panel is the backend's audit log, shared by both tabs.
+*Try (either tab):* "Email the Q3 pricing sheet to dana@globex.com." *Pass:* a *User approval required* card shows a `GOV-####` reference and the exact JSON arguments, and the audit row reads `pending`. **Approve and run** turns the row `executed` and the agent quotes a `send_email-…` receipt; **Reject** turns it `rejected` and nothing runs. *Also try:* "Open a high-priority ticket: the checkout page is down." (runs with no card, since the policy allows it) and "Delete customer record CUST-4471." (row `denied`; the agent explains why and does not retry). *Fail:* the agent says the email was sent but no row reads `executed`, meaning it skipped the gate; the card appears but approving changes nothing, meaning the resume or `respond` never reached the backend; or the panel says *Backend unreachable*. On the `useInterrupt` tab, answer the card before typing again. Until you do, the client rejects new runs with "pending interrupt(s) not addressed by resume".
+
 **`/programmatic-control`** — ⚠️ **Partial.** `addMessage` / `runAgent` / `stopAgent` / `subscribe`, no chat component.
 *Try:* "Ask for something long", then Stop. *Pass:* the reply pane fills with no chat on the page and the event log shows `onRunStartedEvent` → `onRunFinalized`; Stop cuts it short and still finalizes. *Fail:* buttons do nothing and the log stays empty.
 
@@ -322,7 +325,8 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference
 | [A2UI · Dynamic Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/dynamic-schema) | `/generative-ui/a2ui/dynamic-schema` | ✅ | Catalog auto-injects `generate_a2ui` as a frontend tool. `renderers.tsx` has no imports, and its runtime route needs a catch-all segment — see §9. |
 | [A2UI · Fixed Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/fixed-schema) | `/generative-ui/a2ui/fixed-schema` | ⚠️ | `display_flight` works via a repo-authored MCP bridge (`flights_mcp_server.py`); `flight_schema.json`, `SURFACE_ID`, `CATALOG_ID` are repo-supplied — §9.1, §9.4. |
 | [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) | `/frontend-tools` | ✅ | |
-| [Human-in-the-Loop](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop) | `/human-in-the-loop` | ✅ | Pattern 1 only; `useInterrupt` needs LangGraph. |
+| [Human-in-the-Loop](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop) | `/human-in-the-loop` | ✅ | Pattern 1 only. The page ties `useInterrupt` to LangGraph; Governed Action Approval runs it on this adapter through a repo bridge — §9.20. |
+| [Governed Action Approval UI](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/governed-actions) | `/human-in-the-loop/governed-actions` | ⚠️ | Both patterns work end to end. The policy, store, audit log and `useInterrupt` bridge are repo code because the page publishes no backend — §9.20. |
 | [Programmatic Control](https://docs.copilotkit.ai/claude-sdk-python/programmatic-control) | `/programmatic-control` | ⚠️ | The page's promise-based section is a build placeholder — see §9. |
 | [Shared State](https://docs.copilotkit.ai/claude-sdk-python/shared-state) | `/shared-state` | ❌ | UI→agent works; agent→UI does not. `set_notes` unreachable and the `ag_ui_update_state` substitute does not carry notes back. |
 | [Render state in your app](https://docs.copilotkit.ai/claude-sdk-python/shared-state/rendering-in-app) | `/shared-state/rendering-in-app` | ✅ | Framework-neutral page; follows the google-adk layout. |
@@ -491,6 +495,22 @@ Chat dies at submit, not at connect, so the page looks healthy until you send a 
 
 This repo keeps the doc's relative `runtimeUrl` verbatim and fixes it on the route side: `/api/copilotkit-declarative-gen-ui` now sits at `[[...slug]]/route.ts` on the `@copilotkit/runtime/v2` surface, like every other runtime route here. `/info` resolves, transport lands on `"rest"`, and the throwing code path is never entered. Passing an absolute `runtimeUrl` also works, but diverges from the published snippet.
 
+### 9.20 Governed Action Approval assumes an interrupt-capable backend and publishes none
+
+[The Governed Action Approval UI page](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/governed-actions) publishes a `GovernedAction` envelope, a card, two ways to show it (`useInterrupt` and `useHumanInTheLoop`), and a TypeScript `handleApproval`. It publishes no Python. Its guardrails (check policy on the server, use a stable id and reference, treat deny as final, audit every step) come with no code. The route is ⚠️ for that reason: it works, but its backend half is this repo's.
+
+- **`useInterrupt` needs AG-UI interrupts, and `ClaudeAgentAdapter` has none.** The v2 hook waits for `RUN_FINISHED` with `outcome: {type: "interrupt"}` and resumes by sending a `resume` array. The adapter never emits that outcome and ignores `resume`. It also forwards only the last message's text to Claude, so a bare resume run would re-send the assistant's own reply as a prompt. `backend/src/agents/governance_bridge.py` wraps `adapter.run` to:
+  - end the run with an interrupt for each queued action, with the envelope at `metadata.action`;
+  - turn the `resume` entry into a stored decision;
+  - add one note so Claude learns the outcome.
+
+  It removes that note from the `RUN_STARTED` echo as well as `MESSAGES_SNAPSHOT`, because the AG-UI client adds any unseen message from the echo to the chat.
+- **The page's `handleApproval` trusts the response it is handed.** On the tool path, the next backend call comes from the model, so taking its word for the user's answer would let it approve its own action. `governance.py` reads the decision from the `approve_governed_action` tool result in the message history instead. `execute_governed_action` accepts only an id and a reference.
+- **Type gaps in the snippets.** `useInterrupt`'s `render` must return a `ReactElement`, so the page's `return null` does not compile; this repo returns an empty fragment. `useHumanInTheLoop` again needs an explicit generic (§9.16). Both hooks need an `agentId` here, because the chat does not use the default agent.
+- **Only the `require_approval` card appears on the `useInterrupt` tab.** The server handles `allow` and `deny` before any interrupt is raised, so the card's auto-approve and auto-block effects only run on the tool tab.
+- **Mocked side effects and in-memory state.** The side effects write to an in-memory outbox, and the audit log (`GET /governance/audit`) resets when the backend restarts.
+- **The page's sidebar group has more pages.** Its Human-in-the-loop group also lists *Pausing the Agent for Input* and *Headless Interrupts*, which this repo does not track yet.
+
 ---
 
 ## 10. Troubleshooting
@@ -515,7 +535,7 @@ The framework's doc sidebar has no Troubleshooting section, so these are this re
 
 **Two inspectors / a runaway console.** Two `CopilotKitInspector` elements on one page spin lit-html into an unbounded assert loop that can take out the tab and the dev server. `frontend/src/lib/inspector.ts` guarantees only one mounts — if you add a nested `<CopilotKit>`, add its route to `NESTED_PROVIDER_ROUTES` there. `NEXT_PUBLIC_COPILOTKIT_INSPECTOR=off` disables it entirely.
 
-**The thread list is empty but chat works.** No `INTELLIGENCE_API_KEY`, so the runtime fell back to SSE with an in-memory runner. That fallback is deliberate — chat keeps working on all 25 agents — but nothing is persisted to list.
+**The thread list is empty but chat works.** No `INTELLIGENCE_API_KEY`, so the runtime fell back to SSE with an in-memory runner. That fallback is deliberate — chat keeps working on all 27 agents — but nothing is persisted to list.
 
 **Every route fails with `Timed out joining channel`.** The Intelligence
 realtime socket cannot join, and runs are ingested over it — so this breaks all
@@ -590,9 +610,11 @@ claude-sdk-python/
 │       └── agents/
 │           ├── chat_agents.py the Quickstart's options dict → build_adapter()
 │           ├── prompts.py     per-route system prompts, with doc provenance noted
-│           ├── registry.py    the 25 agents; id = AG-UI agent id = mount path
+│           ├── registry.py    the 27 agents; id = AG-UI agent id = mount path
 │           ├── weather_mcp_server.py   repo bridge: get_weather as an in-process MCP server (§9.1)
 │           ├── flights_mcp_server.py   repo bridge: display_flight, same shape
+│           ├── governance.py           repo code: Governed Actions policy, store, audit log, MCP tools (§9.20)
+│           ├── governance_bridge.py    repo bridge: AG-UI interrupts + resume around adapter.run (§9.20)
 │           └── doc_reference/ published doc code, as printed — only the two bridges above import it
 │               ├── __init__.py             ← why this directory exists
 │               ├── a2ui_schemas/           flight_schema.json, booked_schema.json — repo-supplied (§9.4)
@@ -612,9 +634,10 @@ claude-sdk-python/
         ├── page.tsx           landing
         ├── status/            the status table
         ├── api/
-        │   ├── copilotkit/[[...slug]]/route.ts        all 25 agents · Intelligence · A2UI
+        │   ├── copilotkit/[[...slug]]/route.ts        all 27 agents · Intelligence · A2UI
         │   ├── copilotkit-voice/[[...slug]]/route.ts  v2 runtime + TranscriptionService
-        │   └── copilotkit-declarative-gen-ui/[[...slug]]/route.ts  A2UI dynamic-schema
+        │   ├── copilotkit-declarative-gen-ui/[[...slug]]/route.ts  A2UI dynamic-schema
+        │   └── governance/audit/route.ts               proxy for the backend's governance audit log
         └── <one directory per doc route>/
             ├── page.tsx       notes, source, doc link, try-it
             └── demo-chat/     the chrome-free live surface
@@ -664,6 +687,7 @@ Grouped as this repo's nav groups them. Pages marked ◦ resolve but are absent 
 **App Control**
 - [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools)
 - [Human-in-the-Loop](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop)
+- [Governed Action Approval UI](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/governed-actions)
 - [Programmatic Control](https://docs.copilotkit.ai/claude-sdk-python/programmatic-control)
 
 **Shared State**

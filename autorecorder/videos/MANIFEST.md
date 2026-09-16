@@ -6,36 +6,37 @@ The `.webm` files are **not** in git; this file is how their state is tracked.
 Regenerate it after every `npm run record`, and commit it — the diff is the
 record of what that run changed.
 
-Generated **2026-09-15 08:06** · 26 new
+Generated **2026-09-16 11:49** · 1 stale · 2 new · 24 current
 
 | # | Clip | Recorded | Size | Status | Note |
 |---|------|----------|------|--------|------|
-| 01 | `CLAUDESDK-PY-react-01-Quickstart.webm` | 2026-09-15 07:35 | 4.3 MB | 🆕 new |  |
-| 02 | `CLAUDESDK-PY-react-02-CopilotChat.webm` | 2026-09-15 07:36 | 3.6 MB | 🆕 new |  |
-| 03 | `CLAUDESDK-PY-react-03-CopilotSidebar.webm` | 2026-09-15 07:37 | 5.3 MB | 🆕 new |  |
-| 04 | `CLAUDESDK-PY-react-04-CopilotPopup.webm` | 2026-09-15 07:38 | 4.9 MB | 🆕 new |  |
-| 05 | `CLAUDESDK-PY-react-05-OpenCloseAndFeedback.webm` | 2026-09-15 07:39 | 3.9 MB | 🆕 new |  |
-| 06 | `CLAUDESDK-PY-react-06-CSSCustomization.webm` | 2026-09-15 07:40 | 2.7 MB | 🆕 new |  |
-| 07 | `CLAUDESDK-PY-react-07-Slots.webm` | 2026-09-15 08:00 | 2.9 MB | 🆕 new |  |
-| 08 | `CLAUDESDK-PY-react-08-HeadlessUI.webm` | 2026-09-15 07:41 | 3.0 MB | 🆕 new |  |
-| 09 | `CLAUDESDK-PY-react-09-ReasoningMessages.webm` | 2026-09-15 08:01 | 3.2 MB | 🆕 new |  |
-| 10 | `CLAUDESDK-PY-react-10-MultimodalAttachments.webm` | 2026-09-15 07:59 | 2.7 MB | 🆕 new |  |
-| 11 | `CLAUDESDK-PY-react-11-Voice.webm` | 2026-09-15 07:44 | 4.6 MB | 🆕 new |  |
-| 12 | `CLAUDESDK-PY-react-12-Reasoning.webm` | 2026-09-15 08:02 | 3.3 MB | 🆕 new |  |
-| 13 | `CLAUDESDK-PY-react-13-ComponentsAsTools.webm` | 2026-09-15 07:45 | 3.5 MB | 🆕 new |  |
-| 14 | `CLAUDESDK-PY-react-14-ToolCallRendering.webm` | 2026-09-15 07:46 | 3.5 MB | 🆕 new |  |
-| 15 | `CLAUDESDK-PY-react-15-StateRendering.webm` | 2026-09-15 07:47 | 3.7 MB | 🆕 new |  |
-| 16 | `CLAUDESDK-PY-react-16-A2UIDynamicSchema.webm` | 2026-09-15 07:48 | 2.7 MB | 🆕 new |  |
-| 17 | `CLAUDESDK-PY-react-17-A2UIFixedSchema.webm` | 2026-09-15 08:04 | 2.5 MB | 🆕 new |  |
-| 18 | `CLAUDESDK-PY-react-18-FrontendTools.webm` | 2026-09-15 07:49 | 4.4 MB | 🆕 new |  |
-| 19 | `CLAUDESDK-PY-react-19-HumanInTheLoop.webm` | 2026-09-15 07:50 | 3.6 MB | 🆕 new |  |
-| 20 | `CLAUDESDK-PY-react-20-ProgrammaticControl.webm` | 2026-09-15 07:51 | 3.1 MB | 🆕 new |  |
-| 21 | `CLAUDESDK-PY-react-21-SharedState.webm` | 2026-09-15 07:52 | 5.5 MB | 🆕 new |  |
-| 22 | `CLAUDESDK-PY-react-22-RenderStateInYourApp.webm` | 2026-09-15 07:53 | 2.7 MB | 🆕 new |  |
-| 23 | `CLAUDESDK-PY-react-23-StateStreaming.webm` | 2026-09-15 07:54 | 4.7 MB | 🆕 new |  |
-| 24 | `CLAUDESDK-PY-react-24-AgentReadOnlyContext.webm` | 2026-09-15 07:55 | 2.9 MB | 🆕 new |  |
-| 25 | `CLAUDESDK-PY-react-25-SubAgents.webm` | 2026-09-15 08:03 | 5.8 MB | 🆕 new |  |
-| 26 | `CLAUDESDK-PY-react-26-AgentConfig.webm` | 2026-09-15 07:57 | 6.6 MB | 🆕 new |  |
+| 01 | `CLAUDESDK-PY-react-01-Quickstart.webm` | 2026-09-15 07:35 | 4.3 MB | ⚠️ stale | frontend/package.json modified after recording (+2 more) |
+| 02 | `CLAUDESDK-PY-react-02-CopilotChat.webm` | 2026-09-15 07:36 | 3.6 MB | ✅ current |  |
+| 03 | `CLAUDESDK-PY-react-03-CopilotSidebar.webm` | 2026-09-15 07:37 | 5.3 MB | ✅ current |  |
+| 04 | `CLAUDESDK-PY-react-04-CopilotPopup.webm` | 2026-09-15 07:38 | 4.9 MB | ✅ current |  |
+| 05 | `CLAUDESDK-PY-react-05-OpenCloseAndFeedback.webm` | 2026-09-15 07:39 | 3.9 MB | ✅ current |  |
+| 06 | `CLAUDESDK-PY-react-06-CSSCustomization.webm` | 2026-09-15 07:40 | 2.7 MB | ✅ current |  |
+| 07 | `CLAUDESDK-PY-react-07-Slots.webm` | 2026-09-15 08:00 | 2.9 MB | ✅ current |  |
+| 08 | `CLAUDESDK-PY-react-08-HeadlessUI.webm` | 2026-09-15 07:41 | 3.0 MB | ✅ current |  |
+| 09 | `CLAUDESDK-PY-react-09-ReasoningMessages.webm` | 2026-09-15 08:01 | 3.2 MB | ✅ current |  |
+| 10 | `CLAUDESDK-PY-react-10-MultimodalAttachments.webm` | 2026-09-15 07:59 | 2.7 MB | ✅ current |  |
+| 11 | `CLAUDESDK-PY-react-11-Voice.webm` | 2026-09-15 07:44 | 4.6 MB | ✅ current |  |
+| 12 | `CLAUDESDK-PY-react-12-Reasoning.webm` | 2026-09-15 08:02 | 3.3 MB | ✅ current |  |
+| 13 | `CLAUDESDK-PY-react-13-ComponentsAsTools.webm` | 2026-09-15 07:45 | 3.5 MB | ✅ current |  |
+| 14 | `CLAUDESDK-PY-react-14-ToolCallRendering.webm` | 2026-09-15 08:08 | 3.4 MB | 🆕 new |  |
+| 15 | `CLAUDESDK-PY-react-15-StateRendering.webm` | 2026-09-15 07:47 | 3.7 MB | ✅ current |  |
+| 16 | `CLAUDESDK-PY-react-16-A2UIDynamicSchema.webm` | 2026-09-15 07:48 | 2.7 MB | ✅ current |  |
+| 17 | `CLAUDESDK-PY-react-17-A2UIFixedSchema.webm` | 2026-09-15 08:04 | 2.5 MB | ✅ current |  |
+| 18 | `CLAUDESDK-PY-react-18-FrontendTools.webm` | 2026-09-15 07:49 | 4.4 MB | ✅ current |  |
+| 19 | `CLAUDESDK-PY-react-19-HumanInTheLoop.webm` | 2026-09-15 07:50 | 3.6 MB | ✅ current |  |
+| 20 | `CLAUDESDK-PY-react-20-GovernedActionApproval.webm` | 2026-09-16 11:48 | 8.6 MB | 🆕 new |  |
+| 21 | `CLAUDESDK-PY-react-21-ProgrammaticControl.webm` | 2026-09-15 07:51 | 3.1 MB | ✅ current |  |
+| 22 | `CLAUDESDK-PY-react-22-SharedState.webm` | 2026-09-15 07:52 | 5.5 MB | ✅ current |  |
+| 23 | `CLAUDESDK-PY-react-23-RenderStateInYourApp.webm` | 2026-09-15 07:53 | 2.7 MB | ✅ current |  |
+| 24 | `CLAUDESDK-PY-react-24-StateStreaming.webm` | 2026-09-15 07:54 | 4.7 MB | ✅ current |  |
+| 25 | `CLAUDESDK-PY-react-25-AgentReadOnlyContext.webm` | 2026-09-15 07:55 | 2.9 MB | ✅ current |  |
+| 26 | `CLAUDESDK-PY-react-26-SubAgents.webm` | 2026-09-15 08:03 | 5.8 MB | ✅ current |  |
+| 27 | `CLAUDESDK-PY-react-27-AgentConfig.webm` | 2026-09-15 07:57 | 6.6 MB | ✅ current |  |
 
 **Status meanings**
 

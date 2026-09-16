@@ -33,7 +33,8 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, Request
 from fastapi.responses import StreamingResponse
 
-from agents.registry import REGISTRY
+from agents.governance import STORE as GOVERNANCE_STORE
+from agents.registry import REGISTRY, RegisteredAgent
 
 load_dotenv()
 
@@ -50,8 +51,14 @@ app = FastAPI(
 
 
 #region mount
-def _mount(agent_id: str, adapter: ClaudeAgentAdapter) -> None:
-    """Give one adapter the Quickstart's endpoint at `/{agent_id}`."""
+def _mount(agent_id: str, registered: RegisteredAgent) -> None:
+    """Give one adapter the Quickstart's endpoint at `/{agent_id}`.
+
+    `registered.run` swaps in a wrapper around `adapter.run` for the routes
+    that need one (Governed Actions); everything else streams the adapter
+    unchanged.
+    """
+    adapter: ClaudeAgentAdapter = registered.adapter
 
     @app.post(f"/{agent_id}", name=f"run_{agent_id}")
     async def run_agent(request: Request) -> StreamingResponse:
@@ -61,7 +68,12 @@ def _mount(agent_id: str, adapter: ClaudeAgentAdapter) -> None:
         
         async def event_stream() -> AsyncIterator[str]:
             try:
-                async for event in adapter.run(input_data):
+                events = (
+                    registered.run(adapter, input_data)
+                    if registered.run
+                    else adapter.run(input_data)
+                )
+                async for event in events:
                     yield encoder.encode(event)
             except Exception as error:
                 # Every failure — malformed request body or streaming —
@@ -86,7 +98,7 @@ def _mount(agent_id: str, adapter: ClaudeAgentAdapter) -> None:
 
 
 for _agent_id, _registered in REGISTRY.items():
-    _mount(_agent_id, _registered.adapter)
+    _mount(_agent_id, _registered)
 #endregion
 
 
@@ -98,6 +110,12 @@ async def health() -> dict:
         "agents": sorted(REGISTRY),
         "count": len(REGISTRY),
     }
+
+
+@app.get("/governance/audit")
+async def governance_audit() -> dict:
+    """Governed Actions: every proposal, verdict, decision and result so far."""
+    return GOVERNANCE_STORE.snapshot()
 
 
 if __name__ == "__main__":

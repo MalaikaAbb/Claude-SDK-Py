@@ -162,11 +162,35 @@ export const DELETE = (req: NextRequest) => getHandler()(req);
 
 The `basePath: "/api/copilotkit-voice"` in `createCopilotRuntimeHandler` must match the API route's directory path. With `transcriptionService` set, the runtime advertises `audioFileTranscriptionEnabled: true` on `/info` (which is what tells the chat to render the mic button) and routes `POST /transcribe` to the service.
 
+<Callout type="warn" title="Without a service, `/transcribe` answers 503">
+A runtime with no `transcriptionService` still serves the route, and answers every request
+`503` with `{ "error": "service_not_configured" }`. The mic button never appears, so the
+symptom is a chat with no voice input rather than a visible server error — check `/info` for
+`audioFileTranscriptionEnabled` when voice silently doesn't show up.
+</Callout>
+
+<Callout type="warn" title="Calling `/transcribe` yourself">
+The chat handles this for you; these are the rules if you post to the route directly. As
+multipart, the audio field must be named `audio` — any other name reads as absent and the
+route answers `invalid_request`. As JSON, `mimeType` is required alongside the base64
+`audio`, and a payload without it is rejected the same way.
+</Callout>
+
 
 
 ### Custom transcription backends
 
 `TranscriptionService` from `@copilotkit/runtime/v2` is an abstract class. Subclass it to plug in any transcription provider — Whisper, AssemblyAI, Deepgram, your own model. The library ships `TranscriptionServiceOpenAI` as the canonical reference implementation.
+
+<Callout type="warn" title="Return a string, and let provider errors through">
+`transcribe` returns the transcript as a string — the handler wraps it into
+`{ transcription }` itself, so returning a richer object is a type error.
+
+Let the provider's own errors propagate unchanged. The runtime classifies failures by reading
+the error text for markers like `rate`, `429`, `auth` and `too long`, so a provider message
+such as `OpenAI returned 429 rate limited` maps to the right error code on its own. Replacing
+it with your own wording bypasses that and everything lands as a generic provider error.
+</Callout>
 
 A useful pattern is wrapping your service in a guard that returns a clean 4xx when credentials aren't configured, instead of an opaque 5xx from the underlying SDK:
 

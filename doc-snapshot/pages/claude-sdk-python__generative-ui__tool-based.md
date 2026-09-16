@@ -83,6 +83,14 @@ def _build_frontend_tools(input_data: RunAgentInput) -> list[dict[str, Any]]:
   </Step>
 </Steps>
 
+Import the React hook and Zod in the component that registers the tool. This also
+applies to the built-in agent, which needs no backend tool-registration step.
+
+```tsx
+import { useComponent } from "@copilotkit/react-core/v2";
+import { z } from "zod";
+```
+
 `useComponent` takes a name, a Zod schema for its props, and the component
 to render. The runtime registers it as a frontend tool so the agent can
 discover it, and Zod validates the LLM's arguments before they reach your
