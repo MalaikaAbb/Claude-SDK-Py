@@ -34,8 +34,19 @@ export function StatusBadge({ status }: { status: RouteStatus }) {
 /**
  * Every route renders this. It resolves its own metadata from the path so a
  * page can never drift from the nav or the status table.
+ *
+ * `demoLabel` renames the demo button and `extraDemos` adds more buttons beside
+ * it, for routes whose doc page covers more than one live pattern.
  */
-export function RouteHeader({ path }: { path: string }) {
+export function RouteHeader({
+  path,
+  demoLabel = "Open demo",
+  extraDemos = [],
+}: {
+  path: string;
+  demoLabel?: string;
+  extraDemos?: { href: string; label: string }[];
+}) {
   const route = findRoute(path);
   const demo = route ? demoPath(route) : undefined;
 
@@ -84,9 +95,20 @@ export function RouteHeader({ path }: { path: string }) {
             rel="noreferrer"
             className="rounded-md bg-[var(--accent)] px-3 py-1.5 font-medium text-white"
           >
-            Open demo ↗
+            {demoLabel} ↗
           </Link>
         )}
+        {extraDemos.map((extra) => (
+          <Link
+            key={extra.href}
+            href={extra.href}
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-md bg-[var(--accent)] px-3 py-1.5 font-medium text-white"
+          >
+            {extra.label} ↗
+          </Link>
+        ))}
         <a
           href={docUrl(route)}
           target="_blank"
