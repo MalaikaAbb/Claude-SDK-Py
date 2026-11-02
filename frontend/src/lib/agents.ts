@@ -33,6 +33,18 @@ export const AGENT_IDS = [
   "gen-ui-tool-based",
   "a2ui-fixed-schema",
   "declarative-gen-ui",
+  "gen-ui-components",
+  "gen-ui-surfaces",
+  "gen-ui-catalogs",
+  "gen-ui-standard-catalog",
+  "gen-ui-state-actions",
+  "gen-ui-theming",
+  "gen-ui-transports",
+  "gen-ui-transports-plain",
+  "gen-ui-markdown",
+  // Ids as the JSON Render and Hashbrown pages publish them.
+  "byoc_json_render",
+  "declarative-hashbrown-demo",
   "frontend_tools",
   "hitl-in-chat",
   "programmatic-control",
@@ -64,3 +76,26 @@ export const A2UI_DYNAMIC_AGENT_ID = "declarative-gen-ui";
  * advertised agent, so that runtime must advertise as few as possible.
  */
 export const THREADS_AGENT_ID = "threads";
+
+/** The one agent on /api/copilotkit-declarative-json-render. */
+export const JSON_RENDER_AGENT_ID = "byoc_json_render";
+
+/** The one agent on /api/copilotkit-declarative-hashbrown. */
+export const HASHBROWN_AGENT_ID = "declarative-hashbrown-demo";
+
+/**
+ * The agents on the Components and surfaces runtime
+ * (/api/copilotkit-components) — one per page, plus a second Transports agent
+ * that page deliberately leaves out of `agentIds`.
+ */
+export const COMPONENTS_AGENT_IDS = [
+  "gen-ui-components",
+  "gen-ui-surfaces",
+  "gen-ui-catalogs",
+  "gen-ui-standard-catalog",
+  "gen-ui-state-actions",
+  "gen-ui-theming",
+  "gen-ui-transports",
+  "gen-ui-transports-plain",
+  "gen-ui-markdown",
+] as const satisfies readonly AgentId[];

@@ -324,6 +324,126 @@ export const NAV: NavGroup[] = [
         statusNote:
           "display_flight reaches Claude through a repo-authored MCP bridge (backend/src/agents/flights_mcp_server.py). flight_schema.json and the SURFACE_ID/CATALOG_ID constants the doc omits are repo-supplied and marked as such; renderers.tsx has no import block — see README §9.1 and §9.4.",
       },
+      {
+        path: "/generative-ui/json-render",
+        hasDemo: true,
+        agentId: "byoc_json_render",
+        title: "JSON Render",
+        docPath: "/claude-sdk-python/generative-ui/json-render",
+        summary:
+          "The agent replies with a { root, elements } JSON spec, rendered through a typed @json-render/react registry in the assistant-message slot.",
+        status: "not-started",
+        statusNote:
+          "Implemented from the doc; not yet run against the agent. The page prints 4 of its 13 files; the rest come from the showcase source its Code tab loads.",
+      },
+      {
+        path: "/generative-ui/hashbrown",
+        hasDemo: true,
+        agentId: "declarative-hashbrown-demo",
+        title: "Hashbrown",
+        docPath: "/claude-sdk-python/generative-ui/hashbrown",
+        summary:
+          "The agent streams a { ui: [...] } envelope that @hashbrownai/react parses and renders progressively, part by part.",
+        status: "not-started",
+        statusNote:
+          "Implemented from the doc; not yet run against the agent. The page prints 3 of its 11 files; the rest come from the showcase source its Code tab loads.",
+      },
+      {
+        path: "/generative-ui/components",
+        hasDemo: true,
+        agentId: "gen-ui-components",
+        title: "Components and surfaces",
+        docPath: "/claude-sdk-python/generative-ui/components",
+        summary:
+          "The standard catalog on the provider: the agent answers with real UI via the render_ui tool instead of prose.",
+        status: "not-started",
+        statusNote:
+          "Implemented from the doc; not yet run against the agent.",
+      },
+      {
+        path: "/generative-ui/components/surfaces",
+        hasDemo: true,
+        agentId: "gen-ui-surfaces",
+        title: "Components · Surfaces",
+        docPath: "/claude-sdk-python/generative-ui/components/surfaces",
+        summary:
+          "Named GenerativeUISurface targets on the page — a fallback row, a component allowlist, per-product rows, and an error boundary.",
+        status: "not-started",
+        statusNote:
+          "Implemented from the doc; not yet run against the agent.",
+      },
+      {
+        path: "/generative-ui/components/catalogs",
+        hasDemo: true,
+        agentId: "gen-ui-catalogs",
+        title: "Components · Catalogs",
+        docPath: "/claude-sdk-python/generative-ui/components/catalogs",
+        summary:
+          "A custom catalog from createGenerativeUI — typed props, slots, extends, parameterOrder — and its A2UI export.",
+        status: "not-started",
+        statusNote:
+          "Implemented from the doc; not yet run against the agent.",
+      },
+      {
+        path: "/generative-ui/components/standard-catalog",
+        hasDemo: true,
+        agentId: "gen-ui-standard-catalog",
+        title: "Components · Standard catalog",
+        docPath: "/claude-sdk-python/generative-ui/components/standard-catalog",
+        summary:
+          "standardUI extended with an app component, three components omitted, and Card overridden.",
+        status: "not-started",
+        statusNote:
+          "Implemented from the doc; not yet run against the agent.",
+      },
+      {
+        path: "/generative-ui/components/state-and-actions",
+        hasDemo: true,
+        agentId: "gen-ui-state-actions",
+        title: "Components · State and actions",
+        docPath: "/claude-sdk-python/generative-ui/components/state-and-actions",
+        summary:
+          "App state bound into props, a renderer function wired to a real cart, an event sent to the agent, and a writable prop.",
+        status: "not-started",
+        statusNote:
+          "Implemented from the doc; not yet run against the agent.",
+      },
+      {
+        path: "/generative-ui/components/theming",
+        hasDemo: true,
+        agentId: "gen-ui-theming",
+        title: "Components · Theming",
+        docPath: "/claude-sdk-python/generative-ui/components/theming",
+        summary:
+          "--a2ui-* variables through the provider theme, a dark override, and a CSS override the theme beats.",
+        status: "not-started",
+        statusNote:
+          "Implemented from the doc; not yet run against the agent.",
+      },
+      {
+        path: "/generative-ui/components/transports",
+        hasDemo: true,
+        agentId: "gen-ui-transports",
+        title: "Components · Transports",
+        docPath: "/claude-sdk-python/generative-ui/components/transports",
+        summary:
+          "The tool transport scoped with agentIds — the same prompt to an agent that gets the envelope and one that does not.",
+        status: "not-started",
+        statusNote:
+          "Implemented from the doc; not yet run against the agent.",
+      },
+      {
+        path: "/generative-ui/components/markdown-mode",
+        hasDemo: true,
+        agentId: "gen-ui-markdown",
+        title: "Components · Markdown mode",
+        docPath: "/claude-sdk-python/generative-ui/components/markdown-mode",
+        summary:
+          "transport: markdown — the agent writes a2ui fences in its reply and the client renders them.",
+        status: "not-started",
+        statusNote:
+          "Implemented from the doc; not yet run against the agent.",
+      },
     ],
   },
   {

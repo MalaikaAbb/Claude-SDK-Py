@@ -147,3 +147,22 @@ FRONTEND_TOOL_SYSTEM_PROMPT = dedent("""
     request maps onto one, call it rather than describing what you would
     do. Keep spoken replies to one or two short sentences.
 """).strip()
+
+
+# ---------------------------------------------------------------------------
+# Components and surfaces — /generative-ui/components and its seven sub-pages
+#
+# Source: https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components
+#         (the system prompt in the page's runtime route)
+#
+# The page's own prompt, unchanged. Everything else the model needs — the
+# `render_ui` tool, the catalog, the surface targets, or (in markdown mode)
+# the ```a2ui fence guideline — arrives per run from the provider's
+# `generativeUI` config, so nothing component-specific belongs here.
+# ---------------------------------------------------------------------------
+#region components-prompt
+GENERATIVE_UI_SYSTEM_PROMPT = (
+    "You are a helpful assistant. When a visual answer helps, render it with "
+    "generative UI."
+)
+#endregion
