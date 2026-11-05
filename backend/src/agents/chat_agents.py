@@ -17,7 +17,11 @@ arguments. Everything else — model from `ANTHROPIC_MODEL`, empty `tools`,
 
 from __future__ import annotations
 
+import dataclasses
+import hashlib
 import os
+import tempfile
+from pathlib import Path
 from typing import Any
 
 from ag_ui_claude_sdk import ClaudeAgentAdapter
@@ -28,6 +32,44 @@ DEFAULT_ANTHROPIC_MODEL = "claude-opus-4-8"
 #: The Quickstart's system prompt, used by every route that does not need
 #: something more specific.
 DEFAULT_SYSTEM_PROMPT = "You are a helpful assistant embedded in a CopilotKit app."
+
+#: Prompts longer than this go to the CLI as a file. Far below the 32,767
+#: character Windows command-line cap, so the rest of the command line (MCP
+#: config, allowed tools) still has room.
+PROMPT_FILE_THRESHOLD = 8_000
+
+_PROMPT_DIR = Path(tempfile.gettempdir()) / "claude-sdk-py-prompts"
+
+
+class FilePromptAdapter(ClaudeAgentAdapter):
+    """NOT DOC CODE. The Quickstart's adapter, with long prompts sent as a file.
+
+    The adapter appends every AG-UI context entry to the system prompt, and
+    the SDK hands that prompt to the CLI as one `--system-prompt` argument.
+    A generative-UI catalog makes it hundreds of thousands of characters, which
+    Windows refuses with WinError 206 — misreported by the SDK as "Claude Code
+    not found". Linux has its own 128 KiB per-argument cap. README §9.21.
+
+    The SDK already supports `{"type": "file", "path": ...}`, which becomes
+    `--system-prompt-file`; the adapter just never uses it. Prompts under the
+    threshold are left untouched, so routes with small prompts behave exactly
+    as before. Files are named by content hash, so a repeated prompt reuses
+    one file instead of writing a new one each run.
+    """
+
+    def build_options(self, input_data=None, thread_id=None):
+        options = super().build_options(input_data, thread_id=thread_id)
+        prompt = options.system_prompt
+        if isinstance(prompt, str) and len(prompt) > PROMPT_FILE_THRESHOLD:
+            _PROMPT_DIR.mkdir(parents=True, exist_ok=True)
+            digest = hashlib.sha256(prompt.encode("utf-8")).hexdigest()
+            path = _PROMPT_DIR / f"{digest}.md"
+            if not path.exists():
+                path.write_text(prompt, encoding="utf-8")
+            options = dataclasses.replace(
+                options, system_prompt={"type": "file", "path": str(path)}
+            )
+        return options
 
 
 #region build-adapter
@@ -72,7 +114,7 @@ def build_adapter(
     if allowed_tools:
         options["allowed_tools"] = allowed_tools
 
-    return ClaudeAgentAdapter(name=name, options=options)
+    return FilePromptAdapter(name=name, options=options)
 #endregion
 
 

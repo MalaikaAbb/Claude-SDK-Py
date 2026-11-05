@@ -35,6 +35,18 @@ export const NESTED_PROVIDER_ROUTES = [
   "/prebuilt-components/copilot-threads-drawer/demo-chat",
   "/headless-threads/demo-chat",
   "/threads-lifecycle/demo-chat",
+  // Components and surfaces: `generativeUI` is a provider prop, so every one
+  // of these demos brings its own provider.
+  "/generative-ui/components/demo-chat",
+  "/generative-ui/components/surfaces/demo-chat",
+  "/generative-ui/components/catalogs/demo-chat",
+  "/generative-ui/components/standard-catalog/demo-chat",
+  "/generative-ui/components/state-and-actions/demo-chat",
+  "/generative-ui/components/theming/demo-chat",
+  "/generative-ui/components/transports/demo-chat",
+  "/generative-ui/components/markdown-mode/demo-chat",
+  "/generative-ui/json-render/demo-chat",
+  "/generative-ui/hashbrown/demo-chat",
 ] as const;
 
 /**

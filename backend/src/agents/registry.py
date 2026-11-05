@@ -24,6 +24,8 @@ from dataclasses import dataclass
 from ag_ui_claude_sdk import ClaudeAgentAdapter
 
 from agents import prompts
+from agents.byoc_hashbrown_agent import BYOC_HASHBROWN_SYSTEM_PROMPT
+from agents.byoc_json_render_agent import BYOC_JSON_RENDER_SYSTEM_PROMPT
 from agents.chat_agents import (
     DEFAULT_SYSTEM_PROMPT,
     REASONING_THINKING_TOKENS,
@@ -160,6 +162,44 @@ REGISTRY: dict[str, RegisteredAgent] = {
         build_adapter("declarative-gen-ui", prompts.FRONTEND_TOOL_SYSTEM_PROMPT),
         "/claude-sdk-python/generative-ui/a2ui/dynamic-schema",
     ),
+
+    # JSON Render and Hashbrown — ids as their pages publish them. The two
+    # prompt modules are the showcase source the pages' Code tab loads,
+    # copied verbatim; neither page prints them. No tool on either: the
+    # agent writes JSON as plain text and the chat slot renders it.
+    "byoc_json_render": RegisteredAgent(
+        build_adapter("byoc_json_render", BYOC_JSON_RENDER_SYSTEM_PROMPT),
+        "/claude-sdk-python/generative-ui/json-render",
+    ),
+    "declarative-hashbrown-demo": RegisteredAgent(
+        build_adapter("declarative-hashbrown-demo", BYOC_HASHBROWN_SYSTEM_PROMPT),
+        "/claude-sdk-python/generative-ui/hashbrown",
+    ),
+
+    # Components and surfaces — one agent per page so each route keeps its
+    # own conversation, all on the page's own system prompt. None needs a
+    # backend tool: `render_ui` is added to the run by the runtime's
+    # `generativeUI` middleware and reaches Claude as a frontend tool, and
+    # markdown mode needs no tool at all.
+    **{
+        agent_id: RegisteredAgent(
+            build_adapter(agent_id, prompts.GENERATIVE_UI_SYSTEM_PROMPT),
+            f"/claude-sdk-python/generative-ui/components{suffix}",
+        )
+        for agent_id, suffix in (
+            ("gen-ui-components", ""),
+            ("gen-ui-surfaces", "/surfaces"),
+            ("gen-ui-catalogs", "/catalogs"),
+            ("gen-ui-standard-catalog", "/standard-catalog"),
+            ("gen-ui-state-actions", "/state-and-actions"),
+            ("gen-ui-theming", "/theming"),
+            ("gen-ui-transports", "/transports"),
+            # Deliberately left OUT of the Transports page's `agentIds`, so the
+            # same prompt can be sent to an agent that gets no envelope.
+            ("gen-ui-transports-plain", "/transports"),
+            ("gen-ui-markdown", "/markdown-mode"),
+        )
+    },
 
     # App control — all three run on browser-supplied tools, which the adapter
     # forwards to Claude without any backend configuration.
