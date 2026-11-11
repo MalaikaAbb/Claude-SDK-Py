@@ -196,8 +196,9 @@ still works and the thread list has nothing to list.
 switcher: a drawer and a chat inside one shared configuration provider, with no
 active-thread state of your own.
 *Try:* send a message, press New Conversation, send another, then click back to
-the first row. *Pass:* two auto-named rows; clicking one replays that
-conversation. *Fail:* a locked panel means no valid licence token; an empty list
+the first row, then press the header's own "New conversation" button. *Pass:*
+two auto-named rows; clicking one replays that conversation; the header button
+clears the chat and deselects the row. *Fail:* a locked panel means no valid licence token; an empty list
 with a working chat means no API key.
 
 **`/headless-threads`** — ⚠️ **Partial.** The same store behind your own list,
@@ -344,7 +345,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [CopilotSidebar](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/sidebar) | `/prebuilt-components/sidebar` | ✅ | Off-sidebar. `MainContent`/`Suggestions` supplied locally. |
 | [CopilotPopup](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/popup) | `/prebuilt-components/popup` | ✅ | Off-sidebar. |
 | [Chat controls](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/chat-controls) | `/prebuilt-components/chat-controls` | ✅ | Off-sidebar. Doc's `analytics.track` replaced by an on-page log. |
-| [Threads Drawer](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/copilot-threads-drawer) | `/prebuilt-components/copilot-threads-drawer` | ⚠️ | Needs Intelligence + a licence token. Locked view without one. |
+| [Threads Drawer](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/copilot-threads-drawer) | `/prebuilt-components/copilot-threads-drawer` | ⚠️ | Needs Intelligence + a licence token. Locked view without one. Demo adds the page's `NewConversationButton`; sidebar host (`YourMainContent` undefined), controlled-id, CSS-parts and `agentId` snippets shown as text. |
 | [Headless Threads](https://docs.copilotkit.ai/claude-sdk-python/headless-threads) | `/headless-threads` | ⚠️ | Same precondition. The two-step "New conversation" reset joins two doc fragments. The thread-scoped `useAgent` snippet is shown as text, not run. |
 | [Thread & History Lifecycle](https://docs.copilotkit.ai/claude-sdk-python/threads-lifecycle) | `/threads-lifecycle` | ⚠️ | Same precondition. User-scoping, first-message thread creation and the checkpointer comparison are out of scope locally. |
 | [CSS customization](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/css) | `/custom-look-and-feel/css` | ✅ | Off-sidebar. One doc snippet is v1 and not implemented — see §9. |
@@ -590,6 +591,10 @@ Three things come along with the showcase files:
 ### 9.24 The thread-scoped `useAgent` example is a fragment
 
 [Headless Threads](https://docs.copilotkit.ai/claude-sdk-python/headless-threads) now shows `useAgent({ agentId, runtimeAgentId, threadId })` for one agent per thread. `threadId` comes from a component the page never prints, and `runtimeAgentId: "default"` names an agent this repo's threads runtime does not register (it registers `threads`). `/headless-threads` shows the snippet as text.
+
+### 9.25 The Threads Drawer's sidebar layout renders an undefined component
+
+[Threads Drawer](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/copilot-threads-drawer)'s "Use the Drawer with a sidebar chat" sample renders `<YourMainContent />`, which the page never defines, so it is shown as text on the route. The own-button sample (`NewConversationButton`) is complete and runs on the demo.
 
 ---
 

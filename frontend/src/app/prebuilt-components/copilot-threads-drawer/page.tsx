@@ -6,7 +6,58 @@ import {
 } from "@/components/intelligence-notice";
 import { RouteHeader } from "@/components/route-header";
 import { SourceCode } from "@/components/source-code";
-import { Panel, TryIt } from "@/components/ui";
+import { CodeBlock, Panel, TryIt } from "@/components/ui";
+
+// Four of the page's newer snippets, verbatim, shown as text only. The first
+// renders `YourMainContent`, which the page never defines.
+const SIDEBAR_HOST = `import {
+  CopilotKitProvider,
+  CopilotChatConfigurationProvider,
+  CopilotSidebar,
+  CopilotThreadsDrawer,
+} from "@copilotkit/react-core/v2";
+import "@copilotkit/react-core/v2/styles.css";
+
+export default function Page() {
+  return (
+    <CopilotKitProvider runtimeUrl="/api/copilotkit">
+      <CopilotChatConfigurationProvider>
+        <div style={{ display: "flex", height: "100dvh" }}>
+          <CopilotThreadsDrawer />
+          <main style={{ flex: 1 }}>
+            <YourMainContent />
+            <CopilotSidebar defaultOpen={true} />
+          </main>
+        </div>
+      </CopilotChatConfigurationProvider>
+    </CopilotKitProvider>
+  );
+}`;
+
+const CONTROLLED_CHAT = `function ControlledChat() {
+  const [threadId, setThreadId] = useState(() => crypto.randomUUID());
+  const startNew = () => setThreadId(crypto.randomUUID());
+
+  return (
+    <CopilotChatConfigurationProvider threadId={threadId}>
+      <CopilotThreadsDrawer
+        onThreadSelect={(id) => setThreadId(id)}
+        onNewThread={startNew}
+      />
+      <button type="button" onClick={startNew}>
+        New conversation
+      </button>
+      <CopilotChat />
+    </CopilotChatConfigurationProvider>
+  );
+}`;
+
+const HIDE_BUILTIN_NEW = `copilotkit-threads-drawer::part(new-thread-button),
+copilotkit-threads-drawer::part(launcher-new-thread) {
+  display: none;
+}`;
+
+const AGENT_PROP = `<CopilotThreadsDrawer agentId="research_agent" />`;
 
 export default function Page() {
   return (
@@ -39,8 +90,9 @@ export default function Page() {
             prompts={[
               "Send a message, then press New Conversation and send another.",
               "Click back to the first row.",
+              "Press the header's New conversation button.",
             ]}
-            expect="Two rows in the drawer, auto-named by the LLM after the first message. Clicking a row replays that conversation into the chat."
+            expect="Two rows in the drawer, auto-named after the first message. Clicking a row replays that conversation into the chat. The header button clears the chat to the welcome screen and no row stays selected."
             fail="A locked 'Threads are a CopilotKit Intelligence feature' panel means no valid licence token. An empty list with a working chat means the API key is missing — see the notice above."
           />
         </div>
@@ -48,6 +100,36 @@ export default function Page() {
 
       <Panel title="The demo">
         <SourceCode file="frontend/src/app/prebuilt-components/copilot-threads-drawer/demo-chat/page.tsx" />
+      </Panel>
+
+      <Panel
+        title="The page's other layouts"
+        description="Newer sections of the page, verbatim, kept as text. The demo runs only the own-button layout."
+      >
+        <ul className="mb-4 space-y-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          <li>
+            <strong>Sidebar host.</strong> Renders <code>YourMainContent</code>,
+            which the page never defines, so it is not mounted here.
+          </li>
+          <li>
+            <strong>Controlled thread id.</strong> The variant for apps that
+            own <code>threadId</code>; this demo leaves the id to the shared
+            configuration, so the two cannot share one mount.
+          </li>
+          <li>
+            <strong>Hiding the built-in New Conversation controls</strong> via
+            CSS parts, and <strong>pointing the drawer at another agent</strong>{" "}
+            with its <code>agentId</code> prop. This demo keeps both built-in
+            controls and passes <code>agentId</code> on the configuration
+            provider, which the page lists as the second place it looks.
+          </li>
+        </ul>
+        <div className="space-y-4">
+          <CodeBlock code={SIDEBAR_HOST} language="tsx" />
+          <CodeBlock code={CONTROLLED_CHAT} language="tsx" />
+          <CodeBlock code={HIDE_BUILTIN_NEW} language="css" />
+          <CodeBlock code={AGENT_PROP} language="tsx" />
+        </div>
       </Panel>
 
       <Panel
@@ -60,12 +142,17 @@ export default function Page() {
       <Panel title="Doc-vs-implementation notes">
         <ul className="space-y-3 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           <li>
-            The doc&apos;s sample nests a <code>CopilotKitProvider</code> with{" "}
-            <code>publicLicenseKey=&quot;ck_pub_…&quot;</code> because it is a
-            whole page. This app already mounts one at the root, and it sets the
-            licence on the <em>runtime</em> instead — a{" "}
-            <code>publicLicenseKey</code> is a browser-visible credential, and
-            keeping it server-side is the safer default for a repo people clone.
+            The doc&apos;s sample nests a <code>CopilotKitProvider</code>{" "}
+            because it is a whole page. This app already mounts one at the
+            root. The page no longer passes <code>publicLicenseKey</code> on the
+            provider; its new &quot;Intelligence access&quot; section puts the
+            credential on the runtime, which is where this repo already had it.
+          </li>
+          <li>
+            The demo adds the page&apos;s own <code>NewConversationButton</code>{" "}
+            in a header above the chat, verbatim. It calls{" "}
+            <code>startNewThread()</code> on the shared configuration, the same
+            function the drawer&apos;s own row calls.
           </li>
           <li>
             One presentational change. The doc wraps both components in{" "}
