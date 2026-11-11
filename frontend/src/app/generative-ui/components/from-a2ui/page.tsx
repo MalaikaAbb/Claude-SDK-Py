@@ -1,6 +1,6 @@
 import { RouteHeader } from "@/components/route-header";
 import { SourceCode } from "@/components/source-code";
-import { Callout, CodeBlock, Panel, TryIt } from "@/components/ui";
+import { Callout, CodeBlock, Panel } from "@/components/ui";
 
 const BASE = "frontend/src/app/generative-ui/components/from-a2ui";
 
@@ -42,23 +42,13 @@ export default function Page() {
           its A2UI option, and each component becomes a single entry with a
           description and plain prop types, because the engine resolves
           bindings before the component renders. The demo runs the page&apos;s
-          &ldquo;After&rdquo; catalog.
+          &ldquo;After&rdquo; catalog is kept verbatim and type-checked; nothing
+          runs it, because the page publishes no agent.
         </p>
-        <div className="mt-4">
-          <TryIt
-            prompts={["Show a flight card from SFO (San Francisco) to JFK (New York) with a Book button"]}
-            expect="Two Airport components (code, city underneath) with an Arrow between them, inside standard layout components, and a standard Button."
-            fail="A text answer, or a rejection naming a v0.9 shape: the agent wrote { path } bindings or an old action, which the 1.0 engine refuses."
-          />
-        </div>
       </Panel>
 
-      <Panel title="The After catalog, as published">
-        <SourceCode file={`${BASE}/demo-chat/app-ui.ts`} />
-      </Panel>
-
-      <Panel title="The demo">
-        <SourceCode file={`${BASE}/demo-chat/page.tsx`} />
+      <Panel title="The After catalog, as published (type-checked, not mounted)">
+        <SourceCode file={`${BASE}/app-ui.ts`} />
       </Panel>
 
       <Panel
@@ -89,13 +79,9 @@ export default function Page() {
             added and the two components are borrowed from aws-strands-py.
           </li>
           <li>
-            · The page publishes no backend. The route runs this repo&apos;s
-            Claude adapter as <code>gen-ui-from-a2ui</code>, on the same shared
-            prompt as the other Components routes, behind{" "}
-            <code>/api/copilotkit-components</code>. That runtime sets{" "}
-            <code>generativeUI: true</code>, one of the two forms
-            &ldquo;Runtime, after&rdquo; names, and has no <code>a2ui</code>{" "}
-            option.
+            · The page publishes no agent or backend, and none was added, so
+            this route is reference-only: the After catalog is type-checked
+            but not mounted on any chat.
           </li>
           <li>
             · This repo&apos;s Fixed Schema route returns v0.9{" "}
@@ -103,7 +89,7 @@ export default function Page() {
             page says the 1.0 engine rejects v0.9 shapes, so that tool cannot
             move to this engine as published.
           </li>
-          <li>· Angular tabs are not implemented (React harness). Not yet checked in a browser.</li>
+          <li>· Angular tabs are not implemented (React harness).</li>
         </ul>
       </Callout>
     </>

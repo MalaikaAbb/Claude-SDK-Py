@@ -7,7 +7,7 @@ import {
   standardUI,
 } from "@copilotkit/react-core/v2/generative-ui";
 import { z } from "zod"; // Repo-authored import.
-import { Airport, Arrow } from "../flight-components"; // Borrowed scaffolding (aws-strands-py).
+import { Airport, Arrow } from "./flight-components"; // Borrowed scaffolding (aws-strands-py).
 
 export const appUI = createGenerativeUI({
   id: "acme/flights@1",

@@ -198,7 +198,6 @@ REGISTRY: dict[str, RegisteredAgent] = {
             # same prompt can be sent to an agent that gets no envelope.
             ("gen-ui-transports-plain", "/transports"),
             ("gen-ui-markdown", "/markdown-mode"),
-            ("gen-ui-from-a2ui", "/from-a2ui"),
         )
     },
 
