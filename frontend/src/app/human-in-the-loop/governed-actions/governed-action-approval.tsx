@@ -1,5 +1,10 @@
 "use client";
 
+// "Inline approval with useInterrupt" from
+// https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/governed-actions,
+// verbatim apart from `export` on the type and the two components (the
+// tool-call variant reuses GovernedActionCard).
+
 import { useEffect } from "react";
 import { useInterrupt } from "@copilotkit/react-core/v2";
 
@@ -14,6 +19,7 @@ export type GovernedAction = {
 
 export function GovernedActionApproval() {
   useInterrupt({
+    // @ts-expect-error verbatim doc code: render returns `null` when there is no action, but useInterrupt's render type requires a ReactElement (TS2322). README §9.25.
     render: ({ interrupt, resolve, cancel }) => {
       const action = interrupt?.metadata?.action as GovernedAction | undefined;
 

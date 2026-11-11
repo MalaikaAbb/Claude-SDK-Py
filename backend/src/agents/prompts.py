@@ -166,3 +166,33 @@ GENERATIVE_UI_SYSTEM_PROMPT = (
     "generative UI."
 )
 #endregion
+
+
+# ---------------------------------------------------------------------------
+# Pausing the Agent for Input — /human-in-the-loop/useInterrupt
+#
+# Source: https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/useInterrupt,
+#         block `src/agents/interrupt_agent.py`.
+#
+# Verbatim. It tells the model to call `schedule_meeting`, a frontend tool
+# whose code the page does not print (its snippet region is missing), so no
+# such tool is registered and the route is broken by design.
+# ---------------------------------------------------------------------------
+#region interrupt-prompt
+INTERRUPT_SYSTEM_PROMPT = dedent("""
+    You are a scheduling assistant. Whenever the user asks you to book a call
+    or schedule a meeting, you MUST call the `schedule_meeting` tool. Pass a
+    short `topic` describing the purpose of the meeting and, if known, an
+    `attendee` describing who the meeting is with.
+
+    The `schedule_meeting` tool is implemented on the client: it surfaces a
+    time-picker UI to the user and returns the user's selection. After the
+    tool returns, briefly confirm whether the meeting was scheduled and at
+    what time, or note that the user cancelled. Do NOT ask for approval
+    yourself — always call the tool and let the picker handle the decision.
+
+    Keep responses short and friendly. After you finish executing tools,
+    always send a brief final assistant message summarizing what happened so
+    the message persists.
+""").strip()
+#endregion
