@@ -39,9 +39,15 @@ Use frontend tools when your agent needs to:
     ### Forward browser tools to Claude
 
     Frontend tools registered with `useFrontendTool` arrive in the AG-UI run
-    input. Convert each AG-UI tool definition into an Anthropic Messages API
-    tool schema before calling the model. Runs that carry frontend tools use
-    the direct Messages API path rather than the Claude Agent SDK.
+    input. This demo's server calls the Anthropic Messages API directly for
+    runs that carry frontend tools, so it converts each AG-UI tool definition
+    into a Messages API tool schema first.
+
+    The published `ClaudeAgentAdapter` from `ag_ui_claude_sdk` needs no such
+    conversion. It registers each frontend tool on its own in-process MCP tool
+    server as `mcp__ag_ui__<name>`, allows it, and ends the run when Claude
+    calls it so the browser can execute the tool. Pass the run input to the
+    adapter and frontend tools work with no extra wiring.
 
     
 ~~~~python title="agent.py"
@@ -128,5 +134,30 @@ what happened.
       return { status: "success" };
     },
 ```
+
+## Registering a list of tools
+
+`useFrontendTool` registers one tool per call, so it cannot be called in a loop
+over a list whose length changes between renders. When the set of tools comes
+from state, from props, or from a backend response, use
+[`useFrontendTools`](/reference/hooks/useFrontendTools) instead. It takes an
+array and runs a single effect over it, so the array can be empty on one render
+and hold twenty entries on the next.
+
+```tsx
+useFrontendTools(
+  reports.map((report) => ({
+    name: `open_${report.id}`,
+    description: `Open the ${report.title} report`,
+    handler: async () => navigate(`/reports/${report.id}`),
+  })),
+  [navigate],
+);
+```
+
+Tools that leave the array are unregistered, tools that join it are registered,
+and a re-render that produces an equal list does not re-register anything. A
+description built from your data stays current on its own. The second argument
+is for values a handler closes over, such as `navigate` above.
 
 <IntegrationGrid path="frontend-tools" />
