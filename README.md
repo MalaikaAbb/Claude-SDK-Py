@@ -196,8 +196,9 @@ still works and the thread list has nothing to list.
 switcher: a drawer and a chat inside one shared configuration provider, with no
 active-thread state of your own.
 *Try:* send a message, press New Conversation, send another, then click back to
-the first row. *Pass:* two auto-named rows; clicking one replays that
-conversation. *Fail:* a locked panel means no valid licence token; an empty list
+the first row, then press the header's own "New conversation" button. *Pass:*
+two auto-named rows; clicking one replays that conversation; the header button
+clears the chat and deselects the row. *Fail:* a locked panel means no valid licence token; an empty list
 with a working chat means no API key.
 
 **`/headless-threads`** — ⚠️ **Partial.** The same store behind your own list,
@@ -221,7 +222,7 @@ authoritative `threadId` prop — the setters no-op when the id is prop-controll
 *Try:* "Hello." *Pass:* cream paper background, a monospace user message with an ember left border and a `→` prefix, header reading "My Copilot". *Fail:* default styling — `theme.css` did not load.
 
 **`/custom-look-and-feel/slots`** — three slots replaced with whole components.
-*Try:* "Say hello." *Pass:* a gradient welcome card, then every assistant reply in a tinted card tagged "slot", and an indigo disclaimer. *Fail:* default chrome on any of the three.
+*Try:* "Say hello." *Pass:* a gradient welcome card, then every assistant reply in a tinted card tagged "slot", and an indigo disclaimer. *Fail:* default chrome on any of the three. The page's newer `toolCallsView` example is shown on the notes page as compiled source only; nothing on the demo exercises it.
 
 **`/custom-look-and-feel/markdown`** — ⚠️ **Partial, not yet run live.** The `markdownRenderer` slot in its three forms (Streamdown `components` map, class string, full replacement), switchable on one chat.
 *Try:* "Reply with a '## Links' heading, then a markdown link to https://copilotkit.ai and a short **bold** sentence", in each mode. *Pass:* `components` gives an uppercase heading with an orange rule and an orange wavy link (no `node` or `data-streamdown` attribute on the `<a>`); `class-string` makes the block smaller; `replace` shows the raw markdown in a `<pre>`. *Fail:* all modes look the same, or the `<a>` carries `node="[object Object]"`.
@@ -315,7 +316,7 @@ The eight routes below are all 🚧 **Not yet run live**. They compile, serve, a
 ### App Control
 
 **`/frontend-tools`** — a tool the agent calls that runs in the browser.
-*Try:* "Make the background a warm sunset gradient." *Pass:* the background transitions, the printed CSS updates, the agent confirms. *Fail:* the agent describes a gradient instead of applying one.
+*Try:* "Make the background a warm sunset gradient." *Pass:* the background transitions, the printed CSS updates, the agent confirms. *Fail:* the agent describes a gradient instead of applying one. The page's `useFrontendTools` (list of tools) snippet is shown on the notes page only.
 
 **`/webmcp`** — ❌ **Broken as published.** `useFrontendTool` with `webmcp: { annotations: { readOnlyHint: true } }` mirrors `searchOrders` onto `document.modelContext`; a second page registers the same tool on a bare `CopilotKitCore` with no agent.
 *Try:* in Chrome 149+ with WebMCP enabled, open `/webmcp/demo-chat` and call `searchOrders` with `status: "open"` from the Model Context Tool Inspector. *Pass (as a report):* the tool is listed with its schema and read-only hint; calling it fails with `ReferenceError: searchOrders is not defined`. *Fail:* no tool listed (browser lacks `document.modelContext`, or the option did not register).
@@ -373,11 +374,11 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [CopilotSidebar](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/sidebar) | `/prebuilt-components/sidebar` | ✅ | Off-sidebar. `MainContent`/`Suggestions` supplied locally. |
 | [CopilotPopup](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/popup) | `/prebuilt-components/popup` | ✅ | Off-sidebar. |
 | [Chat controls](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/chat-controls) | `/prebuilt-components/chat-controls` | ✅ | Off-sidebar. Doc's `analytics.track` replaced by an on-page log. |
-| [Threads Drawer](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/copilot-threads-drawer) | `/prebuilt-components/copilot-threads-drawer` | ⚠️ | Needs Intelligence + a licence token. Locked view without one. |
-| [Headless Threads](https://docs.copilotkit.ai/claude-sdk-python/headless-threads) | `/headless-threads` | ⚠️ | Same precondition. The two-step "New conversation" reset joins two doc fragments. |
+| [Threads Drawer](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/copilot-threads-drawer) | `/prebuilt-components/copilot-threads-drawer` | ⚠️ | Needs Intelligence + a licence token. Locked view without one. Demo adds the page's `NewConversationButton`; sidebar host (`YourMainContent` undefined), controlled-id, CSS-parts and `agentId` snippets shown as text. |
+| [Headless Threads](https://docs.copilotkit.ai/claude-sdk-python/headless-threads) | `/headless-threads` | ⚠️ | Same precondition. The two-step "New conversation" reset joins two doc fragments. The thread-scoped `useAgent` snippet is shown as text, not run. |
 | [Thread & History Lifecycle](https://docs.copilotkit.ai/claude-sdk-python/threads-lifecycle) | `/threads-lifecycle` | ⚠️ | Same precondition. User-scoping, first-message thread creation and the checkpointer comparison are out of scope locally. |
 | [CSS customization](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/css) | `/custom-look-and-feel/css` | ✅ | Off-sidebar. One doc snippet is v1 and not implemented — see §9. |
-| [Slots](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/slots) | `/custom-look-and-feel/slots` | ✅ | Off-sidebar. The three slot components are declared by the doc, not defined. |
+| [Slots](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/slots) | `/custom-look-and-feel/slots` | ✅ | Off-sidebar. The three slot components are declared by the doc, not defined. The `toolCallsView` snippet is type-checked but not mounted (the slots agent has no tools). |
 | [Markdown Rendering](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/markdown) | `/custom-look-and-feel/markdown` | ⚠️ | Not yet run live. `my-link`/`my-heading` CSS borrowed from google-adk (the page never defines them). Reuses `chat-slots`. |
 | [Headless UI](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/headless-ui) | `/custom-look-and-feel/headless-ui` | ✅ | Off-sidebar. `headless-simple` only; `headless-complete` is not published in full. |
 | [Reasoning Messages](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/reasoning-messages) | `/custom-look-and-feel/reasoning-messages` | ✅ | Off-sidebar. Runs on the adapter's native thinking support, not the doc's 300-line agent. |
@@ -402,6 +403,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [Theming](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/theming) | `/generative-ui/components/theming` | 🚧 | Not yet run live. `.dark` goes on a wrapper, not `<html>`. `mapStyle` not set. |
 | [Transports](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/transports) | `/generative-ui/components/transports` | 🚧 | Not yet run live. Second agent added to show `agentIds` scoping. |
 | [Markdown mode](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/markdown-mode) | `/generative-ui/components/markdown-mode` | 🚧 | Not yet run live. Default `sendContext` only. The `sendContext: false` Python fragment is in `doc_reference/markdown_mode.py`, unwired. |
+| [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) | `/frontend-tools` | ✅ | The `useFrontendTools` list snippet is a fragment (`reports`, `navigate` undefined); shown as text, not run. |
 | [Adopt from A2UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/from-a2ui) | `/generative-ui/components/from-a2ui` | ❌ | Reference only: no agent/backend on the page, none added; After catalog type-checked, not mounted. `Airport`/`Arrow` borrowed from aws-strands-py (§9.23). |
 | [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) | `/frontend-tools` | ✅ | |
 | [HITL Overview](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/index) | `/human-in-the-loop` | ✅ | Pattern 1 only; `useInterrupt` needs LangGraph. The sidebar now links the overview at `/human-in-the-loop/index` (same content as the bare URL). |
@@ -451,7 +453,7 @@ The same shape would unblock the other four routes; it is not applied there beca
 
 ### 9.2 The feature pages target a backend that is never published
 
-Related but distinct. The backend snippets on the feature pages are not written against `ClaudeAgentAdapter` at all — they are fragments of a hand-rolled streaming loop over the raw Anthropic Messages API. The [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) page says so outright: *"Runs that carry frontend tools use the direct Messages API path rather than the Claude Agent SDK."* That loop is never published in full, so there is no second server to drop these fragments into either. Every one is reproduced under `backend/src/agents/doc_reference/`.
+Related but distinct. The backend snippets on the feature pages are not written against `ClaudeAgentAdapter` at all — they are fragments of a hand-rolled streaming loop over the raw Anthropic Messages API. The [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) page says so outright: its demo server calls the Messages API directly for runs with frontend tools (the page now adds that the published `ClaudeAgentAdapter` needs no conversion, which is what `/frontend-tools` runs on). That loop is never published in full, so there is no second server to drop these fragments into either. Every one is reproduced under `backend/src/agents/doc_reference/`.
 
 ### 9.3 `renderers.tsx` has no import block, on both A2UI pages
 
@@ -622,6 +624,17 @@ Three things come along with the showcase files:
 - **Lint.** `charts/pie-chart.tsx` fails this repo's lint in both demos (`react-hooks/immutability`: a running total is reassigned inside `.map`). It renders fine and `next build` does not lint, so it is left as published.
 - **Version drift.** The showcase pins `recharts` `^2.15`, and this app uses `^3.7`. The chart components type-check against 3.x.
 
+### 9.23 `useFrontendTools` is published as a fragment
+
+[Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) now documents the plural `useFrontendTools` hook with a snippet that maps over `reports` and calls `navigate`. The page defines neither, nor the component around them, so `/frontend-tools` shows the snippet as text and does not run it.
+
+### 9.24 The thread-scoped `useAgent` example is a fragment
+
+[Headless Threads](https://docs.copilotkit.ai/claude-sdk-python/headless-threads) now shows `useAgent({ agentId, runtimeAgentId, threadId })` for one agent per thread. `threadId` comes from a component the page never prints, and `runtimeAgentId: "default"` names an agent this repo's threads runtime does not register (it registers `threads`). `/headless-threads` shows the snippet as text.
+
+### 9.25 The Threads Drawer's sidebar layout renders an undefined component
+
+[Threads Drawer](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/copilot-threads-drawer)'s "Use the Drawer with a sidebar chat" sample renders `<YourMainContent />`, which the page never defines, so it is shown as text on the route. The own-button sample (`NewConversationButton`) is complete and runs on the demo.
 ### 9.23 Pausing the Agent for Input is missing its frontend
 
 [Pausing the Agent for Input](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/useInterrupt) says that for this framework the pause is a `useFrontendTool` named `schedule_meeting` with a Promise-resolving handler, but the snippet that should show it is empty on the rendered page (its source region is missing). The backend prompt it does print tells Claude to call `schedule_meeting`. `/human-in-the-loop/useInterrupt` runs that prompt verbatim on the Quickstart adapter (`gen-ui-interrupt`) and does not write the tool, so the agent cannot pause. The page's generic Approve/Cancel `useInterrupt` example is mounted, but `ClaudeAgentAdapter` only emits AG-UI interrupts for `defer_tools`, which no page mentions, and resumes them on `{ behavior }` rather than the example's `{ approved }`.

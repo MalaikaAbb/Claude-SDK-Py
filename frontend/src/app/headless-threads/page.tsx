@@ -6,7 +6,16 @@ import {
 } from "@/components/intelligence-notice";
 import { RouteHeader } from "@/components/route-header";
 import { SourceCode } from "@/components/source-code";
-import { Panel, TryIt } from "@/components/ui";
+import { CodeBlock, Callout, Panel, TryIt } from "@/components/ui";
+
+// The page's "Driving one agent per thread" snippet, verbatim. `threadId` is
+// whatever thread the surrounding component is pinned to; the page does not
+// show that component.
+const THREAD_SCOPED_AGENT = `const { agent } = useAgent({
+  agentId: \`chat-\${threadId}\`, // local id, unique per mounted thread
+  runtimeAgentId: "default",   // the one runtime agent they all route to
+  threadId,                    // the thread this instance is pinned to
+});`;
 
 export default function Page() {
   return (
@@ -98,11 +107,31 @@ export default function Page() {
             demo identity headers the root provider sends.
           </li>
           <li>
-            The page&apos;s &quot;Migrating existing history?&quot; callout
-            links to Google ADK and LangGraph thread-import guides from a Claude
-            page. There is no Claude equivalent listed.
+            The page&apos;s callout (now &quot;Add AG-UI streams to existing
+            threads&quot;) still offers history-import steps only for Google
+            ADK and LangGraph. There is no Claude equivalent listed.
           </li>
         </ul>
+      </Panel>
+
+      <Panel
+        title="Driving one agent per thread"
+        description="A newer section of the page: a thread-scoped useAgent. Shown as text; the demo does not mount per-thread agents."
+      >
+        <CodeBlock code={THREAD_SCOPED_AGENT} language="tsx" />
+        <div className="mt-4">
+          <Callout tone="info" title="Not exercised here">
+            <p className="leading-relaxed">
+              The snippet is a fragment: <code>threadId</code> comes from a
+              component the page does not show, and it targets a runtime agent
+              named <code>&quot;default&quot;</code>, while this route&apos;s
+              threads runtime registers only <code>threads</code>. The demo
+              switches one chat between threads instead of mounting one agent
+              per thread, so the three-key form is recorded here rather than
+              run.
+            </p>
+          </Callout>
+        </div>
       </Panel>
     </>
   );
