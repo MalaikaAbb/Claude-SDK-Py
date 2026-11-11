@@ -300,6 +300,9 @@ The eight routes below are all 🚧 **Not yet run live**. They compile, serve, a
 **`/frontend-tools`** — a tool the agent calls that runs in the browser.
 *Try:* "Make the background a warm sunset gradient." *Pass:* the background transitions, the printed CSS updates, the agent confirms. *Fail:* the agent describes a gradient instead of applying one.
 
+**`/webmcp`** — ❌ **Broken as published.** `useFrontendTool` with `webmcp: { annotations: { readOnlyHint: true } }` mirrors `searchOrders` onto `document.modelContext`; a second page registers the same tool on a bare `CopilotKitCore` with no agent.
+*Try:* in Chrome 149+ with WebMCP enabled, open `/webmcp/demo-chat` and call `searchOrders` with `status: "open"` from the Model Context Tool Inspector. *Pass (as a report):* the tool is listed with its schema and read-only hint; calling it fails with `ReferenceError: searchOrders is not defined`. *Fail:* no tool listed (browser lacks `document.modelContext`, or the option did not register).
+
 **`/human-in-the-loop`** — `useHumanInTheLoop` suspending the run behind a picker.
 *Try:* "Book an intro call with the sales team." *Pass:* a four-slot picker appears inline and the run visibly pauses; picking swaps it for a confirmation and the agent's next message names your time. *Fail:* the agent invents a time without asking, or picking does nothing.
 
@@ -370,6 +373,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [Transports](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/transports) | `/generative-ui/components/transports` | 🚧 | Not yet run live. Second agent added to show `agentIds` scoping. |
 | [Markdown mode](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/markdown-mode) | `/generative-ui/components/markdown-mode` | 🚧 | Not yet run live. Default `sendContext` only. The `sendContext: false` Python fragment is in `doc_reference/markdown_mode.py`, unwired. |
 | [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) | `/frontend-tools` | ✅ | |
+| [WebMCP](https://docs.copilotkit.ai/claude-sdk-python/webmcp) | `/webmcp` | ❌ | `searchOrders` called, never defined (handler throws). No agent on the page, so no chat. Needs a WebMCP browser (§9.23). |
 | [Human-in-the-Loop](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop) | `/human-in-the-loop` | ✅ | Pattern 1 only; `useInterrupt` needs LangGraph. |
 | [Programmatic Control](https://docs.copilotkit.ai/claude-sdk-python/programmatic-control) | `/programmatic-control` | ⚠️ | The page's promise-based section is a build placeholder — see §9. |
 | [Shared State](https://docs.copilotkit.ai/claude-sdk-python/shared-state) | `/shared-state` | ❌ | UI→agent works; agent→UI does not. `set_notes` unreachable and the `ag_ui_update_state` substitute does not carry notes back. |
@@ -583,6 +587,10 @@ Three things come along with the showcase files:
 - **Lint.** `charts/pie-chart.tsx` fails this repo's lint in both demos (`react-hooks/immutability`: a running total is reassigned inside `.map`). It renders fine and `next build` does not lint, so it is left as published.
 - **Version drift.** The showcase pins `recharts` `^2.15`, and this app uses `^3.7`. The chart components type-check against 3.x.
 
+### 9.23 WebMCP's handler calls a function the page never defines
+
+Both [WebMCP](https://docs.copilotkit.ai/claude-sdk-python/webmcp) snippets (the React `OrderSearch` tool and the core-only `CopilotKitCore`) call `searchOrders(status)`, which the page never defines. `/webmcp` keeps them verbatim with `@ts-expect-error` on that line and no stub, so calling the tool throws `ReferenceError`. The page prints no agent, so the route has no chat. The core-only snippet imports `@copilotkit/core`, which this repo gets only as a dependency of `@copilotkit/react-core`.
+
 ---
 
 ## 10. Troubleshooting
@@ -771,6 +779,7 @@ Grouped as this repo's nav groups them. Pages marked ◦ resolve but are absent 
 
 **App Control**
 - [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools)
+- [WebMCP](https://docs.copilotkit.ai/claude-sdk-python/webmcp)
 - [Human-in-the-Loop](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop)
 - [Programmatic Control](https://docs.copilotkit.ai/claude-sdk-python/programmatic-control)
 

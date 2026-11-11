@@ -460,6 +460,17 @@ export const NAV: NavGroup[] = [
         status: "working",
       },
       {
+        path: "/webmcp",
+        hasDemo: true,
+        title: "WebMCP",
+        docPath: "/claude-sdk-python/webmcp",
+        summary:
+          "A frontend tool mirrored onto document.modelContext so WebMCP browser agents can call it, plus the core-only registration with no agent.",
+        status: "broken",
+        statusNote:
+          "Both snippets verbatim (route ported from aws-strands-py). Doc gap: searchOrders is called but never defined on the page, so the tool handler throws (no stub). The page prints no agent, so there is no chat; the tool only registers (WebMCP needs a browser exposing document.modelContext).",
+      },
+      {
         path: "/human-in-the-loop",
         hasDemo: true,
         agentId: "hitl-in-chat",
