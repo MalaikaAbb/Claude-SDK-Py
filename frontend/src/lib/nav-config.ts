@@ -527,10 +527,46 @@ export const NAV: NavGroup[] = [
         hasDemo: true,
         agentId: "hitl-in-chat",
         title: "Human in the Loop",
-        docPath: "/claude-sdk-python/human-in-the-loop",
+        // The sidebar now links the overview as `/human-in-the-loop/index`;
+        // the bare URL still serves the same page.
+        docPath: "/claude-sdk-python/human-in-the-loop/index",
         summary:
           "useHumanInTheLoop suspending the run behind a time picker until the user answers.",
         status: "working",
+      },
+      {
+        path: "/human-in-the-loop/useInterrupt",
+        hasDemo: true,
+        agentId: "gen-ui-interrupt",
+        title: "Pausing the Agent for Input",
+        docPath: "/claude-sdk-python/human-in-the-loop/useInterrupt",
+        summary:
+          "A pause the agent cannot skip: the page's Promise-based frontend tool for this framework, plus the generic useInterrupt contract.",
+        status: "broken",
+        statusNote:
+          "The page's frontend snippet (a schedule_meeting useFrontendTool with a Promise handler) is missing from the rendered page, so its published prompt points at a tool that does not exist. Approve/Cancel useInterrupt example mounted verbatim; the adapter emits no interrupt without defer_tools, which the page never mentions.",
+      },
+      {
+        path: "/human-in-the-loop/headless",
+        title: "Headless Interrupts",
+        docPath: "/claude-sdk-python/human-in-the-loop/headless",
+        summary:
+          "Settling a pause from UI outside the chat, with a Promise-based frontend tool whose render returns null.",
+        status: "broken",
+        statusNote:
+          "Reference-only. The page's single snippet region is missing for this framework and no agent is published, so there is nothing to run.",
+      },
+      {
+        path: "/human-in-the-loop/governed-actions",
+        hasDemo: true,
+        agentId: "governed-actions",
+        title: "Governed Action Approval UI",
+        docPath: "/claude-sdk-python/human-in-the-loop/governed-actions",
+        summary:
+          "An approval card in front of a side effect, raised as a frontend tool (useHumanInTheLoop) or as an interrupt (useInterrupt).",
+        status: "partial",
+        statusNote:
+          "Not yet checked in a browser. Frontend code verbatim; no backend, policy engine or executeSideEffect is published, so the agent is the Quickstart adapter and verdicts are whatever Claude writes. The useInterrupt half never shows: nothing emits metadata.action.",
       },
       {
         path: "/programmatic-control",

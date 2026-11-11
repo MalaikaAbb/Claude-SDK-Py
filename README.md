@@ -323,6 +323,15 @@ The eight routes below are all 🚧 **Not yet run live**. They compile, serve, a
 **`/human-in-the-loop`** — `useHumanInTheLoop` suspending the run behind a picker.
 *Try:* "Book an intro call with the sales team." *Pass:* a four-slot picker appears inline and the run visibly pauses; picking swaps it for a confirmation and the agent's next message names your time. *Fail:* the agent invents a time without asking, or picking does nothing.
 
+**`/human-in-the-loop/useInterrupt`** — ❌ **Broken as published.** The page's published `interrupt_agent` prompt on a Claude adapter, with the page's Approve/Cancel `useInterrupt` example mounted beside the chat.
+*Try:* "Book a call with the sales team to discuss pricing." *Pass (as a report):* a text reply and no picker: the `schedule_meeting` frontend tool the prompt names is not printed on the page, and no interrupt is emitted. *Fail:* a picker appears (something registered the tool).
+
+**`/human-in-the-loop/headless`** — ❌ **Reference-only.** The page's one snippet is missing for this framework and it prints no agent, so the route only summarises the pattern and links to the HITL routes.
+*Try:* open it. *Pass:* the broken callout and links render. *Fail:* none — there is no live surface.
+
+**`/human-in-the-loop/governed-actions`** — ⚠️ **Partial, not yet run live.** Both of the page's approval variants on one chat: the `useHumanInTheLoop` tool `approve_governed_action` and the `useInterrupt` card.
+*Try:* "Before you apply a 15% discount to order 1042, ask me to approve it with approve_governed_action (verdict require_approval)." *Pass:* an approval card with summary, tool, reference and arguments; Approve or Reject sends `{ approved, actionId, reference }` back and the agent replies to match. *Fail:* a text-only reply (no tool call), or buttons that do nothing.
+
 **`/programmatic-control`** — ⚠️ **Partial.** `addMessage` / `runAgent` / `stopAgent` / `subscribe`, no chat component.
 *Try:* "Ask for something long", then Stop. *Pass:* the reply pane fills with no chat on the page and the event log shows `onRunStartedEvent` → `onRunFinalized`; Stop cuts it short and still finalizes. *Fail:* buttons do nothing and the log stays empty.
 
@@ -395,6 +404,10 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [Markdown mode](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/markdown-mode) | `/generative-ui/components/markdown-mode` | 🚧 | Not yet run live. Default `sendContext` only. The `sendContext: false` Python fragment is in `doc_reference/markdown_mode.py`, unwired. |
 | [Adopt from A2UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/from-a2ui) | `/generative-ui/components/from-a2ui` | ❌ | Reference only: no agent/backend on the page, none added; After catalog type-checked, not mounted. `Airport`/`Arrow` borrowed from aws-strands-py (§9.23). |
 | [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) | `/frontend-tools` | ✅ | |
+| [HITL Overview](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/index) | `/human-in-the-loop` | ✅ | Pattern 1 only; `useInterrupt` needs LangGraph. The sidebar now links the overview at `/human-in-the-loop/index` (same content as the bare URL). |
+| [Pausing the Agent for Input](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/useInterrupt) | `/human-in-the-loop/useInterrupt` | ❌ | Frontend snippet missing on the page (`schedule_meeting` never printed); prompt-only agent; interrupts need `defer_tools`, not on the page (§9.23). |
+| [Headless Interrupts](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/headless) | `/human-in-the-loop/headless` | ❌ | Reference-only: no code on the page for this framework (§9.24). |
+| [Governed Action Approval UI](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/governed-actions) | `/human-in-the-loop/governed-actions` | ⚠️ | Not yet run live. Tool-call half only; no backend/policy engine/`executeSideEffect` published, verdicts are the model's; the `useInterrupt` card never fires (§9.25). |
 | [WebMCP](https://docs.copilotkit.ai/claude-sdk-python/webmcp) | `/webmcp` | ❌ | `searchOrders` called, never defined (handler throws). No agent on the page, so no chat. Needs a WebMCP browser (§9.23). |
 | [Human-in-the-Loop](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop) | `/human-in-the-loop` | ✅ | Pattern 1 only; `useInterrupt` needs LangGraph. |
 | [Programmatic Control](https://docs.copilotkit.ai/claude-sdk-python/programmatic-control) | `/programmatic-control` | ⚠️ | The page's promise-based section is a build placeholder — see §9. |
@@ -609,6 +622,19 @@ Three things come along with the showcase files:
 - **Lint.** `charts/pie-chart.tsx` fails this repo's lint in both demos (`react-hooks/immutability`: a running total is reassigned inside `.map`). It renders fine and `next build` does not lint, so it is left as published.
 - **Version drift.** The showcase pins `recharts` `^2.15`, and this app uses `^3.7`. The chart components type-check against 3.x.
 
+### 9.23 Pausing the Agent for Input is missing its frontend
+
+[Pausing the Agent for Input](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/useInterrupt) says that for this framework the pause is a `useFrontendTool` named `schedule_meeting` with a Promise-resolving handler, but the snippet that should show it is empty on the rendered page (its source region is missing). The backend prompt it does print tells Claude to call `schedule_meeting`. `/human-in-the-loop/useInterrupt` runs that prompt verbatim on the Quickstart adapter (`gen-ui-interrupt`) and does not write the tool, so the agent cannot pause. The page's generic Approve/Cancel `useInterrupt` example is mounted, but `ClaudeAgentAdapter` only emits AG-UI interrupts for `defer_tools`, which no page mentions, and resumes them on `{ behavior }` rather than the example's `{ approved }`.
+
+### 9.24 Headless Interrupts has no code for this framework
+
+[Headless Interrupts](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/headless) describes a Promise-based `useFrontendTool` whose pending state drives a picker outside the chat, but its only snippet (`headless-promise-primitives`) is missing on the rendered page and no agent is printed. `/human-in-the-loop/headless` is reference-only and status ❌.
+
+### 9.25 Governed Action Approval publishes the UI and none of the governance
+
+[Governed Action Approval UI](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/governed-actions) prints the `GovernedAction` envelope, a `useInterrupt` card and a `useHumanInTheLoop` tool, plus a `handleApproval` resume check that calls an undefined `executeSideEffect`. No agent, policy engine or emitter of `interrupt.metadata.action` is printed. `/human-in-the-loop/governed-actions` runs both frontend variants on the Quickstart adapter (`governed-actions`, default prompt): the tool-call card works mechanically with model-invented verdicts, and the interrupt card never appears. The Claude adapter's own interrupts (for `defer_tools`) carry `{ source, toolName, input }` and resume on `{ behavior }`, so the published card would not match them either. The interrupt card used to be an unlisted demo at `/human-in-the-loop/use-interrupt`; it moved here.
+
+The published `useInterrupt` render returns `null` when `metadata.action` is missing, but react-core 1.83 types `render` as returning a `ReactElement`, so the doc block fails type-checking (TS2322). It is kept verbatim with a `@ts-expect-error` above `render`.
 ### 9.23 WebMCP's handler calls a function the page never defines
 
 Both [WebMCP](https://docs.copilotkit.ai/claude-sdk-python/webmcp) snippets (the React `OrderSearch` tool and the core-only `CopilotKitCore`) call `searchOrders(status)`, which the page never defines. `/webmcp` keeps them verbatim with `@ts-expect-error` on that line and no stub, so calling the tool throws `ReferenceError`. The page prints no agent, so the route has no chat. The core-only snippet imports `@copilotkit/core`, which this repo gets only as a dependency of `@copilotkit/react-core`.
@@ -822,6 +848,10 @@ Grouped as this repo's nav groups them. Pages marked ◦ resolve but are absent 
 
 **App Control**
 - [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools)
+- [HITL Overview](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/index)
+- [Pausing the Agent for Input](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/useInterrupt)
+- [Headless Interrupts](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/headless)
+- [Governed Action Approval UI](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/governed-actions)
 - [WebMCP](https://docs.copilotkit.ai/claude-sdk-python/webmcp)
 - [Human-in-the-Loop](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop)
 - [Programmatic Control](https://docs.copilotkit.ai/claude-sdk-python/programmatic-control)
