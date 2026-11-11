@@ -42,6 +42,7 @@ export const AGENT_IDS = [
   "gen-ui-transports",
   "gen-ui-transports-plain",
   "gen-ui-markdown",
+  "gen-ui-from-a2ui",
   // Ids as the JSON Render and Hashbrown pages publish them.
   "byoc_json_render",
   "declarative-hashbrown-demo",
@@ -98,4 +99,5 @@ export const COMPONENTS_AGENT_IDS = [
   "gen-ui-transports",
   "gen-ui-transports-plain",
   "gen-ui-markdown",
+  "gen-ui-from-a2ui",
 ] as const satisfies readonly AgentId[];

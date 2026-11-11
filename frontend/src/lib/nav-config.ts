@@ -444,6 +444,18 @@ export const NAV: NavGroup[] = [
         statusNote:
           "Implemented from the doc; not yet run against the agent.",
       },
+      {
+        path: "/generative-ui/components/from-a2ui",
+        hasDemo: true,
+        agentId: "gen-ui-from-a2ui",
+        title: "Components · Adopt from A2UI",
+        docPath: "/claude-sdk-python/generative-ui/components/from-a2ui",
+        summary:
+          "The v0.9 a2ui renderer → A2UI 1.0 migration: the After catalog running on the new engine, with the Before code shown.",
+        status: "not-started",
+        statusNote:
+          "Implemented from the doc; not yet run against the agent. Airport and Arrow are borrowed from aws-strands-py (the page never defines them). The page has no backend, so the section's shared Claude adapter runs it.",
+      },
     ],
   },
   {
