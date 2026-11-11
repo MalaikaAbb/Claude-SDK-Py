@@ -371,6 +371,26 @@ export const NAV: NavGroup[] = [
           "Implemented from the doc; not yet run against the agent. The page prints 3 of its 11 files; the rest come from the showcase source its Code tab loads.",
       },
       {
+        path: "/generative-ui/mcp-apps",
+        title: "MCP Apps",
+        docPath: "/claude-sdk-python/generative-ui/mcp-apps",
+        summary:
+          "An MCP server's tool UI (Excalidraw) rendered inline in the chat via the runtime's mcpApps middleware.",
+        status: "broken",
+        statusNote:
+          "Reference only. The Code tab's agent, runtime and page are kept verbatim and not wired up: they import unpublished normalize_claude_model, createClaudeHttpAgent and ./chat. Nothing is written in their place.",
+      },
+      {
+        path: "/generative-ui/open-generative-ui",
+        title: "Open Generative UI",
+        docPath: "/claude-sdk-python/generative-ui/open-generative-ui",
+        summary:
+          "The agent writes sandboxed HTML/CSS/JS that streams into an iframe, optionally calling back into host functions.",
+        status: "broken",
+        statusNote:
+          "Reference only. No agent is published (two prompt hints only); the runtime imports unpublished helpers; the frontend snippets are fragments using an undefined Chat, VISUALIZATION_DESIGN_SKILL and ./suggestions. All kept as published, nothing written in their place.",
+      },
+      {
         path: "/generative-ui/components",
         hasDemo: true,
         agentId: "gen-ui-components",

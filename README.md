@@ -273,6 +273,14 @@ Two ways to let the agent draw a dashboard without any tool call. In both, the a
 **`/generative-ui/hashbrown`**: a `{ ui: [...] }` envelope parsed while it streams by `@hashbrownai/react`, so the dashboard builds up piece by piece (Markdown, metric, pieChart, barChart, dealCard).
 *Try:* the "Sales dashboard" suggestion. *Pass:* a heading, a metric card, then two charts appear one after another while the reply is still streaming. *Fail:* nothing until the end (no progressive parsing), or an empty message (the reply did not match the kit's schema).
 
+### Generative UI · Open-ended
+
+**`/generative-ui/mcp-apps`** — ❌ **Broken — reference only.** The Code tab's agent, runtime and page are shown verbatim and not wired up: each imports something no page publishes.
+*Try:* nothing to run. *Pass (today):* the page renders the published code and its gap callout. §9.23.
+
+**`/generative-ui/open-generative-ui`** — ❌ **Broken — reference only.** No agent is published; the runtime, sandbox functions, prompt hints and the two frontend fragments are shown as published and not wired up.
+*Try:* nothing to run. *Pass (today):* the page renders the published code and its gap callout. §9.24.
+
 ### Generative UI · Components and surfaces
 
 The eight routes below are all 🚧 **Not yet run live**. They compile, serve, and reach their own runtime (`/api/copilotkit-components`, which lists all nine agents on `/info`), but nobody has yet chatted through them against Claude. Every demo brings its own provider because `generativeUI` is a provider prop. The section is marked Experimental on the doc (A2UI 1.0, spec `cbaa5ee`).
@@ -372,6 +380,8 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [A2UI · Fixed Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/fixed-schema) | `/generative-ui/a2ui/fixed-schema` | ⚠️ | `display_flight` works via a repo-authored MCP bridge (`flights_mcp_server.py`); `flight_schema.json`, `SURFACE_ID`, `CATALOG_ID` are repo-supplied — §9.1, §9.4. |
 | [JSON Render](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/json-render) | `/generative-ui/json-render` | 🚧 | Not yet run live in the browser; the agent returns a spec that passes `parseSpec`. Page prints 4 of 13 files, the rest from its showcase source (§9.22). |
 | [Hashbrown](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/hashbrown) | `/generative-ui/hashbrown` | 🚧 | Not yet run live in the browser; the agent returns a valid `ui` envelope. Page prints 3 of 11 files, the rest from its showcase source (§9.22). |
+| [MCP Apps](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/mcp-apps) | `/generative-ui/mcp-apps` | ❌ | Reference only: Code-tab agent, runtime and page verbatim, not wired up (unpublished `normalize_claude_model`, `createClaudeHttpAgent`, `./chat`). Intelligence snippet shown as text (§9.23). |
+| [Open Generative UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/open-generative-ui) | `/generative-ui/open-generative-ui` | ❌ | Reference only: no agent published (prompt hints only); runtime, sandbox functions and frontend fragments kept as published, not wired up (§9.24). |
 | [Components and surfaces](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components) | `/generative-ui/components` | 🚧 | Not yet run live. Standard catalog + `render_ui`. Runtime is the doc's config pointed at the Python agents instead of its TanStack/OpenAI sample. |
 | [Surfaces](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/surfaces) | `/generative-ui/components/surfaces` | 🚧 | Not yet run live. `ProductRow`/`Product` and the product data are repo-supplied (the doc defines neither). |
 | [Catalogs](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/catalogs) | `/generative-ui/components/catalogs` | 🚧 | Not yet run live. Doc catalog type-checks as published. `cartUI`, `Hero`, `Panel` are repo-supplied. Valibot tab not implemented. |
@@ -392,7 +402,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [Agent Config](https://docs.copilotkit.ai/claude-sdk-python/agent-config) | `/agent-config` | ⚠️ | Frontend half works; the published backend half reads a channel the frontend never writes. |
 | [Doc root](https://docs.copilotkit.ai/claude-sdk-python) | `/doc-sync` | 📖 | Not a doc page. Reports drift between `doc-snapshot/` and the live docs. |
 
-Pages in the framework's doc sidebar that this repo does **not** track: CLI, Build with agents, the four Concepts pages, Agentic Protocols, the six Threads pages, MCP Apps, the seven Runtime pages, Deploy to any runtime, Authentication, Inspector, VS Code Extension, the four Intelligence Platform pages, AWS AgentCore, Telemetry.
+Pages in the framework's doc sidebar that this repo does **not** track: CLI, Build with agents, the four Concepts pages, Agentic Protocols, the six Threads pages, the seven Runtime pages, Deploy to any runtime, Authentication, Inspector, VS Code Extension, the four Intelligence Platform pages, AWS AgentCore, Telemetry.
 
 ---
 
@@ -595,6 +605,13 @@ Three things come along with the showcase files:
 - **Lint.** `charts/pie-chart.tsx` fails this repo's lint in both demos (`react-hooks/immutability`: a running total is reassigned inside `.map`). It renders fine and `next build` does not lint, so it is left as published.
 - **Version drift.** The showcase pins `recharts` `^2.15`, and this app uses `^3.7`. The chart components type-check against 3.x.
 
+### 9.23 MCP Apps: agent, runtime and page each import unpublished code
+
+[MCP Apps](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/mcp-apps)'s Code tab ships three files, and each imports something no page publishes: the agent (`mcp_apps_agent.py`, a raw Anthropic streaming loop) imports `normalize_claude_model` from `agents.claude_agent_sdk_adapter`; the runtime (`route.ts`) imports `createClaudeHttpAgent` from `@/app/api/_shared/claude-http-agent`; the demo page imports `Chat` from `./chat`. All three are kept verbatim and not wired up (`backend/src/agents/doc_reference/mcp_apps_agent.py`, `frontend/src/app/generative-ui/mcp-apps/_doc/`), with `@ts-expect-error` on the two unresolved frontend imports. Nothing is written in their place, so the route is reference-only. The "MCP Apps with Intelligence" snippet builds a `BuiltInAgent` on an OpenAI model and is shown as text only.
+
+### 9.24 Open Generative UI publishes prompts but no agent
+
+[Open Generative UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/open-generative-ui)'s Code tab has two agent modules that each define only a `SYSTEM_PROMPT_HINT`; the agent they describe ("the shared Claude backend in `src/agents/agent.py`") is never shown. Its runtime imports the unpublished `createClaudeHttpAgent` and `internalRuntimeErrorResponse`, and its demo page files are not served. The page's two frontend snippets are fragments that render an undefined `Chat`, pass an undefined `VISUALIZATION_DESIGN_SKILL` and import an unpublished `./suggestions`. Everything is kept as published and not wired up: prompt hints in `backend/src/agents/doc_reference/`, runtime and sandbox functions in `frontend/src/app/generative-ui/open-generative-ui/_doc/` (`@ts-expect-error` on the two unresolved imports), and the fragments as text on the route. Nothing is written in their place, so the route is reference-only.
 ### 9.23 Adopt from A2UI's catalog registers components it never defines
 
 [Adopt from A2UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/from-a2ui)'s "After" catalog uses `z`, `Airport` and `Arrow` with no import or definition. `/generative-ui/components/from-a2ui` adds the `zod` import and borrows minimal `Airport`/`Arrow` from the aws-strands-py harness (`flight-components.tsx`, labelled). The page publishes no agent or backend, so the route is reference-only: no agent was added, and the After catalog is type-checked but not mounted. The page also says the 1.0 engine rejects v0.9 operations, which is what this repo's Fixed Schema `display_flight` returns, so that tool cannot be moved to the new engine as published.
@@ -784,6 +801,8 @@ Grouped as this repo's nav groups them. Pages marked ◦ resolve but are absent 
 - [A2UI · Fixed Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/fixed-schema)
 - [JSON Render](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/json-render)
 - [Hashbrown](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/hashbrown)
+- [MCP Apps](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/mcp-apps)
+- [Open Generative UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/open-generative-ui)
 - [Components and surfaces](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components)
   - [Surfaces](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/surfaces)
   - [Catalogs](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/catalogs)
