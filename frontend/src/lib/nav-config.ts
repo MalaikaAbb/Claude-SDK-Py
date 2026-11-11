@@ -484,6 +484,16 @@ export const NAV: NavGroup[] = [
           "The page's frontend snippet (a schedule_meeting useFrontendTool with a Promise handler) is missing from the rendered page, so its published prompt points at a tool that does not exist. Approve/Cancel useInterrupt example mounted verbatim; the adapter emits no interrupt without defer_tools, which the page never mentions.",
       },
       {
+        path: "/human-in-the-loop/headless",
+        title: "Headless Interrupts",
+        docPath: "/claude-sdk-python/human-in-the-loop/headless",
+        summary:
+          "Settling a pause from UI outside the chat, with a Promise-based frontend tool whose render returns null.",
+        status: "broken",
+        statusNote:
+          "Reference-only. The page's single snippet region is missing for this framework and no agent is published, so there is nothing to run.",
+      },
+      {
         path: "/programmatic-control",
         hasDemo: true,
         agentId: "programmatic-control",

@@ -306,6 +306,9 @@ The eight routes below are all 🚧 **Not yet run live**. They compile, serve, a
 **`/human-in-the-loop/useInterrupt`** — ❌ **Broken as published.** The page's published `interrupt_agent` prompt on a Claude adapter, with the page's Approve/Cancel `useInterrupt` example mounted beside the chat.
 *Try:* "Book a call with the sales team to discuss pricing." *Pass (as a report):* a text reply and no picker: the `schedule_meeting` frontend tool the prompt names is not printed on the page, and no interrupt is emitted. *Fail:* a picker appears (something registered the tool).
 
+**`/human-in-the-loop/headless`** — ❌ **Reference-only.** The page's one snippet is missing for this framework and it prints no agent, so the route only summarises the pattern and links to the HITL routes.
+*Try:* open it. *Pass:* the broken callout and links render. *Fail:* none — there is no live surface.
+
 **`/programmatic-control`** — ⚠️ **Partial.** `addMessage` / `runAgent` / `stopAgent` / `subscribe`, no chat component.
 *Try:* "Ask for something long", then Stop. *Pass:* the reply pane fills with no chat on the page and the event log shows `onRunStartedEvent` → `onRunFinalized`; Stop cuts it short and still finalizes. *Fail:* buttons do nothing and the log stays empty.
 
@@ -375,6 +378,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) | `/frontend-tools` | ✅ | |
 | [HITL Overview](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/index) | `/human-in-the-loop` | ✅ | Pattern 1 only; `useInterrupt` needs LangGraph. The sidebar now links the overview at `/human-in-the-loop/index` (same content as the bare URL). |
 | [Pausing the Agent for Input](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/useInterrupt) | `/human-in-the-loop/useInterrupt` | ❌ | Frontend snippet missing on the page (`schedule_meeting` never printed); prompt-only agent; interrupts need `defer_tools`, not on the page (§9.23). |
+| [Headless Interrupts](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/headless) | `/human-in-the-loop/headless` | ❌ | Reference-only: no code on the page for this framework (§9.24). |
 | [Programmatic Control](https://docs.copilotkit.ai/claude-sdk-python/programmatic-control) | `/programmatic-control` | ⚠️ | The page's promise-based section is a build placeholder — see §9. |
 | [Shared State](https://docs.copilotkit.ai/claude-sdk-python/shared-state) | `/shared-state` | ❌ | UI→agent works; agent→UI does not. `set_notes` unreachable and the `ag_ui_update_state` substitute does not carry notes back. |
 | [Render state in your app](https://docs.copilotkit.ai/claude-sdk-python/shared-state/rendering-in-app) | `/shared-state/rendering-in-app` | ✅ | Framework-neutral page; follows the google-adk layout. |
@@ -591,6 +595,10 @@ Three things come along with the showcase files:
 
 [Pausing the Agent for Input](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/useInterrupt) says that for this framework the pause is a `useFrontendTool` named `schedule_meeting` with a Promise-resolving handler, but the snippet that should show it is empty on the rendered page (its source region is missing). The backend prompt it does print tells Claude to call `schedule_meeting`. `/human-in-the-loop/useInterrupt` runs that prompt verbatim on the Quickstart adapter (`gen-ui-interrupt`) and does not write the tool, so the agent cannot pause. The page's generic Approve/Cancel `useInterrupt` example is mounted, but `ClaudeAgentAdapter` only emits AG-UI interrupts for `defer_tools`, which no page mentions, and resumes them on `{ behavior }` rather than the example's `{ approved }`.
 
+### 9.24 Headless Interrupts has no code for this framework
+
+[Headless Interrupts](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/headless) describes a Promise-based `useFrontendTool` whose pending state drives a picker outside the chat, but its only snippet (`headless-promise-primitives`) is missing on the rendered page and no agent is printed. `/human-in-the-loop/headless` is reference-only and status ❌.
+
 ---
 
 ## 10. Troubleshooting
@@ -781,6 +789,7 @@ Grouped as this repo's nav groups them. Pages marked ◦ resolve but are absent 
 - [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools)
 - [HITL Overview](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/index)
 - [Pausing the Agent for Input](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/useInterrupt)
+- [Headless Interrupts](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/headless)
 - [Programmatic Control](https://docs.copilotkit.ai/claude-sdk-python/programmatic-control)
 
 **Shared State**
