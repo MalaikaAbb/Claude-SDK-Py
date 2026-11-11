@@ -368,9 +368,9 @@ export const NAV: NavGroup[] = [
         docPath: "/claude-sdk-python/generative-ui/open-generative-ui",
         summary:
           "The agent writes sandboxed HTML/CSS/JS that streams into an iframe, optionally calling back into host functions.",
-        status: "partial",
+        status: "broken",
         statusNote:
-          "Not yet checked in a browser. The Code tab publishes only two prompt hints, no agent, so they run on the Quickstart adapter. Chat, VISUALIZATION_DESIGN_SKILL, ./suggestions and createClaudeHttpAgent are unpublished: stand-in, commented out, commented out, HttpAgent.",
+          "The Code tab publishes only two prompt hints and no agent, so no open-gen-ui agent is mounted and runs fail. Chat is a minimal labelled component; VISUALIZATION_DESIGN_SKILL and ./suggestions are commented out; HttpAgent in place of the unpublished createClaudeHttpAgent.",
       },
       {
         path: "/generative-ui/components",

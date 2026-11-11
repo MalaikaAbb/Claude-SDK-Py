@@ -10,17 +10,16 @@ export default function Page() {
     <>
       <RouteHeader path="/generative-ui/open-generative-ui" />
 
-      <Callout tone="warn" title="Agent: the Quickstart adapter with the Code tab's prompt hints">
+      <Callout tone="warn" title="Broken as published: no agent">
         <p className="leading-relaxed">
-          The Code tab&apos;s two agent modules publish only a{" "}
-          <code>SYSTEM_PROMPT_HINT</code> each, and say the agent itself is a
-          shared <code>src/agents/agent.py</code> that no page prints. Here each
-          hint runs, verbatim, on this repo&apos;s usual{" "}
-          <code>ClaudeAgentAdapter</code> (<code>open-gen-ui</code>,{" "}
-          <code>open-gen-ui-advanced</code>). The adapter hands the run&apos;s
-          frontend tools to Claude, which is what the page&apos;s warning asks
-          of an agent, so <code>generateSandboxedUi</code> is visible to the
-          model. Not yet checked in a browser.
+          The Code tab&apos;s two agent modules define only a{" "}
+          <code>SYSTEM_PROMPT_HINT</code> each and say the agent itself is a
+          shared <code>src/agents/agent.py</code> that no page prints. Nothing
+          is put in its place: the modules sit unwired in{" "}
+          <code>backend/src/agents/doc_reference/</code>, no{" "}
+          <code>open-gen-ui</code> agents are mounted, and runs on this route
+          fail. The runtime config, snippets and sandbox functions are the
+          page&apos;s.
         </p>
       </Callout>
 
@@ -41,23 +40,8 @@ export default function Page() {
               "(advanced) Build a calculator whose = button calls evaluateExpression on the host",
               "(advanced) Build a button that sends 'hello from the sandbox' with notifyHost",
             ]}
-            expect={
-              <>
-                An iframe preview appears in the chat: placeholder text first,
-                then styles, then the HTML, then scripts run. In advanced mode,
-                using the generated UI logs{" "}
-                <code>[open-gen-ui/advanced] evaluateExpression …</code> or{" "}
-                <code>notifyHost: …</code> in the browser console.
-              </>
-            }
-            fail={
-              <>
-                A plain text reply with no iframe: either the model did not call{" "}
-                <code>generateSandboxedUi</code>, or the middleware is not
-                engaged. Check that requests go to{" "}
-                <code>/api/copilotkit-ogui</code>.
-              </>
-            }
+            expect="As a report: an agent error in the chat (404 from the Python server; no open-gen-ui agent is mounted). As the page intends: an iframe preview that builds up while it streams."
+            fail="A rendered iframe would mean something mounted an agent, which this route deliberately does not."
           />
         </div>
       </Panel>
@@ -77,15 +61,21 @@ export default function Page() {
         <SourceCode file="frontend/src/app/api/copilotkit-ogui/[[...slug]]/route.ts" />
       </Panel>
 
-      <Panel title="The agents">
-        <SourceCode file="backend/src/agents/prompts.py" region="open-gen-ui-prompts" />
+      <Panel title="The agents, as published">
+        <SourceCodeGroup
+          files={[
+            { file: "backend/src/agents/doc_reference/open_gen_ui_agent.py" },
+            { file: "backend/src/agents/doc_reference/open_gen_ui_advanced_agent.py" },
+          ]}
+          note="Prompt hints only, verbatim and unwired."
+        />
       </Panel>
 
       <Callout tone="warn" title="Gaps and harness changes">
         <ul className="space-y-1.5">
           <li>
-            · No agent is published, only two prompt hints. They run on the
-            Quickstart adapter (above).
+            · No agent is published, only two prompt hints. Nothing is
+            mounted in its place.
           </li>
           <li>
             · <code>Chat</code> is rendered by both snippets and defined by
@@ -104,7 +94,8 @@ export default function Page() {
             <code>internalRuntimeErrorResponse</code>, and a single-route
             fixed path that hits README §9.19 with a relative{" "}
             <code>runtimeUrl</code>. It sits at <code>[[...slug]]</code> with{" "}
-            <code>HttpAgent</code>s instead, one per agent id.
+            this repo&apos;s usual <code>HttpAgent</code> wiring, one path per
+            agent id.
           </li>
         </ul>
       </Callout>

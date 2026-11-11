@@ -20,8 +20,10 @@ import { AGENT_URL } from "@/lib/agents";
 
 // HARNESS: the Code tab points both names at one agent at `${AGENT_URL}/`,
 // built with `createClaudeHttpAgent` from the unpublished
-// `@/app/api/_shared/claude-http-agent`. This repo mounts one adapter per id
-// (each with its Code-tab prompt hint), reached with a plain `HttpAgent`.
+// `@/app/api/_shared/claude-http-agent`. This repo reaches its Python agents
+// with a plain `HttpAgent`, one path per id. That agent ("the shared Claude
+// backend in src/agents/agent.py") is never published, so nothing is mounted
+// at either path and runs on this route fail with a 404.
 const agentNames = ["open-gen-ui", "open-gen-ui-advanced"];
 const agents: Record<string, AbstractAgent> = {};
 for (const name of agentNames) {
