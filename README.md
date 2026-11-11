@@ -254,6 +254,9 @@ authoritative `threadId` prop — the setters no-op when the id is prop-controll
 **`/generative-ui/state-rendering`** — ❌ **Broken.** Same cell and same gap as State Streaming.
 *Try:* "Draft a one-paragraph product brief for a habit tracker." *Pass (as a report):* empty canvas with a LIVE badge, then the whole brief at once. *Fail:* an empty canvas after the turn — the state write never happened at all.
 
+**`/generative-ui/a2ui`** — 📖 **Reference.** The A2UI overview: its two setup snippets (catalog on the provider, `a2ui` on the runtime), the Python helper list and the surface colour variables, each shown verbatim next to the route that actually runs that path.
+*Try:* open it and follow the links. *Pass:* the snippets match the page, and the Dynamic Schema / Fixed Schema links lead to the live demos. *Fail:* none — no live surface.
+
 **`/generative-ui/a2ui/dynamic-schema`** — a bring-your-own-catalog dashboard designed per request by a secondary LLM.
 *Try:* "Build me a dashboard for a fictional SaaS: MRR, churn, active seats, and a bar chart of signups by month." *Pass:* a progress indicator, then Card / Metric / DataTable / PieChart / BarChart appearing one at a time. *Fail:* a markdown table, or raw JSON in the chat.
 
@@ -361,6 +364,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [Components as Tools](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-based) | `/generative-ui/tool-based` | ✅ | Works because `useComponent` registers a *frontend* tool. |
 | [Tool Call Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-rendering) | `/generative-ui/tool-rendering` | ⚠️ | `get_weather` works via a repo-authored in-process MCP bridge (`weather_mcp_server.py`), not doc code — §9.1. |
 | [State Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/state-rendering) | `/generative-ui/state-rendering` | ❌ | Same cell and gap as State Streaming. |
+| [A2UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui) | `/generative-ui/a2ui` | 📖 | Overview. Snippets type-checked verbatim (`myCatalog`, `myAgent`, `children` undefined); Python helpers need the `copilotkit` package this backend lacks (§9.23). |
 | [A2UI · Dynamic Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/dynamic-schema) | `/generative-ui/a2ui/dynamic-schema` | ✅ | Catalog auto-injects `generate_a2ui` as a frontend tool. `renderers.tsx` has no imports, and its runtime route needs a catch-all segment — see §9. |
 | [A2UI · Fixed Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/fixed-schema) | `/generative-ui/a2ui/fixed-schema` | ⚠️ | `display_flight` works via a repo-authored MCP bridge (`flights_mcp_server.py`); `flight_schema.json`, `SURFACE_ID`, `CATALOG_ID` are repo-supplied — §9.1, §9.4. |
 | [JSON Render](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/json-render) | `/generative-ui/json-render` | 🚧 | Not yet run live in the browser; the agent returns a spec that passes `parseSpec`. Page prints 4 of 13 files, the rest from its showcase source (§9.22). |
@@ -587,6 +591,9 @@ Three things come along with the showcase files:
 - **Lint.** `charts/pie-chart.tsx` fails this repo's lint in both demos (`react-hooks/immutability`: a running total is reassigned inside `.map`). It renders fine and `next build` does not lint, so it is left as published.
 - **Version drift.** The showcase pins `recharts` `^2.15`, and this app uses `^3.7`. The chart components type-check against 3.x.
 
+### 9.23 The A2UI overview's snippets are fragments, and its Python helpers need an uninstalled package
+
+[A2UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui) prints `<CopilotKit a2ui={{ catalog: myCatalog }}>{children}</CopilotKit>` and a runtime with `agents: { default: myAgent }`; none of the three names is defined, so `frontend/src/app/generative-ui/a2ui/_doc/` keeps both byte-exact with `@ts-expect-error` on those lines. Its "How it works" list uses `from copilotkit import a2ui`, but this backend's install line (the Quickstart's) has no `copilotkit` package; the snippet is kept unimported in `backend/src/agents/doc_reference/a2ui_helpers.py`.
 ### 9.23 Markdown Rendering's link and heading classes are never defined
 
 [Markdown Rendering](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/markdown)'s `components` example gives links `my-link` and h2s `my-heading`, but the page defines no CSS for either, so the verbatim override changes nothing visible. `/custom-look-and-feel/markdown` adds a scoped `markdown.css` (taken from the google-adk harness, labelled) to make it visible. The page names no backend; the route reuses the `chat-slots` agent.
@@ -765,6 +772,7 @@ Grouped as this repo's nav groups them. Pages marked ◦ resolve but are absent 
 - [Components as Tools](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-based)
 - [Tool Call Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-rendering)
 - [State Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/state-rendering)
+- [A2UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui)
 - [A2UI · Dynamic Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/dynamic-schema)
 - [A2UI · Fixed Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/fixed-schema)
 - [JSON Render](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/json-render)
