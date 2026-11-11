@@ -298,7 +298,7 @@ The eight routes below are all 🚧 **Not yet run live**. They compile, serve, a
 ### App Control
 
 **`/frontend-tools`** — a tool the agent calls that runs in the browser.
-*Try:* "Make the background a warm sunset gradient." *Pass:* the background transitions, the printed CSS updates, the agent confirms. *Fail:* the agent describes a gradient instead of applying one.
+*Try:* "Make the background a warm sunset gradient." *Pass:* the background transitions, the printed CSS updates, the agent confirms. *Fail:* the agent describes a gradient instead of applying one. The page's `useFrontendTools` (list of tools) snippet is shown on the notes page only.
 
 **`/human-in-the-loop`** — `useHumanInTheLoop` suspending the run behind a picker.
 *Try:* "Book an intro call with the sales team." *Pass:* a four-slot picker appears inline and the run visibly pauses; picking swaps it for a confirmation and the agent's next message names your time. *Fail:* the agent invents a time without asking, or picking does nothing.
@@ -369,7 +369,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [Theming](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/theming) | `/generative-ui/components/theming` | 🚧 | Not yet run live. `.dark` goes on a wrapper, not `<html>`. `mapStyle` not set. |
 | [Transports](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/transports) | `/generative-ui/components/transports` | 🚧 | Not yet run live. Second agent added to show `agentIds` scoping. |
 | [Markdown mode](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/markdown-mode) | `/generative-ui/components/markdown-mode` | 🚧 | Not yet run live. Default `sendContext` only. The `sendContext: false` Python fragment is in `doc_reference/markdown_mode.py`, unwired. |
-| [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) | `/frontend-tools` | ✅ | |
+| [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) | `/frontend-tools` | ✅ | The `useFrontendTools` list snippet is a fragment (`reports`, `navigate` undefined); shown as text, not run. |
 | [Human-in-the-Loop](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop) | `/human-in-the-loop` | ✅ | Pattern 1 only; `useInterrupt` needs LangGraph. |
 | [Programmatic Control](https://docs.copilotkit.ai/claude-sdk-python/programmatic-control) | `/programmatic-control` | ⚠️ | The page's promise-based section is a build placeholder — see §9. |
 | [Shared State](https://docs.copilotkit.ai/claude-sdk-python/shared-state) | `/shared-state` | ❌ | UI→agent works; agent→UI does not. `set_notes` unreachable and the `ag_ui_update_state` substitute does not carry notes back. |
@@ -412,7 +412,7 @@ The same shape would unblock the other four routes; it is not applied there beca
 
 ### 9.2 The feature pages target a backend that is never published
 
-Related but distinct. The backend snippets on the feature pages are not written against `ClaudeAgentAdapter` at all — they are fragments of a hand-rolled streaming loop over the raw Anthropic Messages API. The [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) page says so outright: *"Runs that carry frontend tools use the direct Messages API path rather than the Claude Agent SDK."* That loop is never published in full, so there is no second server to drop these fragments into either. Every one is reproduced under `backend/src/agents/doc_reference/`.
+Related but distinct. The backend snippets on the feature pages are not written against `ClaudeAgentAdapter` at all — they are fragments of a hand-rolled streaming loop over the raw Anthropic Messages API. The [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) page says so outright: its demo server calls the Messages API directly for runs with frontend tools (the page now adds that the published `ClaudeAgentAdapter` needs no conversion, which is what `/frontend-tools` runs on). That loop is never published in full, so there is no second server to drop these fragments into either. Every one is reproduced under `backend/src/agents/doc_reference/`.
 
 ### 9.3 `renderers.tsx` has no import block, on both A2UI pages
 
@@ -582,6 +582,10 @@ Three things come along with the showcase files:
 - **Theme variables.** The components use the showcase's theme variables (`--card`, `--border`, `--foreground`, `--muted-foreground`, `--primary`, `--destructive`, `--secondary`, `--font-body`). No doc page publishes them and this app does not define them, so the cards render with default colours.
 - **Lint.** `charts/pie-chart.tsx` fails this repo's lint in both demos (`react-hooks/immutability`: a running total is reassigned inside `.map`). It renders fine and `next build` does not lint, so it is left as published.
 - **Version drift.** The showcase pins `recharts` `^2.15`, and this app uses `^3.7`. The chart components type-check against 3.x.
+
+### 9.23 `useFrontendTools` is published as a fragment
+
+[Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) now documents the plural `useFrontendTools` hook with a snippet that maps over `reports` and calls `navigate`. The page defines neither, nor the component around them, so `/frontend-tools` shows the snippet as text and does not run it.
 
 ---
 
