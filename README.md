@@ -355,7 +355,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [Voice](https://docs.copilotkit.ai/claude-sdk-python/voice) | `/voice` | ✅ | Mic needs `OPENAI_API_KEY`; sample-audio button works without it. |
 | [Reasoning](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/reasoning) | `/generative-ui/reasoning` | ✅ | `ReasoningBlock` is one of the few components published in full. |
 | [Components as Tools](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-based) | `/generative-ui/tool-based` | ✅ | Works because `useComponent` registers a *frontend* tool. Headless `CopilotChatToolCallsView` snippet is a fragment (`assistantMessage`, `allMessages` undefined); shown as text. |
-| [Tool Call Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-rendering) | `/generative-ui/tool-rendering` | ⚠️ | `get_weather` works via a repo-authored in-process MCP bridge (`weather_mcp_server.py`), not doc code — §9.1. |
+| [Tool Call Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-rendering) | `/generative-ui/tool-rendering` | ⚠️ | `get_weather` works via a repo-authored in-process MCP bridge (`weather_mcp_server.py`), not doc code — §9.1. Grouping snippets shown as text (`MyToolRow`, `ToolTimeline` undefined) — §9.24. |
 | [State Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/state-rendering) | `/generative-ui/state-rendering` | ❌ | Same cell and gap as State Streaming. |
 | [A2UI · Dynamic Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/dynamic-schema) | `/generative-ui/a2ui/dynamic-schema` | ✅ | Catalog auto-injects `generate_a2ui` as a frontend tool. `renderers.tsx` has no imports, and its runtime route needs a catch-all segment — see §9. |
 | [A2UI · Fixed Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/fixed-schema) | `/generative-ui/a2ui/fixed-schema` | ⚠️ | `display_flight` works via a repo-authored MCP bridge (`flights_mcp_server.py`); `flight_schema.json`, `SURFACE_ID`, `CATALOG_ID` are repo-supplied — §9.1, §9.4. |
@@ -587,6 +587,9 @@ Three things come along with the showcase files:
 
 [Components as Tools](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-based) now shows `<CopilotChatToolCallsView message={assistantMessage} messages={allMessages} />` for headless chats. Neither variable is defined on the page, so `/generative-ui/tool-based` shows it as text; its demo uses `CopilotChat`, which renders tool calls itself.
 
+### 9.24 Tool Call Rendering's grouping examples name undefined components
+
+[Tool Call Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-rendering)'s new "Grouping tool calls" section passes `MyToolRow` to `useDefaultRenderTool` and `ToolTimeline` to the `group` slot, and defines neither. The snippets are shown as text on `/generative-ui/tool-rendering`; the demo keeps the default grouped display.
 
 ---
 
