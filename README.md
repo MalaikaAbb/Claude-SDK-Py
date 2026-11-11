@@ -369,7 +369,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | Doc page | Route | Status | Notes |
 |---|---|---|---|
 | [Introduction](https://docs.copilotkit.ai/claude-sdk-python) | `/` | 📖 | Landing page — orientation and the agent roster. |
-| [Quickstart](https://docs.copilotkit.ai/claude-sdk-python/quickstart?agent=bring-your-own) | `/quickstart` | ✅ | |
+| [Quickstart](https://docs.copilotkit.ai/claude-sdk-python/quickstart?agent=bring-your-own) | `/quickstart` | ✅ | Page now pins `@ag-ui/client@1.0.2`; `package.json` still `^1.0.3` (§9.23). |
 | [CopilotChat](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/chat) | `/prebuilt-components/chat` | ✅ | Page resolves but is absent from the doc sidebar. |
 | [CopilotSidebar](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/sidebar) | `/prebuilt-components/sidebar` | ✅ | Off-sidebar. `MainContent`/`Suggestions` supplied locally. |
 | [CopilotPopup](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/popup) | `/prebuilt-components/popup` | ✅ | Off-sidebar. |
@@ -624,6 +624,9 @@ Three things come along with the showcase files:
 - **Lint.** `charts/pie-chart.tsx` fails this repo's lint in both demos (`react-hooks/immutability`: a running total is reassigned inside `.map`). It renders fine and `next build` does not lint, so it is left as published.
 - **Version drift.** The showcase pins `recharts` `^2.15`, and this app uses `^3.7`. The chart components type-check against 3.x.
 
+### 9.23 The Quickstart pins `@ag-ui/client@1.0.2`; this repo asks for `^1.0.3`
+
+The [Quickstart](https://docs.copilotkit.ai/claude-sdk-python/quickstart) install line is now `npm install @copilotkit/runtime @copilotkit/react-core @ag-ui/client@1.0.2`. 1.0.2 is the exact version `@copilotkit/react-core` and `@copilotkit/runtime` 1.83.0 depend on. `frontend/package.json` declares `@ag-ui/client` and `@ag-ui/core` as `^1.0.3`, so `package-lock.json` holds a root 1.0.3 plus nested 1.0.2 copies under each `@copilotkit/*` package. That is the duplicate-copy setup that can break `AbstractAgent` types. The pin was not changed in the doc sync because it needs a reinstall; aligning it to the page means setting both to `1.0.2` and reinstalling.
 ### 9.23 Components as Tools' headless snippet is a fragment
 
 [Components as Tools](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-based) now shows `<CopilotChatToolCallsView message={assistantMessage} messages={allMessages} />` for headless chats. Neither variable is defined on the page, so `/generative-ui/tool-based` shows it as text; its demo uses `CopilotChat`, which renders tool calls itself.
