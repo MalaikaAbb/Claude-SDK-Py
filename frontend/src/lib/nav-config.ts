@@ -464,7 +464,9 @@ export const NAV: NavGroup[] = [
         hasDemo: true,
         agentId: "hitl-in-chat",
         title: "Human in the Loop",
-        docPath: "/claude-sdk-python/human-in-the-loop",
+        // The sidebar now links the overview as `/human-in-the-loop/index`;
+        // the bare URL still serves the same page.
+        docPath: "/claude-sdk-python/human-in-the-loop/index",
         summary:
           "useHumanInTheLoop suspending the run behind a time picker until the user answers.",
         status: "working",

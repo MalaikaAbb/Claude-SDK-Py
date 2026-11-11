@@ -370,7 +370,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [Transports](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/transports) | `/generative-ui/components/transports` | 🚧 | Not yet run live. Second agent added to show `agentIds` scoping. |
 | [Markdown mode](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/markdown-mode) | `/generative-ui/components/markdown-mode` | 🚧 | Not yet run live. Default `sendContext` only. The `sendContext: false` Python fragment is in `doc_reference/markdown_mode.py`, unwired. |
 | [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) | `/frontend-tools` | ✅ | |
-| [Human-in-the-Loop](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop) | `/human-in-the-loop` | ✅ | Pattern 1 only; `useInterrupt` needs LangGraph. |
+| [HITL Overview](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/index) | `/human-in-the-loop` | ✅ | Pattern 1 only; `useInterrupt` needs LangGraph. The sidebar now links the overview at `/human-in-the-loop/index` (same content as the bare URL). |
 | [Programmatic Control](https://docs.copilotkit.ai/claude-sdk-python/programmatic-control) | `/programmatic-control` | ⚠️ | The page's promise-based section is a build placeholder — see §9. |
 | [Shared State](https://docs.copilotkit.ai/claude-sdk-python/shared-state) | `/shared-state` | ❌ | UI→agent works; agent→UI does not. `set_notes` unreachable and the `ag_ui_update_state` substitute does not carry notes back. |
 | [Render state in your app](https://docs.copilotkit.ai/claude-sdk-python/shared-state/rendering-in-app) | `/shared-state/rendering-in-app` | ✅ | Framework-neutral page; follows the google-adk layout. |
@@ -771,7 +771,7 @@ Grouped as this repo's nav groups them. Pages marked ◦ resolve but are absent 
 
 **App Control**
 - [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools)
-- [Human-in-the-Loop](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop)
+- [HITL Overview](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/index)
 - [Programmatic Control](https://docs.copilotkit.ai/claude-sdk-python/programmatic-control)
 
 **Shared State**
