@@ -1,7 +1,7 @@
 "use client";
 
 // Verbatim from https://docs.copilotkit.ai/claude-sdk-python/webmcp, with a
-// @ts-expect-error on the undefined searchOrders call.
+// ts-expect-error directive on the undefined searchOrders call.
 
 import { useFrontendTool } from "@copilotkit/react-core/v2";
 import { z } from "zod";

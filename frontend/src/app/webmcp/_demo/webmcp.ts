@@ -1,5 +1,5 @@
 // Verbatim from https://docs.copilotkit.ai/claude-sdk-python/webmcp, with a
-// @ts-expect-error on the undefined searchOrders call.
+// ts-expect-error directive on the undefined searchOrders call.
 import { CopilotKitCore } from "@copilotkit/core";
 import { z } from "zod";
 
