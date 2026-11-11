@@ -1,6 +1,6 @@
 import { RouteHeader } from "@/components/route-header";
 import { SourceCode, SourceCodeGroup } from "@/components/source-code";
-import { Callout, CodeBlock, Panel, TryIt } from "@/components/ui";
+import { Callout, CodeBlock, Panel } from "@/components/ui";
 
 const DIR = "frontend/src/app/generative-ui/mcp-apps";
 
@@ -73,17 +73,15 @@ export default function Page() {
     <>
       <RouteHeader path="/generative-ui/mcp-apps" />
 
-      <Callout tone="warn" title="Broken as published: the agent cannot run">
+      <Callout tone="warn" title="Broken as published: reference only">
         <p className="leading-relaxed">
-          The Code tab&apos;s <code>mcp_apps_agent.py</code> is a hand-written
-          streaming loop over the raw Anthropic API, and it imports{" "}
-          <code>normalize_claude_model</code> from an{" "}
-          <code>agents.claude_agent_sdk_adapter</code> module that is never
-          published. It is kept verbatim and unwired in{" "}
-          <code>backend/src/agents/doc_reference/mcp_apps_agent.py</code>, and
-          nothing is put in its place: no agent is mounted at{" "}
-          <code>/mcp-apps</code>, so the runtime&apos;s calls to it fail. The
-          runtime config and demo page are the Code tab&apos;s.
+          Nothing on this route runs. The Code tab&apos;s agent
+          (<code>mcp_apps_agent.py</code>) imports{" "}
+          <code>normalize_claude_model</code> from an unpublished{" "}
+          <code>agents.claude_agent_sdk_adapter</code>; its runtime imports an
+          unpublished <code>createClaudeHttpAgent</code>; its page imports an
+          unpublished <code>./chat</code>. All three files are kept verbatim
+          and not wired up, and nothing is written in their place.
         </p>
       </Callout>
 
@@ -96,27 +94,13 @@ export default function Page() {
           activity event. The provider&apos;s built-in renderer draws it as a
           sandboxed iframe in the chat, so the frontend is a plain chat.
         </p>
-        <div className="mt-4">
-          <TryIt
-            prompts={["Draw a simple diagram: browser → Next.js runtime → Python agent → Claude."]}
-            expect="As a report: an agent error in the chat (the runtime gets a 404 from the Python server, because no mcp-apps agent is mounted). As the page intends: an Excalidraw canvas in the chat, then one sentence."
-            fail="A working canvas would mean something mounted an mcp-apps agent, which this route deliberately does not."
-          />
-        </div>
       </Panel>
 
-      <Panel title="The demo">
+      <Panel title="The Code tab's page and runtime — verbatim, not mounted">
         <SourceCodeGroup
-          files={[
-            { file: `${DIR}/mcp-apps-demo.tsx` },
-            { file: `${DIR}/chat.tsx` },
-          ]}
-          note="Top: the Code tab's page, verbatim. Bottom: the Chat stand-in the page imports and never publishes."
+          files={[{ file: `${DIR}/_doc/page.tsx` }, { file: `${DIR}/_doc/route.ts` }]}
+          note="Type-checked only. The unpublished ./chat and createClaudeHttpAgent imports carry @ts-expect-error."
         />
-      </Panel>
-
-      <Panel title="The runtime">
-        <SourceCode file="frontend/src/app/api/copilotkit-mcp-apps/[[...slug]]/route.ts" />
       </Panel>
 
       <Panel title="The agent">
@@ -134,31 +118,18 @@ export default function Page() {
         </div>
       </Panel>
 
-      <Callout tone="warn" title="Gaps and harness changes">
+      <Callout tone="warn" title="What the page leaves out">
         <ul className="space-y-1.5">
           <li>
-            · The Code tab&apos;s runtime builds agents with{" "}
-            <code>createClaudeHttpAgent</code> from an unpublished{" "}
-            <code>@/app/api/_shared/claude-http-agent</code>; this repo&apos;s
-            usual <code>HttpAgent</code> wiring is used. Its extra{" "}
-            <code>headless-complete</code> agent is left out (no such agent
-            here).
-          </li>
-          <li>
-            · The Code tab serves a fixed <code>route.ts</code> in{" "}
-            <code>single-route</code> mode. With a relative{" "}
-            <code>runtimeUrl</code> that crashes on the first message in this
-            CopilotKit version (README §9.19), so the route uses this
-            repo&apos;s existing catch-all, multi-route fix.
+            · <code>agents.claude_agent_sdk_adapter.normalize_claude_model</code>{" "}
+            (agent), <code>@/app/api/_shared/claude-http-agent</code> (runtime)
+            and <code>./chat</code> (page) are never published.
           </li>
           <li>
             · The Intelligence snippet builds a CopilotKit{" "}
-            <code>BuiltInAgent</code> on an OpenAI model. This harness runs
-            Claude agents only, and Intelligence needs an API key, so it is
-            shown, not run. Its <code>mcpApps</code> block is the same as the
-            one running above, apart from the <code>/mcp</code> URL suffix.
+            <code>BuiltInAgent</code> on an OpenAI model and needs an
+            Intelligence API key; it is shown as text only.
           </li>
-          <li>· <code>Chat</code> is rendered and never defined; a minimal labelled one (a plain <code>CopilotChat</code>, as the page describes) is added.</li>
         </ul>
       </Callout>
     </>

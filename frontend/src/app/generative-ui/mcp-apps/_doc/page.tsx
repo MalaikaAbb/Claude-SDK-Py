@@ -1,8 +1,6 @@
+// Code tab of https://docs.copilotkit.ai/claude-sdk-python/generative-ui/mcp-apps
+// (src/app/demos/mcp-apps/page.tsx), verbatim. Reference only: not mounted.
 "use client";
-
-// Verbatim from the Code tab of
-// https://docs.copilotkit.ai/claude-sdk-python/generative-ui/mcp-apps
-// (src/app/demos/mcp-apps/page.tsx). `./chat` is never published; see chat.tsx.
 
 /**
  * MCP Apps demo.
@@ -24,6 +22,7 @@
 
 import React from "react";
 import { CopilotKit } from "@copilotkit/react-core/v2";
+// @ts-expect-error verbatim doc code: `./chat` is never published (TS2307)
 import { Chat } from "./chat";
 
 export default function MCPAppsDemo() {

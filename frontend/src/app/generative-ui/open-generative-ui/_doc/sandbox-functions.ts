@@ -1,6 +1,5 @@
-// Verbatim from the Code tab of
-// https://docs.copilotkit.ai/claude-sdk-python/generative-ui/open-generative-ui
-// (src/app/demos/open-gen-ui-advanced/sandbox-functions.ts).
+// Code tab of https://docs.copilotkit.ai/claude-sdk-python/generative-ui/open-generative-ui
+// (src/app/demos/open-gen-ui-advanced/sandbox-functions.ts), verbatim. Reference only.
 import { z } from "zod";
 
 /**

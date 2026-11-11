@@ -350,27 +350,23 @@ export const NAV: NavGroup[] = [
       },
       {
         path: "/generative-ui/mcp-apps",
-        hasDemo: true,
-        agentId: "mcp-apps",
         title: "MCP Apps",
         docPath: "/claude-sdk-python/generative-ui/mcp-apps",
         summary:
           "An MCP server's tool UI (Excalidraw) rendered inline in the chat via the runtime's mcpApps middleware.",
         status: "broken",
         statusNote:
-          "Runtime config and demo page verbatim from the Code tab. Its agent module imports an unpublished helper (normalize_claude_model), so it cannot run and no mcp-apps agent is mounted; runs fail. Minimal labelled Chat; HttpAgent in place of the unpublished createClaudeHttpAgent; catch-all route per §9.19.",
+          "Reference only. The Code tab's agent, runtime and page are kept verbatim and not wired up: they import unpublished normalize_claude_model, createClaudeHttpAgent and ./chat. Nothing is written in their place.",
       },
       {
         path: "/generative-ui/open-generative-ui",
-        hasDemo: true,
-        agentId: "open-gen-ui",
         title: "Open Generative UI",
         docPath: "/claude-sdk-python/generative-ui/open-generative-ui",
         summary:
           "The agent writes sandboxed HTML/CSS/JS that streams into an iframe, optionally calling back into host functions.",
         status: "broken",
         statusNote:
-          "The Code tab publishes only two prompt hints and no agent, so no open-gen-ui agent is mounted and runs fail. Chat is a minimal labelled component; VISUALIZATION_DESIGN_SKILL and ./suggestions are commented out; HttpAgent in place of the unpublished createClaudeHttpAgent.",
+          "Reference only. No agent is published (two prompt hints only); the runtime imports unpublished helpers; the frontend snippets are fragments using an undefined Chat, VISUALIZATION_DESIGN_SKILL and ./suggestions. All kept as published, nothing written in their place.",
       },
       {
         path: "/generative-ui/components",

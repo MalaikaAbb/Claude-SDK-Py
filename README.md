@@ -269,11 +269,11 @@ Two ways to let the agent draw a dashboard without any tool call. In both, the a
 
 ### Generative UI · Open-ended
 
-**`/generative-ui/mcp-apps`** — ❌ **Broken as published.** The runtime's `mcpApps` entry points at the public Excalidraw MCP server, but the Code tab's agent cannot run (unpublished import), so no `mcp-apps` agent is mounted.
-*Try:* "Draw a simple diagram: browser → Next.js runtime → Python agent → Claude." *Pass (as a report):* an agent error (404 from the Python server). *Fail:* a working canvas (something mounted an agent).
+**`/generative-ui/mcp-apps`** — ❌ **Broken — reference only.** The Code tab's agent, runtime and page are shown verbatim and not wired up: each imports something no page publishes.
+*Try:* nothing to run. *Pass (today):* the page renders the published code and its gap callout. §9.23.
 
-**`/generative-ui/open-generative-ui`** — ❌ **Broken as published.** The runtime's `openGenerativeUI` flag and the minimal/advanced frontends are the page's, but the page publishes no agent, so none is mounted.
-*Try:* "build me a simple greeting card". *Pass (as a report):* an agent error (404 from the Python server). *Fail:* a rendered iframe (something mounted an agent).
+**`/generative-ui/open-generative-ui`** — ❌ **Broken — reference only.** No agent is published; the runtime, sandbox functions, prompt hints and the two frontend fragments are shown as published and not wired up.
+*Try:* nothing to run. *Pass (today):* the page renders the published code and its gap callout. §9.24.
 
 ### Generative UI · Components and surfaces
 
@@ -369,8 +369,8 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [A2UI · Fixed Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/fixed-schema) | `/generative-ui/a2ui/fixed-schema` | ⚠️ | `display_flight` works via a repo-authored MCP bridge (`flights_mcp_server.py`); `flight_schema.json`, `SURFACE_ID`, `CATALOG_ID` are repo-supplied — §9.1, §9.4. |
 | [JSON Render](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/json-render) | `/generative-ui/json-render` | 🚧 | Not yet run live in the browser; the agent returns a spec that passes `parseSpec`. Page prints 4 of 13 files, the rest from its showcase source (§9.22). |
 | [Hashbrown](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/hashbrown) | `/generative-ui/hashbrown` | 🚧 | Not yet run live in the browser; the agent returns a valid `ui` envelope. Page prints 3 of 11 files, the rest from its showcase source (§9.22). |
-| [MCP Apps](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/mcp-apps) | `/generative-ui/mcp-apps` | ❌ | Code tab agent imports an unpublished helper, so no agent is mounted and runs fail; minimal `Chat`; Intelligence snippet (BuiltInAgent) shown only (§9.23). |
-| [Open Generative UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/open-generative-ui) | `/generative-ui/open-generative-ui` | ❌ | Only prompt hints published, no agent, so none is mounted and runs fail; minimal `Chat`; design skill and suggestions commented out (§9.24). |
+| [MCP Apps](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/mcp-apps) | `/generative-ui/mcp-apps` | ❌ | Reference only: Code-tab agent, runtime and page verbatim, not wired up (unpublished `normalize_claude_model`, `createClaudeHttpAgent`, `./chat`). Intelligence snippet shown as text (§9.23). |
+| [Open Generative UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/open-generative-ui) | `/generative-ui/open-generative-ui` | ❌ | Reference only: no agent published (prompt hints only); runtime, sandbox functions and frontend fragments kept as published, not wired up (§9.24). |
 | [Components and surfaces](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components) | `/generative-ui/components` | 🚧 | Not yet run live. Standard catalog + `render_ui`. Runtime is the doc's config pointed at the Python agents instead of its TanStack/OpenAI sample. |
 | [Surfaces](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/surfaces) | `/generative-ui/components/surfaces` | 🚧 | Not yet run live. `ProductRow`/`Product` and the product data are repo-supplied (the doc defines neither). |
 | [Catalogs](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/catalogs) | `/generative-ui/components/catalogs` | 🚧 | Not yet run live. Doc catalog type-checks as published. `cartUI`, `Hero`, `Panel` are repo-supplied. Valibot tab not implemented. |
@@ -593,13 +593,13 @@ Three things come along with the showcase files:
 - **Lint.** `charts/pie-chart.tsx` fails this repo's lint in both demos (`react-hooks/immutability`: a running total is reassigned inside `.map`). It renders fine and `next build` does not lint, so it is left as published.
 - **Version drift.** The showcase pins `recharts` `^2.15`, and this app uses `^3.7`. The chart components type-check against 3.x.
 
-### 9.23 MCP Apps' Code tab agent cannot run, and two of its imports are unpublished
+### 9.23 MCP Apps: agent, runtime and page each import unpublished code
 
-[MCP Apps](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/mcp-apps)'s Code tab ships a Claude-specific `mcp_apps_agent.py`, but it is a raw Anthropic streaming loop that imports `normalize_claude_model` from `agents.claude_agent_sdk_adapter`, a module no page publishes. It is kept verbatim and unwired in `backend/src/agents/doc_reference/mcp_apps_agent.py`, and no `mcp-apps` agent is mounted in its place, so the route is broken: the runtime's calls to `/mcp-apps` 404. The Code tab's runtime imports `createClaudeHttpAgent` (unpublished; this repo's usual `HttpAgent` wiring is used) and its page imports `./chat` (unpublished; a minimal labelled `CopilotChat` is added). The runtime is a fixed single-route `route.ts` in the Code tab, which hits §9.19 with the page's relative `runtimeUrl`, so it sits at `[[...slug]]` here. The "MCP Apps with Intelligence" snippet builds a `BuiltInAgent` on an OpenAI model and is shown as text only.
+[MCP Apps](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/mcp-apps)'s Code tab ships three files, and each imports something no page publishes: the agent (`mcp_apps_agent.py`, a raw Anthropic streaming loop) imports `normalize_claude_model` from `agents.claude_agent_sdk_adapter`; the runtime (`route.ts`) imports `createClaudeHttpAgent` from `@/app/api/_shared/claude-http-agent`; the demo page imports `Chat` from `./chat`. All three are kept verbatim and not wired up (`backend/src/agents/doc_reference/mcp_apps_agent.py`, `frontend/src/app/generative-ui/mcp-apps/_doc/`), with `@ts-expect-error` on the two unresolved frontend imports. Nothing is written in their place, so the route is reference-only. The "MCP Apps with Intelligence" snippet builds a `BuiltInAgent` on an OpenAI model and is shown as text only.
 
 ### 9.24 Open Generative UI publishes prompts but no agent
 
-[Open Generative UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/open-generative-ui)'s Code tab has two agent modules that each define only a `SYSTEM_PROMPT_HINT`; the agent they describe ("the shared Claude backend in `src/agents/agent.py`") is never shown. The modules are kept verbatim and unwired in `backend/src/agents/doc_reference/`, and no agent is mounted in their place, so the route is broken. The page's snippets also render an undefined `Chat` (minimal labelled `CopilotChat`), pass an undefined `VISUALIZATION_DESIGN_SKILL` and import an unpublished `./suggestions` (both commented out). The Code tab runtime's `createClaudeHttpAgent` and `internalRuntimeErrorResponse` are unpublished, and its single-route fixed path hits §9.19, so the route is a `[[...slug]]` catch-all with `HttpAgent`s.
+[Open Generative UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/open-generative-ui)'s Code tab has two agent modules that each define only a `SYSTEM_PROMPT_HINT`; the agent they describe ("the shared Claude backend in `src/agents/agent.py`") is never shown. Its runtime imports the unpublished `createClaudeHttpAgent` and `internalRuntimeErrorResponse`, and its demo page files are not served. The page's two frontend snippets are fragments that render an undefined `Chat`, pass an undefined `VISUALIZATION_DESIGN_SKILL` and import an unpublished `./suggestions`. Everything is kept as published and not wired up: prompt hints in `backend/src/agents/doc_reference/`, runtime and sandbox functions in `frontend/src/app/generative-ui/open-generative-ui/_doc/` (`@ts-expect-error` on the two unresolved imports), and the fragments as text on the route. Nothing is written in their place, so the route is reference-only.
 
 ---
 
