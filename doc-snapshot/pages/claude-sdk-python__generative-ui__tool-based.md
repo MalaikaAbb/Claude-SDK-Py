@@ -39,9 +39,15 @@ around a real backend tool, see [Tool rendering](/claude-sdk-python/generative-u
     ### Forward browser tools to Claude
 
     Frontend tools registered with `useFrontendTool` arrive in the AG-UI run
-    input. Convert each AG-UI tool definition into an Anthropic Messages API
-    tool schema before calling the model. Runs that carry frontend tools use
-    the direct Messages API path rather than the Claude Agent SDK.
+    input. This demo's server calls the Anthropic Messages API directly for
+    runs that carry frontend tools, so it converts each AG-UI tool definition
+    into a Messages API tool schema first.
+
+    The published `ClaudeAgentAdapter` from `ag_ui_claude_sdk` needs no such
+    conversion. It registers each frontend tool on its own in-process MCP tool
+    server as `mcp__ag_ui__<name>`, allows it, and ends the run when Claude
+    calls it so the browser can execute the tool. Pass the run input to the
+    adapter and frontend tools work with no extra wiring.
 
     
 ~~~~python title="agent.py"
@@ -83,10 +89,26 @@ def _build_frontend_tools(input_data: RunAgentInput) -> list[dict[str, Any]]:
   </Step>
 </Steps>
 
+Import the React hook and Zod in the component that registers the tool. This also
+applies to the built-in agent, which needs no backend tool-registration step.
+
+```tsx
+import { useComponent } from "@copilotkit/react-core/v2";
+import { z } from "zod";
+```
+
 `useComponent` takes a name, a Zod schema for its props, and the component
 to render. The runtime registers it as a frontend tool so the agent can
-discover it, and Zod validates the LLM's arguments before they reach your
-component.
+discover it, and the schema becomes that tool's parameter definition — it is
+what tells the model which arguments to send.
+
+<Callout type="warn">
+  `parameters` is optional, but leaving it out advertises the tool with an
+  empty parameter schema (`{ "type": "object", "properties": {} }`). The model
+  then has nothing to fill in, so it calls the tool with no arguments and your
+  component renders with no props. Pass a schema for any component that needs
+  data.
+</Callout>
 
 ```typescript
 // src/app/demos/gen-ui-tool-based/page.tsx
@@ -108,5 +130,26 @@ anything about CopilotKit.
   name. Make it a verb like `render_bar_chart` or `show_weather` so the LLM
   reliably picks it when the user asks for that visualization.
 </Callout>
+
+## Rendering in a headless chat
+
+CopilotKit's built-in chat components paint registered components for you. A
+headless or custom chat renders the message list itself, so nothing paints a
+tool call unless you render it — the component is registered and the agent
+calls it, but the chat stays empty.
+
+Render the tool calls on each assistant message with
+`CopilotChatToolCallsView`:
+
+```tsx
+import { CopilotChatToolCallsView } from "@copilotkit/react-core/v2";
+
+<CopilotChatToolCallsView message={assistantMessage} messages={allMessages} />;
+```
+
+It looks up the sibling `tool`-role message for each tool call and hands both
+to the registered renderer. For finer placement, call `useRenderToolCall()` and
+paint each tool call yourself — see
+[Headless UI](/claude-sdk-python/custom-look-and-feel/headless-ui).
 
 <IntegrationGrid path="generative-ui/tool-based" />
