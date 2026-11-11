@@ -223,6 +223,9 @@ authoritative `threadId` prop — the setters no-op when the id is prop-controll
 **`/custom-look-and-feel/slots`** — three slots replaced with whole components.
 *Try:* "Say hello." *Pass:* a gradient welcome card, then every assistant reply in a tinted card tagged "slot", and an indigo disclaimer. *Fail:* default chrome on any of the three.
 
+**`/custom-look-and-feel/markdown`** — ⚠️ **Partial, not yet run live.** The `markdownRenderer` slot in its three forms (Streamdown `components` map, class string, full replacement), switchable on one chat.
+*Try:* "Reply with a '## Links' heading, then a markdown link to https://copilotkit.ai and a short **bold** sentence", in each mode. *Pass:* `components` gives an uppercase heading with an orange rule and an orange wavy link (no `node` or `data-streamdown` attribute on the `<a>`); `class-string` makes the block smaller; `replace` shows the raw markdown in a `<pre>`. *Fail:* all modes look the same, or the `<a>` carries `node="[object Object]"`.
+
 **`/custom-look-and-feel/headless-ui`** — a chat with no CopilotKit chrome, built from `useAgent` + `useCopilotKit` + `useRenderToolCall`.
 *Try:* "Give me three ideas for a weekend project." *Pass:* right-aligned user bubble, "Thinking…", then a streamed reply. *Fail:* the message goes out but nothing streams back.
 
@@ -349,6 +352,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [Thread & History Lifecycle](https://docs.copilotkit.ai/claude-sdk-python/threads-lifecycle) | `/threads-lifecycle` | ⚠️ | Same precondition. User-scoping, first-message thread creation and the checkpointer comparison are out of scope locally. |
 | [CSS customization](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/css) | `/custom-look-and-feel/css` | ✅ | Off-sidebar. One doc snippet is v1 and not implemented — see §9. |
 | [Slots](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/slots) | `/custom-look-and-feel/slots` | ✅ | Off-sidebar. The three slot components are declared by the doc, not defined. |
+| [Markdown Rendering](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/markdown) | `/custom-look-and-feel/markdown` | ⚠️ | Not yet run live. `my-link`/`my-heading` CSS borrowed from google-adk (the page never defines them). Reuses `chat-slots`. |
 | [Headless UI](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/headless-ui) | `/custom-look-and-feel/headless-ui` | ✅ | Off-sidebar. `headless-simple` only; `headless-complete` is not published in full. |
 | [Reasoning Messages](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/reasoning-messages) | `/custom-look-and-feel/reasoning-messages` | ✅ | Off-sidebar. Runs on the adapter's native thinking support, not the doc's 300-line agent. |
 | [Multimodal Attachments](https://docs.copilotkit.ai/claude-sdk-python/multimodal-attachments) | `/multimodal-attachments` | ✅ | The one page with no backend half, correctly. |
@@ -583,6 +587,10 @@ Three things come along with the showcase files:
 - **Lint.** `charts/pie-chart.tsx` fails this repo's lint in both demos (`react-hooks/immutability`: a running total is reassigned inside `.map`). It renders fine and `next build` does not lint, so it is left as published.
 - **Version drift.** The showcase pins `recharts` `^2.15`, and this app uses `^3.7`. The chart components type-check against 3.x.
 
+### 9.23 Markdown Rendering's link and heading classes are never defined
+
+[Markdown Rendering](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/markdown)'s `components` example gives links `my-link` and h2s `my-heading`, but the page defines no CSS for either, so the verbatim override changes nothing visible. `/custom-look-and-feel/markdown` adds a scoped `markdown.css` (taken from the google-adk harness, labelled) to make it visible. The page names no backend; the route reuses the `chat-slots` agent.
+
 ---
 
 ## 10. Troubleshooting
@@ -744,6 +752,7 @@ Grouped as this repo's nav groups them. Pages marked ◦ resolve but are absent 
 **Custom Look and Feel**
 - ◦ [CSS Customization](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/css)
 - ◦ [Slots](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/slots)
+- ◦ [Markdown Rendering](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/markdown)
 - ◦ [Headless UI](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/headless-ui)
 - ◦ [Reasoning Messages](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/reasoning-messages)
 

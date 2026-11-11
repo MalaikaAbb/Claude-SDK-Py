@@ -198,6 +198,18 @@ export const NAV: NavGroup[] = [
         offNav: true,
       },
       {
+        path: "/custom-look-and-feel/markdown",
+        hasDemo: true,
+        agentId: "chat-slots",
+        title: "Markdown Rendering",
+        docPath: "/claude-sdk-python/custom-look-and-feel/markdown",
+        summary:
+          "The markdownRenderer slot in its three forms: a Streamdown components map, a class string, and a full replacement.",
+        status: "partial",
+        statusNote:
+          "Not yet checked in a browser. The my-link/my-heading CSS is harness-only (from google-adk) because the doc never defines those classes. Reuses the chat-slots agent because the page names no backend.",
+      },
+      {
         path: "/custom-look-and-feel/headless-ui",
         hasDemo: true,
         agentId: "headless-simple",
