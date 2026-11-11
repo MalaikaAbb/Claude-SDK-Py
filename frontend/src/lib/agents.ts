@@ -42,6 +42,7 @@ export const AGENT_IDS = [
   "gen-ui-transports",
   "gen-ui-transports-plain",
   "gen-ui-markdown",
+  "mcp-apps",
   // Ids as the JSON Render and Hashbrown pages publish them.
   "byoc_json_render",
   "declarative-hashbrown-demo",

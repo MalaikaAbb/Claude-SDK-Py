@@ -349,6 +349,18 @@ export const NAV: NavGroup[] = [
           "Implemented from the doc; not yet run against the agent. The page prints 3 of its 11 files; the rest come from the showcase source its Code tab loads.",
       },
       {
+        path: "/generative-ui/mcp-apps",
+        hasDemo: true,
+        agentId: "mcp-apps",
+        title: "MCP Apps",
+        docPath: "/claude-sdk-python/generative-ui/mcp-apps",
+        summary:
+          "An MCP server's tool UI (Excalidraw) rendered inline in the chat via the runtime's mcpApps middleware.",
+        status: "partial",
+        statusNote:
+          "Not yet checked in a browser. Runtime config and demo page verbatim from the Code tab; its agent module imports an unpublished helper, so the Quickstart adapter runs its prompt. Stand-ins for the unpublished ./chat and createClaudeHttpAgent; catch-all route per §9.19.",
+      },
+      {
         path: "/generative-ui/components",
         hasDemo: true,
         agentId: "gen-ui-components",
