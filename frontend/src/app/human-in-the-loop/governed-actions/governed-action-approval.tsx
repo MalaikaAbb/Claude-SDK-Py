@@ -1,5 +1,10 @@
 "use client";
 
+// "Inline approval with useInterrupt" from
+// https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/governed-actions,
+// verbatim apart from `export` on the type and the two components (the
+// tool-call variant reuses GovernedActionCard).
+
 import { useEffect } from "react";
 import { useInterrupt } from "@copilotkit/react-core/v2";
 

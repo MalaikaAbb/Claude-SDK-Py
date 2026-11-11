@@ -309,6 +309,9 @@ The eight routes below are all 🚧 **Not yet run live**. They compile, serve, a
 **`/human-in-the-loop/headless`** — ❌ **Reference-only.** The page's one snippet is missing for this framework and it prints no agent, so the route only summarises the pattern and links to the HITL routes.
 *Try:* open it. *Pass:* the broken callout and links render. *Fail:* none — there is no live surface.
 
+**`/human-in-the-loop/governed-actions`** — ⚠️ **Partial, not yet run live.** Both of the page's approval variants on one chat: the `useHumanInTheLoop` tool `approve_governed_action` and the `useInterrupt` card.
+*Try:* "Before you apply a 15% discount to order 1042, ask me to approve it with approve_governed_action (verdict require_approval)." *Pass:* an approval card with summary, tool, reference and arguments; Approve or Reject sends `{ approved, actionId, reference }` back and the agent replies to match. *Fail:* a text-only reply (no tool call), or buttons that do nothing.
+
 **`/programmatic-control`** — ⚠️ **Partial.** `addMessage` / `runAgent` / `stopAgent` / `subscribe`, no chat component.
 *Try:* "Ask for something long", then Stop. *Pass:* the reply pane fills with no chat on the page and the event log shows `onRunStartedEvent` → `onRunFinalized`; Stop cuts it short and still finalizes. *Fail:* buttons do nothing and the log stays empty.
 
@@ -379,6 +382,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [HITL Overview](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/index) | `/human-in-the-loop` | ✅ | Pattern 1 only; `useInterrupt` needs LangGraph. The sidebar now links the overview at `/human-in-the-loop/index` (same content as the bare URL). |
 | [Pausing the Agent for Input](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/useInterrupt) | `/human-in-the-loop/useInterrupt` | ❌ | Frontend snippet missing on the page (`schedule_meeting` never printed); prompt-only agent; interrupts need `defer_tools`, not on the page (§9.23). |
 | [Headless Interrupts](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/headless) | `/human-in-the-loop/headless` | ❌ | Reference-only: no code on the page for this framework (§9.24). |
+| [Governed Action Approval UI](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/governed-actions) | `/human-in-the-loop/governed-actions` | ⚠️ | Not yet run live. Tool-call half only; no backend/policy engine/`executeSideEffect` published, verdicts are the model's; the `useInterrupt` card never fires (§9.25). |
 | [Programmatic Control](https://docs.copilotkit.ai/claude-sdk-python/programmatic-control) | `/programmatic-control` | ⚠️ | The page's promise-based section is a build placeholder — see §9. |
 | [Shared State](https://docs.copilotkit.ai/claude-sdk-python/shared-state) | `/shared-state` | ❌ | UI→agent works; agent→UI does not. `set_notes` unreachable and the `ag_ui_update_state` substitute does not carry notes back. |
 | [Render state in your app](https://docs.copilotkit.ai/claude-sdk-python/shared-state/rendering-in-app) | `/shared-state/rendering-in-app` | ✅ | Framework-neutral page; follows the google-adk layout. |
@@ -599,6 +603,10 @@ Three things come along with the showcase files:
 
 [Headless Interrupts](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/headless) describes a Promise-based `useFrontendTool` whose pending state drives a picker outside the chat, but its only snippet (`headless-promise-primitives`) is missing on the rendered page and no agent is printed. `/human-in-the-loop/headless` is reference-only and status ❌.
 
+### 9.25 Governed Action Approval publishes the UI and none of the governance
+
+[Governed Action Approval UI](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/governed-actions) prints the `GovernedAction` envelope, a `useInterrupt` card and a `useHumanInTheLoop` tool, plus a `handleApproval` resume check that calls an undefined `executeSideEffect`. No agent, policy engine or emitter of `interrupt.metadata.action` is printed. `/human-in-the-loop/governed-actions` runs both frontend variants on the Quickstart adapter (`governed-actions`, default prompt): the tool-call card works mechanically with model-invented verdicts, and the interrupt card never appears. The Claude adapter's own interrupts (for `defer_tools`) carry `{ source, toolName, input }` and resume on `{ behavior }`, so the published card would not match them either. The interrupt card used to be an unlisted demo at `/human-in-the-loop/use-interrupt`; it moved here.
+
 ---
 
 ## 10. Troubleshooting
@@ -790,6 +798,7 @@ Grouped as this repo's nav groups them. Pages marked ◦ resolve but are absent 
 - [HITL Overview](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/index)
 - [Pausing the Agent for Input](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/useInterrupt)
 - [Headless Interrupts](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/headless)
+- [Governed Action Approval UI](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/governed-actions)
 - [Programmatic Control](https://docs.copilotkit.ai/claude-sdk-python/programmatic-control)
 
 **Shared State**

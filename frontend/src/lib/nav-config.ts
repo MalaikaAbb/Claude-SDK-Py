@@ -494,6 +494,18 @@ export const NAV: NavGroup[] = [
           "Reference-only. The page's single snippet region is missing for this framework and no agent is published, so there is nothing to run.",
       },
       {
+        path: "/human-in-the-loop/governed-actions",
+        hasDemo: true,
+        agentId: "governed-actions",
+        title: "Governed Action Approval UI",
+        docPath: "/claude-sdk-python/human-in-the-loop/governed-actions",
+        summary:
+          "An approval card in front of a side effect, raised as a frontend tool (useHumanInTheLoop) or as an interrupt (useInterrupt).",
+        status: "partial",
+        statusNote:
+          "Not yet checked in a browser. Frontend code verbatim; no backend, policy engine or executeSideEffect is published, so the agent is the Quickstart adapter and verdicts are whatever Claude writes. The useInterrupt half never shows: nothing emits metadata.action.",
+      },
+      {
         path: "/programmatic-control",
         hasDemo: true,
         agentId: "programmatic-control",

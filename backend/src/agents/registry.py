@@ -218,6 +218,12 @@ REGISTRY: dict[str, RegisteredAgent] = {
         build_adapter("gen-ui-interrupt", prompts.INTERRUPT_SYSTEM_PROMPT),
         "/claude-sdk-python/human-in-the-loop/useInterrupt",
     ),
+    # Governed Action Approval — the page prints no backend, so this is the
+    # Quickstart adapter and prompt; `approve_governed_action` is a frontend
+    # tool registered by the page's useHumanInTheLoop block.
+    "governed-actions": _plain(
+        "governed-actions", "/claude-sdk-python/human-in-the-loop/governed-actions"
+    ),
     "programmatic-control": _plain(
         "programmatic-control", "/claude-sdk-python/programmatic-control"
     ),

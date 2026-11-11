@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { RouteHeader } from "@/components/route-header";
 import { SourceCode } from "@/components/source-code";
 import { Callout, Panel, TryIt } from "@/components/ui";
@@ -5,13 +7,7 @@ import { Callout, Panel, TryIt } from "@/components/ui";
 export default function Page() {
   return (
     <>
-      <RouteHeader
-        path="/human-in-the-loop"
-        demoLabel="Human in the loop"
-        extraDemos={[
-          { href: "/human-in-the-loop/use-interrupt", label: "useInterrupt" },
-        ]}
-      />
+      <RouteHeader path="/human-in-the-loop" demoLabel="Human in the loop" />
 
       <Panel title="What it demonstrates">
         <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
@@ -45,21 +41,18 @@ export default function Page() {
         <SourceCode file="frontend/src/app/human-in-the-loop/time-picker-card.tsx" />
       </Panel>
 
-      <Panel
-        title="useInterrupt — Governed Action Approval"
-        description="The interrupt-based approval card from the Governed Actions page, verbatim."
-      >
-        <div className="mb-4 text-sm">
-          <a
-            href="https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/governed-actions"
-            target="_blank"
-            rel="noreferrer"
+      <Panel title="Governed Action Approval">
+        <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          The interrupt-based approval card that used to sit here now has its
+          own route,{" "}
+          <Link
+            href="/human-in-the-loop/governed-actions"
             className="font-medium text-[var(--accent)] underline underline-offset-4"
           >
-            Governed Actions doc ↗
-          </a>
-        </div>
-        <SourceCode file="frontend/src/app/human-in-the-loop/governed-action-approval.tsx" />
+            /human-in-the-loop/governed-actions
+          </Link>
+          , next to the page&apos;s tool-call variant.
+        </p>
       </Panel>
 
       <Panel title="Doc-vs-implementation notes">
