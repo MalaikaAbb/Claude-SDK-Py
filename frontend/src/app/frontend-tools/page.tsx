@@ -2,7 +2,18 @@ import Link from "next/link";
 
 import { RouteHeader } from "@/components/route-header";
 import { SourceCode } from "@/components/source-code";
-import { Callout, Panel, TryIt } from "@/components/ui";
+import { CodeBlock, Callout, Panel, TryIt } from "@/components/ui";
+
+// The page's "Registering a list of tools" snippet, verbatim. It refers to
+// `reports` and `navigate`, which the page never defines.
+const USE_FRONTEND_TOOLS = `useFrontendTools(
+  reports.map((report) => ({
+    name: \`open_\${report.id}\`,
+    description: \`Open the \${report.title} report\`,
+    handler: async () => navigate(\`/reports/\${report.id}\`),
+  })),
+  [navigate],
+);`;
 
 export default function Page() {
   return (
@@ -38,10 +49,11 @@ export default function Page() {
         <Callout tone="success">
           <p className="leading-relaxed">
             The page&apos;s backend half is{" "}
-            <code>_build_frontend_tools</code>, and it introduces itself with
-            &quot;Runs that carry frontend tools use the direct Messages API
-            path rather than the Claude Agent SDK.&quot; That is true of the
-            reference implementation and not of this one.
+            <code>_build_frontend_tools</code>, a conversion to Messages API
+            tool schemas. The page now says outright that this belongs to its
+            demo server, which calls the Messages API directly, and that the
+            published <code>ClaudeAgentAdapter</code> needs no conversion at
+            all. That is the path this route runs on.
           </p>
           <p className="mt-2 leading-relaxed">
             <code>ClaudeAgentAdapter.build_options</code> reads{" "}
@@ -61,6 +73,25 @@ export default function Page() {
         </Callout>
         <div className="mt-4">
           <SourceCode file="backend/src/agents/doc_reference/frontend_tools.py" />
+        </div>
+      </Panel>
+
+      <Panel
+        title="Registering a list of tools: useFrontendTools"
+        description="Published on the page as a fragment. Shown here as text; not wired into the demo."
+      >
+        <CodeBlock code={USE_FRONTEND_TOOLS} language="tsx" />
+        <div className="mt-4">
+          <Callout tone="warn" title="Fragment only">
+            <p className="leading-relaxed">
+              The snippet maps over <code>reports</code> and calls{" "}
+              <code>navigate</code>, and the page defines neither, nor the
+              component it would sit in. With nothing to supply a list of
+              reports, this route does not invent one: the plural hook is
+              recorded here and the demo keeps the single{" "}
+              <code>useFrontendTool</code> it already exercises.
+            </p>
+          </Callout>
         </div>
       </Panel>
 

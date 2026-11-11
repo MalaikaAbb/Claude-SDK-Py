@@ -2,7 +2,13 @@ import Link from "next/link";
 
 import { RouteHeader } from "@/components/route-header";
 import { SourceCode } from "@/components/source-code";
-import { Callout, Panel, TryIt } from "@/components/ui";
+import { CodeBlock, Callout, Panel, TryIt } from "@/components/ui";
+
+// The page's "Rendering in a headless chat" snippet, verbatim. It refers to
+// `assistantMessage` and `allMessages`, which the page never defines.
+const HEADLESS_TOOL_CALLS = `import { CopilotChatToolCallsView } from "@copilotkit/react-core/v2";
+
+<CopilotChatToolCallsView message={assistantMessage} messages={allMessages} />;`;
 
 export default function Page() {
   return (
@@ -14,8 +20,9 @@ export default function Page() {
           The simplest generative UI: register a component with{" "}
           <code>useComponent</code> and it becomes a tool. No handler, no
           server-side execution, no user interaction — the agent decides when to
-          show it, fills in the data, and CopilotKit paints it. Zod validates
-          the model&apos;s arguments before they reach your props.
+          show it, fills in the data, and CopilotKit paints it. The Zod schema
+          is advertised as the tool&apos;s parameters, so it is what tells the
+          model which arguments to send.
         </p>
         <p className="mt-3 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           Contrast with{" "}
@@ -52,6 +59,31 @@ export default function Page() {
         <SourceCode file="frontend/src/app/generative-ui/tool-based/bar-chart.tsx" />
       </Panel>
 
+      <Panel
+        title="Rendering in a headless chat"
+        description="A newer section of the page, for chats that draw their own message list. Shown as text."
+      >
+        <CodeBlock code={HEADLESS_TOOL_CALLS} language="tsx" />
+        <div className="mt-4">
+          <Callout tone="info" title="Fragment, not run here">
+            <p className="leading-relaxed">
+              The JSX line uses <code>assistantMessage</code> and{" "}
+              <code>allMessages</code> without defining them, so it is not
+              mounted on this route. The demo uses <code>CopilotChat</code>,
+              which paints registered components itself. The{" "}
+              <Link
+                href="/custom-look-and-feel/headless-ui"
+                className="text-[var(--accent)] underline underline-offset-4"
+              >
+                Headless UI
+              </Link>{" "}
+              route covers the <code>useRenderToolCall()</code> alternative the
+              page points to.
+            </p>
+          </Callout>
+        </div>
+      </Panel>
+
       <Panel title="Notes">
         <ul className="space-y-3 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
           <li>
@@ -60,6 +92,19 @@ export default function Page() {
             <code>barChartPropsSchema</code> are named by that call and never
             defined; both are written here, minimally, from the page&apos;s
             description of them.
+          </li>
+          <li>
+            The page now warns that omitting <code>parameters</code> advertises
+            an empty object schema, so the model calls the tool with no
+            arguments. The demo passes <code>barChartPropsSchema</code>, so it
+            is not affected.
+          </li>
+          <li>
+            The page&apos;s backend <code>agent.py</code> block is now labelled
+            as its demo server&apos;s direct Messages API path; it also says the
+            published <code>ClaudeAgentAdapter</code> needs none of it. This
+            route runs on the adapter, which registers the component&apos;s tool
+            by itself.
           </li>
           <li>
             The page&apos;s advice on naming holds and is worth repeating:{" "}

@@ -13,6 +13,21 @@ const ZERO_CONFIG = `// The zero-config entry point, also published on the page.
 // the assistant's final text summary.
 useDefaultRenderTool();`;
 
+// The page's "Grouping tool calls" snippets, verbatim. The third renders
+// `ToolTimeline`, which the page describes but never defines; the first
+// passes `MyToolRow`, also undefined.
+const GROUPING = `useDefaultRenderTool({ render: MyToolRow, group: true });
+
+// "grouped" (default) | "line" | "stacked" | "turn" | "separate"
+<CopilotChat messageView={{ toolCallDisplay: "line" }} />
+
+// ToolTimeline: your component, given the group's \`calls\` and a \`renderCall\` function
+<CopilotChat
+  messageView={{
+    assistantMessage: { toolCallsView: { group: ToolTimeline } },
+  }}
+/>`;
+
 export default function Page() {
   return (
     <>
@@ -91,6 +106,28 @@ export default function Page() {
         description="Published on the page and not used by the demo, which registers its own catch-all instead."
       >
         <CodeBlock code={ZERO_CONFIG} language="tsx" />
+      </Panel>
+
+      <Panel
+        title="Grouping tool calls"
+        description="A newer section of the page. Shown as text; the demo keeps the default grouped display."
+      >
+        <CodeBlock code={GROUPING} language="tsx" />
+        <p className="mt-4 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          The <code>toolCallDisplay</code> line is complete on its own, but the
+          demo&apos;s turns usually make a single <code>get_weather</code> call,
+          drawn by a per-tool renderer that the page says always stands alone,
+          so switching the display would show nothing different here. The other
+          two lines name <code>MyToolRow</code> and <code>ToolTimeline</code>,
+          which the page never defines.
+        </p>
+        <p className="mt-2 text-sm leading-relaxed text-slate-700 dark:text-slate-300">
+          The page&apos;s new note that <code>parameters</code> stays the
+          tool&apos;s inputs while the output arrives as a string{" "}
+          <code>result</code> already matches the demo: the weather card reads{" "}
+          <code>parameters.location</code> and parses <code>result</code> for
+          the rest.
+        </p>
       </Panel>
 
       <Panel

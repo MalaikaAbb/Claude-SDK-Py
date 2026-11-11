@@ -13,9 +13,9 @@ The reason is that `ClaudeAgentAdapter` already does this. `build_options` in
 through `convert_agui_tool_to_claude_sdk`, packs the results into a
 `create_sdk_mcp_server("ag_ui", ...)` server, and auto-grants
 `mcp__ag_ui__<name>` in `allowed_tools`. The function below is the manual
-equivalent for the direct Messages API path the page assumes you are on —
-"Runs that carry frontend tools use the direct Messages API path rather than
-the Claude Agent SDK", as the page puts it. On the adapter you need none of it.
+equivalent for the direct Messages API path. The Frontend Tools page now
+labels it as its demo server's path and states that the published adapter
+needs no conversion, which matches what the routes above run on.
 
 Kept here so the two paths can be compared side by side on the route pages.
 """

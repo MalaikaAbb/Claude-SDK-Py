@@ -56,6 +56,32 @@ export default function Page() {
         <CodeBlock code={LEVELS} language="tsx" />
       </Panel>
 
+      <Panel
+        title="Tool calls: the toolCallsView sub-slot"
+        description="The page's newer section, copied verbatim. It wraps the default CopilotChatToolCallsView in a dashed container and keeps registered tool renderers."
+      >
+        <SourceCode
+          file="frontend/src/app/custom-look-and-feel/slots/tool-calls-view.tsx"
+          region="doc-tool-calls"
+        />
+        <div className="mt-4">
+          <Callout tone="info" title="Type-checked, not mounted">
+            <p className="leading-relaxed">
+              The file compiles with the app, which proves the{" "}
+              <code>CopilotChatToolCallsView</code> export and its props type
+              exist as the page prints them. It is not on the demo: the{" "}
+              <code>chat-slots</code> agent has no tools, so there would be no
+              tool calls to wrap, and the demo&apos;s{" "}
+              <code>assistantMessage</code> is already a whole component, which
+              cannot also take a nested <code>toolCallsView</code> object. The
+              page&apos;s grouping option (<code>toolCallDisplay</code>) and the
+              markdown sub-slot point at other pages and are not part of this
+              route.
+            </p>
+          </Callout>
+        </div>
+      </Panel>
+
       <Panel title="Doc-vs-implementation notes">
         <Callout tone="warn" title="welcomeScreen is the empty state, not decoration">
           <p className="leading-relaxed">
