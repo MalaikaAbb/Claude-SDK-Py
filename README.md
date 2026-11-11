@@ -345,7 +345,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [CopilotPopup](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/popup) | `/prebuilt-components/popup` | ✅ | Off-sidebar. |
 | [Chat controls](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/chat-controls) | `/prebuilt-components/chat-controls` | ✅ | Off-sidebar. Doc's `analytics.track` replaced by an on-page log. |
 | [Threads Drawer](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/copilot-threads-drawer) | `/prebuilt-components/copilot-threads-drawer` | ⚠️ | Needs Intelligence + a licence token. Locked view without one. |
-| [Headless Threads](https://docs.copilotkit.ai/claude-sdk-python/headless-threads) | `/headless-threads` | ⚠️ | Same precondition. The two-step "New conversation" reset joins two doc fragments. |
+| [Headless Threads](https://docs.copilotkit.ai/claude-sdk-python/headless-threads) | `/headless-threads` | ⚠️ | Same precondition. The two-step "New conversation" reset joins two doc fragments. The thread-scoped `useAgent` snippet is shown as text, not run. |
 | [Thread & History Lifecycle](https://docs.copilotkit.ai/claude-sdk-python/threads-lifecycle) | `/threads-lifecycle` | ⚠️ | Same precondition. User-scoping, first-message thread creation and the checkpointer comparison are out of scope locally. |
 | [CSS customization](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/css) | `/custom-look-and-feel/css` | ✅ | Off-sidebar. One doc snippet is v1 and not implemented — see §9. |
 | [Slots](https://docs.copilotkit.ai/claude-sdk-python/custom-look-and-feel/slots) | `/custom-look-and-feel/slots` | ✅ | Off-sidebar. The three slot components are declared by the doc, not defined. The `toolCallsView` snippet is type-checked but not mounted (the slots agent has no tools). |
@@ -586,6 +586,10 @@ Three things come along with the showcase files:
 ### 9.23 `useFrontendTools` is published as a fragment
 
 [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) now documents the plural `useFrontendTools` hook with a snippet that maps over `reports` and calls `navigate`. The page defines neither, nor the component around them, so `/frontend-tools` shows the snippet as text and does not run it.
+
+### 9.24 The thread-scoped `useAgent` example is a fragment
+
+[Headless Threads](https://docs.copilotkit.ai/claude-sdk-python/headless-threads) now shows `useAgent({ agentId, runtimeAgentId, threadId })` for one agent per thread. `threadId` comes from a component the page never prints, and `runtimeAgentId: "default"` names an agent this repo's threads runtime does not register (it registers `threads`). `/headless-threads` shows the snippet as text.
 
 ---
 
