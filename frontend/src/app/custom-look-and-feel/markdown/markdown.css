@@ -1,0 +1,24 @@
+/*
+ * Harness-only — NOT from the docs. Taken from the google-adk harness
+ * (frontend/src/app/custom-look-and-feel/markdown/markdown.css).
+ *
+ * The doc's `components` example assigns `my-link` and `my-heading` but never
+ * defines them, so verbatim code changes nothing you can see. These two rules
+ * exist only to make the override visible. Scoped to the demo wrapper so they
+ * cannot leak into the rest of the harness.
+ */
+
+.chat-markdown-demo-scope .my-link {
+  color: #c2410c;
+  text-decoration: underline wavy;
+  text-underline-offset: 3px;
+}
+
+.chat-markdown-demo-scope .my-heading {
+  border-left: 4px solid #c2410c;
+  padding-left: 0.5rem;
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
