@@ -19,6 +19,7 @@ export type GovernedAction = {
 
 export function GovernedActionApproval() {
   useInterrupt({
+    // @ts-expect-error verbatim doc code: render returns `null` when there is no action, but useInterrupt's render type requires a ReactElement (TS2322). README §9.25.
     render: ({ interrupt, resolve, cancel }) => {
       const action = interrupt?.metadata?.action as GovernedAction | undefined;
 

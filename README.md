@@ -607,6 +607,8 @@ Three things come along with the showcase files:
 
 [Governed Action Approval UI](https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/governed-actions) prints the `GovernedAction` envelope, a `useInterrupt` card and a `useHumanInTheLoop` tool, plus a `handleApproval` resume check that calls an undefined `executeSideEffect`. No agent, policy engine or emitter of `interrupt.metadata.action` is printed. `/human-in-the-loop/governed-actions` runs both frontend variants on the Quickstart adapter (`governed-actions`, default prompt): the tool-call card works mechanically with model-invented verdicts, and the interrupt card never appears. The Claude adapter's own interrupts (for `defer_tools`) carry `{ source, toolName, input }` and resume on `{ behavior }`, so the published card would not match them either. The interrupt card used to be an unlisted demo at `/human-in-the-loop/use-interrupt`; it moved here.
 
+The published `useInterrupt` render returns `null` when `metadata.action` is missing, but react-core 1.83 types `render` as returning a `ReactElement`, so the doc block fails type-checking (TS2322). It is kept verbatim with a `@ts-expect-error` above `render`.
+
 ---
 
 ## 10. Troubleshooting
