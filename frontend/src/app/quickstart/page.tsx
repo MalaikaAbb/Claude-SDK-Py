@@ -75,9 +75,26 @@ export default function Page() {
           </li>
           <li>
             <strong>The Quickstart added an Inspector step</strong> whose third
-            check is whether the Threads tab is unlocked. That is the same
+            check is whether the Rich Threads tab is unlocked. That is the same
             Intelligence switch the Rich Threads routes depend on, which is why
             this repo now configures it — see below.
+          </li>
+          <li>
+            <strong>The provider moved into a client file.</strong> The page
+            now puts <code>&lt;CopilotKit&gt;</code> in an{" "}
+            <code>app/providers.tsx</code> marked <code>&quot;use client&quot;</code>{" "}
+            and renders that from the server <code>layout.tsx</code>. This repo
+            already did the same with <code>components/providers.tsx</code>{" "}
+            (shown below); it uses <code>CopilotKitProvider</code> rather than
+            the page&apos;s <code>CopilotKit</code> wrapper, for the inspector
+            reason given in that file.
+          </li>
+          <li>
+            <strong>The install line pins <code>@ag-ui/client@1.0.2</code>.</strong>{" "}
+            That is the exact version <code>@copilotkit/react-core</code> 1.83.0
+            depends on. This repo&apos;s <code>package.json</code> still asks
+            for <code>^1.0.3</code>, so the lockfile carries both copies. Not
+            changed in this sync (no installs were run); see README §9.23.
           </li>
         </ul>
       </Panel>
