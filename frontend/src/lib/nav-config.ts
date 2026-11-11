@@ -310,6 +310,7 @@ export const NAV: NavGroup[] = [
         statusNote:
           "Overview page. Its setup paths run on the Dynamic Schema (catalog on provider) and Fixed Schema (runtime a2ui block) routes; the snippets are type-checked verbatim (myCatalog, myAgent, children undefined), the Python helper snippet needs the copilotkit package this backend lacks, and the CSS variables are shown, not applied.",
       },
+      {
         path: "/generative-ui/a2ui/dynamic-schema",
         hasDemo: true,
         agentId: "declarative-gen-ui",
