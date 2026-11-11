@@ -361,6 +361,18 @@ export const NAV: NavGroup[] = [
           "Not yet checked in a browser. Runtime config and demo page verbatim from the Code tab; its agent module imports an unpublished helper, so the Quickstart adapter runs its prompt. Stand-ins for the unpublished ./chat and createClaudeHttpAgent; catch-all route per §9.19.",
       },
       {
+        path: "/generative-ui/open-generative-ui",
+        hasDemo: true,
+        agentId: "open-gen-ui",
+        title: "Open Generative UI",
+        docPath: "/claude-sdk-python/generative-ui/open-generative-ui",
+        summary:
+          "The agent writes sandboxed HTML/CSS/JS that streams into an iframe, optionally calling back into host functions.",
+        status: "partial",
+        statusNote:
+          "Not yet checked in a browser. The Code tab publishes only two prompt hints, no agent, so they run on the Quickstart adapter. Chat, VISUALIZATION_DESIGN_SKILL, ./suggestions and createClaudeHttpAgent are unpublished: stand-in, commented out, commented out, HttpAgent.",
+      },
+      {
         path: "/generative-ui/components",
         hasDemo: true,
         agentId: "gen-ui-components",

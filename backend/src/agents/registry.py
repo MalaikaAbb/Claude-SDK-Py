@@ -210,6 +210,18 @@ REGISTRY: dict[str, RegisteredAgent] = {
         "/claude-sdk-python/generative-ui/mcp-apps",
     ),
 
+    # Open Generative UI — the Code tab's two prompt hints on the Quickstart
+    # adapter. The Code tab's agent ("the shared Claude backend in
+    # src/agents/agent.py") is never published.
+    "open-gen-ui": RegisteredAgent(
+        build_adapter("open-gen-ui", prompts.OPEN_GEN_UI_SYSTEM_PROMPT),
+        "/claude-sdk-python/generative-ui/open-generative-ui",
+    ),
+    "open-gen-ui-advanced": RegisteredAgent(
+        build_adapter("open-gen-ui-advanced", prompts.OPEN_GEN_UI_ADVANCED_SYSTEM_PROMPT),
+        "/claude-sdk-python/generative-ui/open-generative-ui",
+    ),
+
     # App control — all three run on browser-supplied tools, which the adapter
     # forwards to Claude without any backend configuration.
     "frontend_tools": RegisteredAgent(

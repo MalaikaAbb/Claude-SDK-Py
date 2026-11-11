@@ -36,6 +36,7 @@ export const NESTED_PROVIDER_ROUTES = [
   "/headless-threads/demo-chat",
   "/threads-lifecycle/demo-chat",
   "/generative-ui/mcp-apps/demo-chat",
+  "/generative-ui/open-generative-ui/demo-chat",
   // Components and surfaces: `generativeUI` is a provider prop, so every one
   // of these demos brings its own provider.
   "/generative-ui/components/demo-chat",

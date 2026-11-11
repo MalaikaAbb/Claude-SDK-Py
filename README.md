@@ -272,6 +272,9 @@ Two ways to let the agent draw a dashboard without any tool call. In both, the a
 **`/generative-ui/mcp-apps`** — ⚠️ **Partial, not yet run live.** The runtime's `mcpApps` entry points at the public Excalidraw MCP server; the agent calls its tool and the built-in renderer draws the returned UI as a sandboxed iframe in a plain chat.
 *Try:* "Draw a simple diagram: browser → Next.js runtime → Python agent → Claude." *Pass:* an Excalidraw canvas with boxes and arrows inside the chat, then one sentence. *Fail:* a text-only description (the MCP tools never reached the agent), or an error banner (Excalidraw or the Python server unreachable).
 
+**`/generative-ui/open-generative-ui`** — ⚠️ **Partial, not yet run live.** The runtime's `openGenerativeUI` flag turns the agent's `generateSandboxedUi` call into a streamed, sandboxed iframe; an *advanced* mode adds two host-side sandbox functions.
+*Try:* "build me a simple greeting card"; in advanced mode, "Build a calculator whose = button calls evaluateExpression on the host". *Pass:* an iframe preview builds up in the chat (styles, then HTML, then scripts); in advanced mode the browser console logs `[open-gen-ui/advanced] evaluateExpression …`. *Fail:* a text-only reply.
+
 ### Generative UI · Components and surfaces
 
 The eight routes below are all 🚧 **Not yet run live**. They compile, serve, and reach their own runtime (`/api/copilotkit-components`, which lists all nine agents on `/info`), but nobody has yet chatted through them against Claude. Every demo brings its own provider because `generativeUI` is a provider prop. The section is marked Experimental on the doc (A2UI 1.0, spec `cbaa5ee`).
@@ -367,6 +370,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [JSON Render](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/json-render) | `/generative-ui/json-render` | 🚧 | Not yet run live in the browser; the agent returns a spec that passes `parseSpec`. Page prints 4 of 13 files, the rest from its showcase source (§9.22). |
 | [Hashbrown](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/hashbrown) | `/generative-ui/hashbrown` | 🚧 | Not yet run live in the browser; the agent returns a valid `ui` envelope. Page prints 3 of 11 files, the rest from its showcase source (§9.22). |
 | [MCP Apps](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/mcp-apps) | `/generative-ui/mcp-apps` | ⚠️ | Not yet run live. Code tab agent imports an unpublished helper → Quickstart adapter with its prompt; `./chat`, `createClaudeHttpAgent` stand-ins; Intelligence snippet (BuiltInAgent) shown only (§9.23). |
+| [Open Generative UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/open-generative-ui) | `/generative-ui/open-generative-ui` | ⚠️ | Not yet run live. Only prompt hints published → Quickstart adapter; `Chat` stand-in; design skill and suggestions commented out (§9.24). |
 | [Components and surfaces](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components) | `/generative-ui/components` | 🚧 | Not yet run live. Standard catalog + `render_ui`. Runtime is the doc's config pointed at the Python agents instead of its TanStack/OpenAI sample. |
 | [Surfaces](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/surfaces) | `/generative-ui/components/surfaces` | 🚧 | Not yet run live. `ProductRow`/`Product` and the product data are repo-supplied (the doc defines neither). |
 | [Catalogs](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/catalogs) | `/generative-ui/components/catalogs` | 🚧 | Not yet run live. Doc catalog type-checks as published. `cartUI`, `Hero`, `Panel` are repo-supplied. Valibot tab not implemented. |
@@ -593,6 +597,10 @@ Three things come along with the showcase files:
 
 [MCP Apps](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/mcp-apps)'s Code tab ships a Claude-specific `mcp_apps_agent.py`, but it is a raw Anthropic streaming loop that imports `normalize_claude_model` from `agents.claude_agent_sdk_adapter`, a module no page publishes. It is kept verbatim and unwired in `backend/src/agents/doc_reference/mcp_apps_agent.py`; the `mcp-apps` agent is the Quickstart `ClaudeAgentAdapter` with that module's `SYSTEM_PROMPT` and no tools. The Code tab's runtime imports `createClaudeHttpAgent` (unpublished; a plain `HttpAgent` stands in) and its page imports `./chat` (unpublished; a plain `CopilotChat` stands in). The runtime is a fixed single-route `route.ts` in the Code tab, which hits §9.19 with the page's relative `runtimeUrl`, so it sits at `[[...slug]]` here. The "MCP Apps with Intelligence" snippet builds a `BuiltInAgent` on an OpenAI model and is shown as text only.
 
+### 9.24 Open Generative UI publishes prompts but no agent
+
+[Open Generative UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/open-generative-ui)'s Code tab has two agent modules that each define only a `SYSTEM_PROMPT_HINT`; the agent they describe ("the shared Claude backend in `src/agents/agent.py`") is never shown. The hints run verbatim on the Quickstart adapter (`open-gen-ui`, `open-gen-ui-advanced`). The page's snippets also render an undefined `Chat` (plain `CopilotChat` stand-in), pass an undefined `VISUALIZATION_DESIGN_SKILL` and import an unpublished `./suggestions` (both commented out). The Code tab runtime's `createClaudeHttpAgent` and `internalRuntimeErrorResponse` are unpublished, and its single-route fixed path hits §9.19, so the route is a `[[...slug]]` catch-all with `HttpAgent`s.
+
 ---
 
 ## 10. Troubleshooting
@@ -771,6 +779,7 @@ Grouped as this repo's nav groups them. Pages marked ◦ resolve but are absent 
 - [JSON Render](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/json-render)
 - [Hashbrown](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/hashbrown)
 - [MCP Apps](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/mcp-apps)
+- [Open Generative UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/open-generative-ui)
 - [Components and surfaces](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components)
   - [Surfaces](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/surfaces)
   - [Catalogs](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/components/catalogs)

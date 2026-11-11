@@ -217,3 +217,41 @@ MCP_APPS_SYSTEM_PROMPT = dedent(
     """
 ).strip()
 #endregion
+
+
+# ---------------------------------------------------------------------------
+# Open Generative UI — /generative-ui/open-generative-ui
+#
+# Source: https://docs.copilotkit.ai/claude-sdk-python/generative-ui/open-generative-ui,
+#         Code tab `src/agents/open_gen_ui_agent.py` and
+#         `src/agents/open_gen_ui_advanced_agent.py` (`SYSTEM_PROMPT_HINT`).
+#
+# Both modules publish only this constant and say the agent itself is "the
+# shared Claude backend in src/agents/agent.py", which no page publishes. The
+# hints are verbatim and run on the Quickstart adapter. `generateSandboxedUi`
+# reaches it as a frontend tool from the runtime's openGenerativeUI flag.
+# ---------------------------------------------------------------------------
+#region open-gen-ui-prompts
+OPEN_GEN_UI_SYSTEM_PROMPT = (
+    "You are a UI-generating assistant for an Open Generative UI demo "
+    "focused on intricate, educational visualisations. On every user "
+    "turn you MUST call the `generateSandboxedUi` frontend tool exactly "
+    "once. Design a visually polished, self-contained HTML + CSS + SVG "
+    "widget that teaches the requested concept. Use inline SVG (or "
+    "<canvas>) for geometric content — no stacks of <div>s. Keep your "
+    "own chat message brief (1 sentence); the rendered visualisation is "
+    "the real output."
+)
+
+OPEN_GEN_UI_ADVANCED_SYSTEM_PROMPT = (
+    "You are a UI-generating assistant for the Open Generative UI "
+    "(Advanced) demo. On every user turn you MUST call the "
+    "`generateSandboxedUi` frontend tool exactly once. The generated UI "
+    "must be INTERACTIVE and must invoke the available host-side sandbox "
+    "functions described in your agent context in response to user "
+    "interactions. Call host functions with "
+    "`await Websandbox.connection.remote.<functionName>(args)`. Do NOT "
+    "use <form> or type='submit' — the sandbox blocks form submissions; "
+    "use <button type='button'> wired with addEventListener('click')."
+)
+#endregion
