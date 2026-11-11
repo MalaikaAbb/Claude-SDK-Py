@@ -21,8 +21,11 @@ import {
 import { AGENT_URL } from "@/lib/agents";
 
 // HARNESS: the Code tab builds each agent with `createClaudeHttpAgent` from
-// `@/app/api/_shared/claude-http-agent`, which is never published. A plain
-// `HttpAgent`, as on every other runtime route in this repo, stands in.
+// `@/app/api/_shared/claude-http-agent`, which is never published. This repo
+// reaches its Python agents with a plain `HttpAgent` on every runtime route,
+// so that is used here. Nothing is mounted at `${AGENT_URL}/mcp-apps`: the
+// Code tab's agent module cannot run (unpublished import) and is not
+// replaced, so runs on this route fail with a 404 from the agent server.
 // HARNESS: the Code tab also registers a `headless-complete` agent here for a
 // different cell. This repo has no `headless-complete` agent (README §8), so
 // that line is left out.

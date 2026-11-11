@@ -3,8 +3,8 @@
 # (src/agents/mcp_apps_agent.py). NOT IMPORTED: it imports
 # `agents.claude_agent_sdk_adapter.normalize_claude_model`, which no page
 # publishes, and runs its own raw Anthropic streaming loop rather than the
-# ClaudeAgentAdapter every other route uses. Its SYSTEM_PROMPT is reused by
-# the `mcp-apps` registry entry (see prompts.MCP_APPS_SYSTEM_PROMPT).
+# ClaudeAgentAdapter every other route uses. No `mcp-apps` agent is mounted:
+# the published agent cannot run, and it is not replaced (route is broken).
 
 """Claude Agent SDK (Python) backend for the CopilotKit MCP Apps demo.
 

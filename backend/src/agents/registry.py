@@ -201,15 +201,6 @@ REGISTRY: dict[str, RegisteredAgent] = {
         )
     },
 
-    # MCP Apps — the Code tab's prompt on the Quickstart adapter, not the Code
-    # tab's raw Anthropic loop (that module imports an unpublished helper; it
-    # sits unwired in doc_reference/mcp_apps_agent.py). The Excalidraw tools
-    # arrive per run from the runtime's MCP Apps middleware.
-    "mcp-apps": RegisteredAgent(
-        build_adapter("mcp-apps", prompts.MCP_APPS_SYSTEM_PROMPT),
-        "/claude-sdk-python/generative-ui/mcp-apps",
-    ),
-
     # Open Generative UI — the Code tab's two prompt hints on the Quickstart
     # adapter. The Code tab's agent ("the shared Claude backend in
     # src/agents/agent.py") is never published.

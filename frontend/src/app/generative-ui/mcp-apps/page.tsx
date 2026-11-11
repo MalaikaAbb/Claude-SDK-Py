@@ -73,19 +73,17 @@ export default function Page() {
     <>
       <RouteHeader path="/generative-ui/mcp-apps" />
 
-      <Callout tone="warn" title="Agent: the Quickstart adapter, not the Code tab's agent module">
+      <Callout tone="warn" title="Broken as published: the agent cannot run">
         <p className="leading-relaxed">
           The Code tab&apos;s <code>mcp_apps_agent.py</code> is a hand-written
           streaming loop over the raw Anthropic API, and it imports{" "}
           <code>normalize_claude_model</code> from an{" "}
           <code>agents.claude_agent_sdk_adapter</code> module that is never
-          published, so it cannot run here. It is kept verbatim and unwired in{" "}
-          <code>backend/src/agents/doc_reference/mcp_apps_agent.py</code>. The{" "}
-          <code>mcp-apps</code> agent is this repo&apos;s usual{" "}
-          <code>ClaudeAgentAdapter</code> with that module&apos;s{" "}
-          <code>SYSTEM_PROMPT</code>, verbatim, and no tools of its own: the
-          Excalidraw tools reach it per run from the runtime&apos;s middleware.
-          Not yet checked in a browser.
+          published. It is kept verbatim and unwired in{" "}
+          <code>backend/src/agents/doc_reference/mcp_apps_agent.py</code>, and
+          nothing is put in its place: no agent is mounted at{" "}
+          <code>/mcp-apps</code>, so the runtime&apos;s calls to it fail. The
+          runtime config and demo page are the Code tab&apos;s.
         </p>
       </Callout>
 
@@ -101,8 +99,8 @@ export default function Page() {
         <div className="mt-4">
           <TryIt
             prompts={["Draw a simple diagram: browser → Next.js runtime → Python agent → Claude."]}
-            expect="A tool call to Excalidraw's create_view, then an Excalidraw canvas inside the chat showing three or four boxes joined by arrows, then one sentence from the agent."
-            fail="A text description of a diagram with no canvas means the Excalidraw tools never reached the agent; an error banner means the runtime could not reach mcp.excalidraw.com or the Python server on :8000."
+            expect="As a report: an agent error in the chat (the runtime gets a 404 from the Python server, because no mcp-apps agent is mounted). As the page intends: an Excalidraw canvas in the chat, then one sentence."
+            fail="A working canvas would mean something mounted an mcp-apps agent, which this route deliberately does not."
           />
         </div>
       </Panel>
@@ -122,13 +120,7 @@ export default function Page() {
       </Panel>
 
       <Panel title="The agent">
-        <SourceCodeGroup
-          files={[
-            { file: "backend/src/agents/prompts.py", region: "mcp-apps-prompt" },
-            { file: "backend/src/agents/doc_reference/mcp_apps_agent.py" },
-          ]}
-          note="Top: the prompt the mcp-apps adapter runs on. Bottom: the Code tab's agent module, verbatim and unwired."
-        />
+        <SourceCode file="backend/src/agents/doc_reference/mcp_apps_agent.py" />
       </Panel>
 
       <Panel
@@ -147,8 +139,8 @@ export default function Page() {
           <li>
             · The Code tab&apos;s runtime builds agents with{" "}
             <code>createClaudeHttpAgent</code> from an unpublished{" "}
-            <code>@/app/api/_shared/claude-http-agent</code>; a plain{" "}
-            <code>HttpAgent</code> stands in. Its extra{" "}
+            <code>@/app/api/_shared/claude-http-agent</code>; this repo&apos;s
+            usual <code>HttpAgent</code> wiring is used. Its extra{" "}
             <code>headless-complete</code> agent is left out (no such agent
             here).
           </li>
@@ -166,7 +158,7 @@ export default function Page() {
             shown, not run. Its <code>mcpApps</code> block is the same as the
             one running above, apart from the <code>/mcp</code> URL suffix.
           </li>
-          <li>· <code>Chat</code> is a stand-in: a plain <code>CopilotChat</code>, as the page describes.</li>
+          <li>· <code>Chat</code> is rendered and never defined; a minimal labelled one (a plain <code>CopilotChat</code>, as the page describes) is added.</li>
         </ul>
       </Callout>
     </>

@@ -356,9 +356,9 @@ export const NAV: NavGroup[] = [
         docPath: "/claude-sdk-python/generative-ui/mcp-apps",
         summary:
           "An MCP server's tool UI (Excalidraw) rendered inline in the chat via the runtime's mcpApps middleware.",
-        status: "partial",
+        status: "broken",
         statusNote:
-          "Not yet checked in a browser. Runtime config and demo page verbatim from the Code tab; its agent module imports an unpublished helper, so the Quickstart adapter runs its prompt. Stand-ins for the unpublished ./chat and createClaudeHttpAgent; catch-all route per §9.19.",
+          "Runtime config and demo page verbatim from the Code tab. Its agent module imports an unpublished helper (normalize_claude_model), so it cannot run and no mcp-apps agent is mounted; runs fail. Minimal labelled Chat; HttpAgent in place of the unpublished createClaudeHttpAgent; catch-all route per §9.19.",
       },
       {
         path: "/generative-ui/open-generative-ui",
