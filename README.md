@@ -385,8 +385,8 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | [Multimodal Attachments](https://docs.copilotkit.ai/claude-sdk-python/multimodal-attachments) | `/multimodal-attachments` | ✅ | The one page with no backend half, correctly. |
 | [Voice](https://docs.copilotkit.ai/claude-sdk-python/voice) | `/voice` | ✅ | Mic needs `OPENAI_API_KEY`; sample-audio button works without it. |
 | [Reasoning](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/reasoning) | `/generative-ui/reasoning` | ✅ | `ReasoningBlock` is one of the few components published in full. |
-| [Components as Tools](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-based) | `/generative-ui/tool-based` | ✅ | Works because `useComponent` registers a *frontend* tool. |
-| [Tool Call Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-rendering) | `/generative-ui/tool-rendering` | ⚠️ | `get_weather` works via a repo-authored in-process MCP bridge (`weather_mcp_server.py`), not doc code — §9.1. |
+| [Components as Tools](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-based) | `/generative-ui/tool-based` | ✅ | Works because `useComponent` registers a *frontend* tool. Headless `CopilotChatToolCallsView` snippet is a fragment (`assistantMessage`, `allMessages` undefined); shown as text. |
+| [Tool Call Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-rendering) | `/generative-ui/tool-rendering` | ⚠️ | `get_weather` works via a repo-authored in-process MCP bridge (`weather_mcp_server.py`), not doc code — §9.1. Grouping snippets shown as text (`MyToolRow`, `ToolTimeline` undefined) — §9.24. |
 | [State Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/state-rendering) | `/generative-ui/state-rendering` | ❌ | Same cell and gap as State Streaming. |
 | [A2UI](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui) | `/generative-ui/a2ui` | 📖 | Overview. Snippets type-checked verbatim (`myCatalog`, `myAgent`, `children` undefined); Python helpers need the `copilotkit` package this backend lacks (§9.23). |
 | [A2UI · Dynamic Schema](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/a2ui/dynamic-schema) | `/generative-ui/a2ui/dynamic-schema` | ✅ | Catalog auto-injects `generate_a2ui` as a frontend tool. `renderers.tsx` has no imports, and its runtime route needs a catch-all segment — see §9. |
@@ -624,6 +624,13 @@ Three things come along with the showcase files:
 - **Lint.** `charts/pie-chart.tsx` fails this repo's lint in both demos (`react-hooks/immutability`: a running total is reassigned inside `.map`). It renders fine and `next build` does not lint, so it is left as published.
 - **Version drift.** The showcase pins `recharts` `^2.15`, and this app uses `^3.7`. The chart components type-check against 3.x.
 
+### 9.23 Components as Tools' headless snippet is a fragment
+
+[Components as Tools](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-based) now shows `<CopilotChatToolCallsView message={assistantMessage} messages={allMessages} />` for headless chats. Neither variable is defined on the page, so `/generative-ui/tool-based` shows it as text; its demo uses `CopilotChat`, which renders tool calls itself.
+
+### 9.24 Tool Call Rendering's grouping examples name undefined components
+
+[Tool Call Rendering](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-rendering)'s new "Grouping tool calls" section passes `MyToolRow` to `useDefaultRenderTool` and `ToolTimeline` to the `group` slot, and defines neither. The snippets are shown as text on `/generative-ui/tool-rendering`; the demo keeps the default grouped display.
 ### 9.23 `useFrontendTools` is published as a fragment
 
 [Frontend Tools](https://docs.copilotkit.ai/claude-sdk-python/frontend-tools) now documents the plural `useFrontendTools` hook with a snippet that maps over `reports` and calls `navigate`. The page defines neither, nor the component around them, so `/frontend-tools` shows the snippet as text and does not run it.
