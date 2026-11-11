@@ -198,6 +198,18 @@ export const NAV: NavGroup[] = [
         offNav: true,
       },
       {
+        path: "/custom-look-and-feel/markdown",
+        hasDemo: true,
+        agentId: "chat-slots",
+        title: "Markdown Rendering",
+        docPath: "/claude-sdk-python/custom-look-and-feel/markdown",
+        summary:
+          "The markdownRenderer slot in its three forms: a Streamdown components map, a class string, and a full replacement.",
+        status: "partial",
+        statusNote:
+          "Not yet checked in a browser. The my-link/my-heading CSS is harness-only (from google-adk) because the doc never defines those classes. Reuses the chat-slots agent because the page names no backend.",
+      },
+      {
         path: "/custom-look-and-feel/headless-ui",
         hasDemo: true,
         agentId: "headless-simple",
@@ -301,6 +313,16 @@ export const NAV: NavGroup[] = [
           "The useAgent subscription is live, but the doc's stream_document_state consumes a raw Anthropic stream this backend never produces.",
       },
       {
+        path: "/generative-ui/a2ui",
+        title: "A2UI",
+        docPath: "/claude-sdk-python/generative-ui/a2ui",
+        summary:
+          "The A2UI overview: three operations, two approaches, two ways to switch it on, and the surface color variables.",
+        status: "reference",
+        statusNote:
+          "Overview page. Its setup paths run on the Dynamic Schema (catalog on provider) and Fixed Schema (runtime a2ui block) routes; the snippets are type-checked verbatim (myCatalog, myAgent, children undefined), the Python helper snippet needs the copilotkit package this backend lacks, and the CSS variables are shown, not applied.",
+      },
+      {
         path: "/generative-ui/a2ui/dynamic-schema",
         hasDemo: true,
         agentId: "declarative-gen-ui",
@@ -347,6 +369,26 @@ export const NAV: NavGroup[] = [
         status: "not-started",
         statusNote:
           "Implemented from the doc; not yet run against the agent. The page prints 3 of its 11 files; the rest come from the showcase source its Code tab loads.",
+      },
+      {
+        path: "/generative-ui/mcp-apps",
+        title: "MCP Apps",
+        docPath: "/claude-sdk-python/generative-ui/mcp-apps",
+        summary:
+          "An MCP server's tool UI (Excalidraw) rendered inline in the chat via the runtime's mcpApps middleware.",
+        status: "broken",
+        statusNote:
+          "Reference only. The Code tab's agent, runtime and page are kept verbatim and not wired up: they import unpublished normalize_claude_model, createClaudeHttpAgent and ./chat. Nothing is written in their place.",
+      },
+      {
+        path: "/generative-ui/open-generative-ui",
+        title: "Open Generative UI",
+        docPath: "/claude-sdk-python/generative-ui/open-generative-ui",
+        summary:
+          "The agent writes sandboxed HTML/CSS/JS that streams into an iframe, optionally calling back into host functions.",
+        status: "broken",
+        statusNote:
+          "Reference only. No agent is published (two prompt hints only); the runtime imports unpublished helpers; the frontend snippets are fragments using an undefined Chat, VISUALIZATION_DESIGN_SKILL and ./suggestions. All kept as published, nothing written in their place.",
       },
       {
         path: "/generative-ui/components",
@@ -444,6 +486,16 @@ export const NAV: NavGroup[] = [
         statusNote:
           "Implemented from the doc; not yet run against the agent.",
       },
+      {
+        path: "/generative-ui/components/from-a2ui",
+        title: "Components · Adopt from A2UI",
+        docPath: "/claude-sdk-python/generative-ui/components/from-a2ui",
+        summary:
+          "The v0.9 a2ui renderer → A2UI 1.0 migration: the After catalog for the new engine, with the Before code shown.",
+        status: "broken",
+        statusNote:
+          "Reference only. The page publishes no agent or backend, and none was added. The After catalog is verbatim and type-checked, not mounted. Airport and Arrow are borrowed from aws-strands-py (the page never defines them).",
+      },
     ],
   },
   {
@@ -460,14 +512,61 @@ export const NAV: NavGroup[] = [
         status: "working",
       },
       {
+        path: "/webmcp",
+        hasDemo: true,
+        title: "WebMCP",
+        docPath: "/claude-sdk-python/webmcp",
+        summary:
+          "A frontend tool mirrored onto document.modelContext so WebMCP browser agents can call it, plus the core-only registration with no agent.",
+        status: "broken",
+        statusNote:
+          "Both snippets verbatim (route ported from aws-strands-py). Doc gap: searchOrders is called but never defined on the page, so the tool handler throws (no stub). The page prints no agent, so there is no chat; the tool only registers (WebMCP needs a browser exposing document.modelContext).",
+      },
+      {
         path: "/human-in-the-loop",
         hasDemo: true,
         agentId: "hitl-in-chat",
         title: "Human in the Loop",
-        docPath: "/claude-sdk-python/human-in-the-loop",
+        // The sidebar now links the overview as `/human-in-the-loop/index`;
+        // the bare URL still serves the same page.
+        docPath: "/claude-sdk-python/human-in-the-loop/index",
         summary:
           "useHumanInTheLoop suspending the run behind a time picker until the user answers.",
         status: "working",
+      },
+      {
+        path: "/human-in-the-loop/useInterrupt",
+        hasDemo: true,
+        agentId: "gen-ui-interrupt",
+        title: "Pausing the Agent for Input",
+        docPath: "/claude-sdk-python/human-in-the-loop/useInterrupt",
+        summary:
+          "A pause the agent cannot skip: the page's Promise-based frontend tool for this framework, plus the generic useInterrupt contract.",
+        status: "broken",
+        statusNote:
+          "The page's frontend snippet (a schedule_meeting useFrontendTool with a Promise handler) is missing from the rendered page, so its published prompt points at a tool that does not exist. Approve/Cancel useInterrupt example mounted verbatim; the adapter emits no interrupt without defer_tools, which the page never mentions.",
+      },
+      {
+        path: "/human-in-the-loop/headless",
+        title: "Headless Interrupts",
+        docPath: "/claude-sdk-python/human-in-the-loop/headless",
+        summary:
+          "Settling a pause from UI outside the chat, with a Promise-based frontend tool whose render returns null.",
+        status: "broken",
+        statusNote:
+          "Reference-only. The page's single snippet region is missing for this framework and no agent is published, so there is nothing to run.",
+      },
+      {
+        path: "/human-in-the-loop/governed-actions",
+        hasDemo: true,
+        agentId: "governed-actions",
+        title: "Governed Action Approval UI",
+        docPath: "/claude-sdk-python/human-in-the-loop/governed-actions",
+        summary:
+          "An approval card in front of a side effect, raised as a frontend tool (useHumanInTheLoop) or as an interrupt (useInterrupt).",
+        status: "partial",
+        statusNote:
+          "Not yet checked in a browser. Frontend code verbatim; no backend, policy engine or executeSideEffect is published, so the agent is the Quickstart adapter and verdicts are whatever Claude writes. The useInterrupt half never shows: nothing emits metadata.action.",
       },
       {
         path: "/programmatic-control",

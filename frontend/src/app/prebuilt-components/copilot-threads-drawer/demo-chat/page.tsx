@@ -5,6 +5,7 @@ import {
   CopilotChat,
   CopilotChatConfigurationProvider,
   CopilotThreadsDrawer,
+  useCopilotChatConfiguration,
 } from "@copilotkit/react-core/v2";
 
 import { DemoFrame } from "@/components/demo-frame";
@@ -34,9 +35,8 @@ const AGENT_ID = "threads";
  * two components.
  *
  * `CopilotKitProvider` is not repeated here; the app already mounts one at the
- * root. The doc nests them because its sample is a whole page, and its sample
- * also passes `publicLicenseKey` on that provider — this repo sets the licence
- * on the runtime instead, so the key never reaches the browser bundle.
+ * root. The doc nests them because its sample is a whole page. The licence is
+ * set on the runtime, which is where the page now says it belongs too.
  *
  * One departure, presentational only. The doc's wrapper is
  * `<div style={{ display: "flex", height: "100dvh" }}>` with the two components
@@ -64,13 +64,33 @@ export default function Page() {
           <AutoThreadName />
           <div style={{ display: "flex", height: "100%" }}>
             <CopilotThreadsDrawer />
-            <div style={{ flex: 1, minWidth: 0 }}>
+            {/* The page's "Add your own New conversation button" layout: a
+                header holding the button above the chat. `minWidth: 0` is
+                this repo's (see the note above). */}
+            <main style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+              <header>
+                <NewConversationButton />
+              </header>
               <CopilotChat />
-            </div>
+            </main>
           </div>
         </CopilotChatConfigurationProvider>
       </CopilotKit>
     </DemoFrame>
+  );
+}
+
+// From the page's "Add your own New conversation button" section, verbatim.
+function NewConversationButton() {
+  const configuration = useCopilotChatConfiguration();
+
+  return (
+    <button
+      type="button"
+      onClick={() => configuration?.startNewThread()}
+    >
+      New conversation
+    </button>
   );
 }
 
