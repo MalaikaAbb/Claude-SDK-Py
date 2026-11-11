@@ -198,6 +198,18 @@ export const NAV: NavGroup[] = [
         offNav: true,
       },
       {
+        path: "/custom-look-and-feel/markdown",
+        hasDemo: true,
+        agentId: "chat-slots",
+        title: "Markdown Rendering",
+        docPath: "/claude-sdk-python/custom-look-and-feel/markdown",
+        summary:
+          "The markdownRenderer slot in its three forms: a Streamdown components map, a class string, and a full replacement.",
+        status: "partial",
+        statusNote:
+          "Not yet checked in a browser. The my-link/my-heading CSS is harness-only (from google-adk) because the doc never defines those classes. Reuses the chat-slots agent because the page names no backend.",
+      },
+      {
         path: "/custom-look-and-feel/headless-ui",
         hasDemo: true,
         agentId: "headless-simple",
@@ -301,6 +313,16 @@ export const NAV: NavGroup[] = [
           "The useAgent subscription is live, but the doc's stream_document_state consumes a raw Anthropic stream this backend never produces.",
       },
       {
+        path: "/generative-ui/a2ui",
+        title: "A2UI",
+        docPath: "/claude-sdk-python/generative-ui/a2ui",
+        summary:
+          "The A2UI overview: three operations, two approaches, two ways to switch it on, and the surface color variables.",
+        status: "reference",
+        statusNote:
+          "Overview page. Its setup paths run on the Dynamic Schema (catalog on provider) and Fixed Schema (runtime a2ui block) routes; the snippets are type-checked verbatim (myCatalog, myAgent, children undefined), the Python helper snippet needs the copilotkit package this backend lacks, and the CSS variables are shown, not applied.",
+      },
+      {
         path: "/generative-ui/a2ui/dynamic-schema",
         hasDemo: true,
         agentId: "declarative-gen-ui",
@@ -347,6 +369,26 @@ export const NAV: NavGroup[] = [
         status: "not-started",
         statusNote:
           "Implemented from the doc; not yet run against the agent. The page prints 3 of its 11 files; the rest come from the showcase source its Code tab loads.",
+      },
+      {
+        path: "/generative-ui/mcp-apps",
+        title: "MCP Apps",
+        docPath: "/claude-sdk-python/generative-ui/mcp-apps",
+        summary:
+          "An MCP server's tool UI (Excalidraw) rendered inline in the chat via the runtime's mcpApps middleware.",
+        status: "broken",
+        statusNote:
+          "Reference only. The Code tab's agent, runtime and page are kept verbatim and not wired up: they import unpublished normalize_claude_model, createClaudeHttpAgent and ./chat. Nothing is written in their place.",
+      },
+      {
+        path: "/generative-ui/open-generative-ui",
+        title: "Open Generative UI",
+        docPath: "/claude-sdk-python/generative-ui/open-generative-ui",
+        summary:
+          "The agent writes sandboxed HTML/CSS/JS that streams into an iframe, optionally calling back into host functions.",
+        status: "broken",
+        statusNote:
+          "Reference only. No agent is published (two prompt hints only); the runtime imports unpublished helpers; the frontend snippets are fragments using an undefined Chat, VISUALIZATION_DESIGN_SKILL and ./suggestions. All kept as published, nothing written in their place.",
       },
       {
         path: "/generative-ui/components",
@@ -443,6 +485,16 @@ export const NAV: NavGroup[] = [
         status: "not-started",
         statusNote:
           "Implemented from the doc; not yet run against the agent.",
+      },
+      {
+        path: "/generative-ui/components/from-a2ui",
+        title: "Components · Adopt from A2UI",
+        docPath: "/claude-sdk-python/generative-ui/components/from-a2ui",
+        summary:
+          "The v0.9 a2ui renderer → A2UI 1.0 migration: the After catalog for the new engine, with the Before code shown.",
+        status: "broken",
+        statusNote:
+          "Reference only. The page publishes no agent or backend, and none was added. The After catalog is verbatim and type-checked, not mounted. Airport and Arrow are borrowed from aws-strands-py (the page never defines them).",
       },
     ],
   },
