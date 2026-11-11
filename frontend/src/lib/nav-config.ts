@@ -472,6 +472,18 @@ export const NAV: NavGroup[] = [
         status: "working",
       },
       {
+        path: "/human-in-the-loop/useInterrupt",
+        hasDemo: true,
+        agentId: "gen-ui-interrupt",
+        title: "Pausing the Agent for Input",
+        docPath: "/claude-sdk-python/human-in-the-loop/useInterrupt",
+        summary:
+          "A pause the agent cannot skip: the page's Promise-based frontend tool for this framework, plus the generic useInterrupt contract.",
+        status: "broken",
+        statusNote:
+          "The page's frontend snippet (a schedule_meeting useFrontendTool with a Promise handler) is missing from the rendered page, so its published prompt points at a tool that does not exist. Approve/Cancel useInterrupt example mounted verbatim; the adapter emits no interrupt without defer_tools, which the page never mentions.",
+      },
+      {
         path: "/programmatic-control",
         hasDemo: true,
         agentId: "programmatic-control",

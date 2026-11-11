@@ -211,6 +211,13 @@ REGISTRY: dict[str, RegisteredAgent] = {
         build_adapter("hitl-in-chat", prompts.FRONTEND_TOOL_SYSTEM_PROMPT),
         "/claude-sdk-python/human-in-the-loop",
     ),
+    # Pausing the Agent for Input — the page's published interrupt_agent
+    # prompt on the Quickstart adapter. Its `schedule_meeting` frontend tool
+    # is not printed on the page, so nothing registers it.
+    "gen-ui-interrupt": RegisteredAgent(
+        build_adapter("gen-ui-interrupt", prompts.INTERRUPT_SYSTEM_PROMPT),
+        "/claude-sdk-python/human-in-the-loop/useInterrupt",
+    ),
     "programmatic-control": _plain(
         "programmatic-control", "/claude-sdk-python/programmatic-control"
     ),
