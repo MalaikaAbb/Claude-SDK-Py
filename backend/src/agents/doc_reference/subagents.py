@@ -27,7 +27,7 @@ import anthropic
 
 from agents.claude_agent_sdk_adapter import normalize_claude_model  # not published
 
-DEFAULT_ANTHROPIC_MODEL = "claude-sonnet-4-6"
+DEFAULT_ANTHROPIC_MODEL = "claude-opus-4-8"
 
 
 # Each sub-agent is defined by its own system prompt; `_invoke_sub_agent`
