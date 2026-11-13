@@ -1,7 +1,7 @@
 {
   "schema": 1,
   "docsRoot": "https://docs.copilotkit.ai/claude-sdk-python",
-  "syncedAt": "2026-11-11T14:08:05.698Z",
+  "syncedAt": "2026-11-13T11:08:52.380Z",
   "pages": {
     "/claude-sdk-python": {
       "file": "claude-sdk-python.md",
@@ -14,7 +14,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:06 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/agent-config": {
       "file": "claude-sdk-python__agent-config.md",
@@ -26,7 +26,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:06 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/custom-look-and-feel/css": {
       "file": "claude-sdk-python__custom-look-and-feel__css.md",
@@ -38,7 +38,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:06 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:52 GMT"
     },
     "/claude-sdk-python/custom-look-and-feel/headless-ui": {
       "file": "claude-sdk-python__custom-look-and-feel__headless-ui.md",
@@ -50,7 +50,19 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:06 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
+    },
+    "/claude-sdk-python/custom-look-and-feel/markdown": {
+      "file": "claude-sdk-python__custom-look-and-feel__markdown.md",
+      "sha256": "cf34528c5da98c93fb8f540a242a0ed3214c33f93173bbad1b464609da7aa821",
+      "bytes": 5850,
+      "lines": 159,
+      "routes": [
+        "/custom-look-and-feel/markdown"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/custom-look-and-feel/reasoning-messages": {
       "file": "claude-sdk-python__custom-look-and-feel__reasoning-messages.md",
@@ -62,7 +74,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:06 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/custom-look-and-feel/slots": {
       "file": "claude-sdk-python__custom-look-and-feel__slots.md",
@@ -74,7 +86,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:06 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/frontend-tools": {
       "file": "claude-sdk-python__frontend-tools.md",
@@ -86,127 +98,151 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
+    },
+    "/claude-sdk-python/generative-ui/a2ui": {
+      "file": "claude-sdk-python__generative-ui__a2ui.md",
+      "sha256": "a45f94d6e7578dbba782b74c2d6958e606eecedd45184e14d62ce5940967820c",
+      "bytes": 6209,
+      "lines": 166,
+      "routes": [
+        "/generative-ui/a2ui"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/generative-ui/a2ui/dynamic-schema": {
       "file": "claude-sdk-python__generative-ui__a2ui__dynamic-schema.md",
-      "sha256": "f8d4dbdaadbd448efd886b58b207d255e101a9a8cf01aad8792fb8a3462aa831",
-      "bytes": 19696,
+      "sha256": "2aab9e22474d347ca1a615ea38adf817b231338169ac5be4d74d6245fc7ac8b2",
+      "bytes": 19737,
       "lines": 574,
       "routes": [
         "/generative-ui/a2ui/dynamic-schema"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/generative-ui/a2ui/fixed-schema": {
       "file": "claude-sdk-python__generative-ui__a2ui__fixed-schema.md",
-      "sha256": "e9b64c915b91a47f1c177c8c000b7077092876e77324ee9c3f67a6fe828f8017",
-      "bytes": 19606,
+      "sha256": "d4ef367b81934340f3b57e3d63b6d675dd95597d8e7c1dc70e7378344d4b7e84",
+      "bytes": 19780,
       "lines": 566,
       "routes": [
         "/generative-ui/a2ui/fixed-schema"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/generative-ui/components": {
       "file": "claude-sdk-python__generative-ui__components.md",
-      "sha256": "7a75305fe0d8a27827b14628319eb7c2dc5163c0732f0b1f0505d28ccafcef42",
-      "bytes": 12289,
-      "lines": 301,
+      "sha256": "ce415cfa248a9e7fcf2b7eea1fdd249b367ccce4e300976899524540cfe6a15f",
+      "bytes": 33645,
+      "lines": 795,
       "routes": [
         "/generative-ui/components"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/generative-ui/components/catalogs": {
       "file": "claude-sdk-python__generative-ui__components__catalogs.md",
-      "sha256": "1b173d79ee40a66a52620cb1a4b3a1bb5a2cc1711c1071377410212564f5f759",
-      "bytes": 13645,
-      "lines": 304,
+      "sha256": "f41da6016ad36ac2e5c325ddb9c27d0c449e2741458921432090be4aea8df970",
+      "bytes": 23839,
+      "lines": 520,
       "routes": [
         "/generative-ui/components/catalogs"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
+    },
+    "/claude-sdk-python/generative-ui/components/from-a2ui": {
+      "file": "claude-sdk-python__generative-ui__components__from-a2ui.md",
+      "sha256": "0ddc6c0f5d142f2fec18b6036ee7e6171843a386b3d97110a090048f05e37313",
+      "bytes": 16720,
+      "lines": 279,
+      "routes": [
+        "/generative-ui/components/from-a2ui"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/generative-ui/components/markdown-mode": {
       "file": "claude-sdk-python__generative-ui__components__markdown-mode.md",
-      "sha256": "0c3f8c9c80a2d14004c214c158eee81b8539cd24191a85efd0a0eb7ae3f31b29",
-      "bytes": 7445,
-      "lines": 160,
+      "sha256": "37189966dca4a2d83c64ced05fec7b5ce64825ac3aaf43cc9af892b63ba7cd6d",
+      "bytes": 8756,
+      "lines": 188,
       "routes": [
         "/generative-ui/components/markdown-mode"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/generative-ui/components/standard-catalog": {
       "file": "claude-sdk-python__generative-ui__components__standard-catalog.md",
-      "sha256": "d8a816812e5bfabcd8ca3c2390a677eaa8c3634059f5aed001692881621c42a4",
-      "bytes": 13914,
-      "lines": 181,
+      "sha256": "949167f65c1a3f40cdb20e6785e0678f679f7d53981b0347a138f70bdfea423d",
+      "bytes": 16193,
+      "lines": 238,
       "routes": [
         "/generative-ui/components/standard-catalog"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/generative-ui/components/state-and-actions": {
       "file": "claude-sdk-python__generative-ui__components__state-and-actions.md",
-      "sha256": "58cd01d15c0c6bed1b7f35a39fea1421da930682ddea5460d567c275c1f88cd4",
-      "bytes": 13961,
-      "lines": 333,
+      "sha256": "e5e862366caa0d49bd7ac316c4ee0a4927c45cf57a9f9f92c293ae897f50f79c",
+      "bytes": 23526,
+      "lines": 556,
       "routes": [
         "/generative-ui/components/state-and-actions"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/generative-ui/components/surfaces": {
       "file": "claude-sdk-python__generative-ui__components__surfaces.md",
-      "sha256": "5e04b841cb2deba5ad060560372c7d0e101415200ae9926f8dca7005a7a497c5",
-      "bytes": 8464,
-      "lines": 210,
+      "sha256": "7ec93ea8b7b2688508ad577902fdf72df1d197e463aa860a4bfdb43118ccea75",
+      "bytes": 21284,
+      "lines": 427,
       "routes": [
         "/generative-ui/components/surfaces"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/generative-ui/components/theming": {
       "file": "claude-sdk-python__generative-ui__components__theming.md",
-      "sha256": "9fd29e6c376088733371c5862401ba5faf8ed042dfd2ae15d2f70d844d316153",
-      "bytes": 4995,
-      "lines": 156,
+      "sha256": "c89f301eefd9d4de9a18836d6b08abab4a35a7691e19bee05008d2ff531434c9",
+      "bytes": 6809,
+      "lines": 203,
       "routes": [
         "/generative-ui/components/theming"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/generative-ui/components/transports": {
       "file": "claude-sdk-python__generative-ui__components__transports.md",
-      "sha256": "639fc95b7e21c59df915a5e498720ece5f80fcc07315b75b9d8442fda98cd152",
-      "bytes": 3948,
-      "lines": 106,
+      "sha256": "5d522e90812eb0052fd84767520c8ba12d6c85b504d231a4c11c05027144a720",
+      "bytes": 5165,
+      "lines": 139,
       "routes": [
         "/generative-ui/components/transports"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:53 GMT"
     },
     "/claude-sdk-python/generative-ui/hashbrown": {
       "file": "claude-sdk-python__generative-ui__hashbrown.md",
@@ -218,7 +254,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
     },
     "/claude-sdk-python/generative-ui/json-render": {
       "file": "claude-sdk-python__generative-ui__json-render.md",
@@ -230,19 +266,43 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
+    },
+    "/claude-sdk-python/generative-ui/mcp-apps": {
+      "file": "claude-sdk-python__generative-ui__mcp-apps.md",
+      "sha256": "d1fe397195f5b18855651afa8b161b34ac70d09b5a794d8c8002a9809b6e3647",
+      "bytes": 8440,
+      "lines": 235,
+      "routes": [
+        "/generative-ui/mcp-apps"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
+    },
+    "/claude-sdk-python/generative-ui/open-generative-ui": {
+      "file": "claude-sdk-python__generative-ui__open-generative-ui.md",
+      "sha256": "401178075db2ab875eb5992a6f40bb1838e73903166b97f12444e49340d5cab2",
+      "bytes": 11789,
+      "lines": 298,
+      "routes": [
+        "/generative-ui/open-generative-ui"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
     },
     "/claude-sdk-python/generative-ui/reasoning": {
       "file": "claude-sdk-python__generative-ui__reasoning.md",
-      "sha256": "ec267500ed7296682ba35af3cd436815faf742cb6df48c6c472d76d1d2359c5d",
-      "bytes": 5646,
+      "sha256": "92457cd81ee6cb58e275e007c76ae1aa20dfb7407ab95c9f3db3df7cb170f3ab",
+      "bytes": 5780,
       "lines": 180,
       "routes": [
         "/generative-ui/reasoning"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
     },
     "/claude-sdk-python/generative-ui/state-rendering": {
       "file": "claude-sdk-python__generative-ui__state-rendering.md",
@@ -254,7 +314,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
     },
     "/claude-sdk-python/generative-ui/tool-based": {
       "file": "claude-sdk-python__generative-ui__tool-based.md",
@@ -266,7 +326,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
     },
     "/claude-sdk-python/generative-ui/tool-rendering": {
       "file": "claude-sdk-python__generative-ui__tool-rendering.md",
@@ -278,7 +338,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
     },
     "/claude-sdk-python/headless-threads": {
       "file": "claude-sdk-python__headless-threads.md",
@@ -290,10 +350,34 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:07 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
     },
-    "/claude-sdk-python/human-in-the-loop": {
-      "file": "claude-sdk-python__human-in-the-loop.md",
+    "/claude-sdk-python/human-in-the-loop/governed-actions": {
+      "file": "claude-sdk-python__human-in-the-loop__governed-actions.md",
+      "sha256": "c3ffbf2aa5a8b697765c47f5668c9ac1f3608ae778728bb504b77c18a995214b",
+      "bytes": 7168,
+      "lines": 256,
+      "routes": [
+        "/human-in-the-loop/governed-actions"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
+    },
+    "/claude-sdk-python/human-in-the-loop/headless": {
+      "file": "claude-sdk-python__human-in-the-loop__headless.md",
+      "sha256": "a60e6e6960a180b8aca4a8872bb386e6fc58d65f1b22b7e93acce8d93ed09eab",
+      "bytes": 2902,
+      "lines": 84,
+      "routes": [
+        "/human-in-the-loop/headless"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
+    },
+    "/claude-sdk-python/human-in-the-loop/index": {
+      "file": "claude-sdk-python__human-in-the-loop__index.md",
       "sha256": "ef06b90b75e9cfa506c40525be87a1a15df9ba4f1041840c4c16dbdc6abafdde",
       "bytes": 9050,
       "lines": 297,
@@ -302,19 +386,31 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:08 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
+    },
+    "/claude-sdk-python/human-in-the-loop/useInterrupt": {
+      "file": "claude-sdk-python__human-in-the-loop__useInterrupt.md",
+      "sha256": "138ec3dbe2031f94836b6c66c24d2716def1005015195d2f2941a5fb81f1b1a5",
+      "bytes": 7387,
+      "lines": 198,
+      "routes": [
+        "/human-in-the-loop/useInterrupt"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
     },
     "/claude-sdk-python/multi-agent/subagents": {
       "file": "claude-sdk-python__multi-agent__subagents.md",
-      "sha256": "59c2a8cc8a667bcbb363749e97ecf867d63a7decac09e9d384f88978d4979fd8",
-      "bytes": 15702,
-      "lines": 438,
+      "sha256": "e1119ff2f38ea205aea62a94131a696aeef7110aacd9a5330613a8153ce9e9b0",
+      "bytes": 16139,
+      "lines": 440,
       "routes": [
         "/multi-agent/subagents"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:08 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
     },
     "/claude-sdk-python/multimodal-attachments": {
       "file": "claude-sdk-python__multimodal-attachments.md",
@@ -326,7 +422,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:08 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
     },
     "/claude-sdk-python/prebuilt-components/chat": {
       "file": "claude-sdk-python__prebuilt-components__chat.md",
@@ -338,7 +434,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:08 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
     },
     "/claude-sdk-python/prebuilt-components/chat-controls": {
       "file": "claude-sdk-python__prebuilt-components__chat-controls.md",
@@ -350,7 +446,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:08 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
     },
     "/claude-sdk-python/prebuilt-components/copilot-threads-drawer": {
       "file": "claude-sdk-python__prebuilt-components__copilot-threads-drawer.md",
@@ -362,7 +458,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:08 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:54 GMT"
     },
     "/claude-sdk-python/prebuilt-components/popup": {
       "file": "claude-sdk-python__prebuilt-components__popup.md",
@@ -374,7 +470,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:10 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:55 GMT"
     },
     "/claude-sdk-python/prebuilt-components/sidebar": {
       "file": "claude-sdk-python__prebuilt-components__sidebar.md",
@@ -386,7 +482,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:08 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:55 GMT"
     },
     "/claude-sdk-python/programmatic-control": {
       "file": "claude-sdk-python__programmatic-control.md",
@@ -398,7 +494,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:08 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:55 GMT"
     },
     "/claude-sdk-python/quickstart": {
       "file": "claude-sdk-python__quickstart.md",
@@ -410,19 +506,19 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:08 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:55 GMT"
     },
     "/claude-sdk-python/shared-state": {
       "file": "claude-sdk-python__shared-state.md",
-      "sha256": "6f378f105034632dc3a1aea102f02d0b5db60b1e4b02e3e60fe938ef0776b51f",
-      "bytes": 16861,
+      "sha256": "3783c3bc5ee53854703fda7b61ec30f3269f45d0a959c6244602fd8e800070cf",
+      "bytes": 17023,
       "lines": 501,
       "routes": [
         "/shared-state"
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:08 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:55 GMT"
     },
     "/claude-sdk-python/shared-state/agent-readonly": {
       "file": "claude-sdk-python__shared-state__agent-readonly.md",
@@ -434,7 +530,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:09 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:55 GMT"
     },
     "/claude-sdk-python/shared-state/rendering-in-app": {
       "file": "claude-sdk-python__shared-state__rendering-in-app.md",
@@ -446,7 +542,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:09 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:55 GMT"
     },
     "/claude-sdk-python/shared-state/streaming": {
       "file": "claude-sdk-python__shared-state__streaming.md",
@@ -458,7 +554,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:09 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:55 GMT"
     },
     "/claude-sdk-python/threads-lifecycle": {
       "file": "claude-sdk-python__threads-lifecycle.md",
@@ -470,7 +566,7 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:09 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:55 GMT"
     },
     "/claude-sdk-python/voice": {
       "file": "claude-sdk-python__voice.md",
@@ -482,11 +578,23 @@
       ],
       "status": "ok",
       "age": 0,
-      "date": "Wed, 11 Nov 2026 14:08:09 GMT"
+      "date": "Fri, 13 Nov 2026 11:08:55 GMT"
+    },
+    "/claude-sdk-python/webmcp": {
+      "file": "claude-sdk-python__webmcp.md",
+      "sha256": "7e4d4f50b04ecd13a6e77cbc18d3ab927d688171d6838158ab0781a4973797f2",
+      "bytes": 7496,
+      "lines": 165,
+      "routes": [
+        "/webmcp"
+      ],
+      "status": "ok",
+      "age": 0,
+      "date": "Fri, 13 Nov 2026 11:08:55 GMT"
     }
   },
   "sitemap": {
-    "fetchedAt": "2026-11-11T14:08:05.698Z",
+    "fetchedAt": "2026-11-13T11:08:52.380Z",
     "urlsUnderRoot": 162,
     "knownUnmapped": [
       "https://docs.copilotkit.ai/claude-sdk-python/AG-UI-Streams",
@@ -527,6 +635,7 @@
       "https://docs.copilotkit.ai/claude-sdk-python/cookbook/arcade",
       "https://docs.copilotkit.ai/claude-sdk-python/cookbook/claude-managed-agents",
       "https://docs.copilotkit.ai/claude-sdk-python/cookbook/daytona",
+      "https://docs.copilotkit.ai/claude-sdk-python/cookbook/google-antigravity",
       "https://docs.copilotkit.ai/claude-sdk-python/cookbook/jev-generative-ui",
       "https://docs.copilotkit.ai/claude-sdk-python/cookbook/manufact",
       "https://docs.copilotkit.ai/claude-sdk-python/cookbook/openbox-governed-copilotkit",
@@ -551,6 +660,7 @@
       "https://docs.copilotkit.ai/claude-sdk-python/generative-ui/open-json-ui",
       "https://docs.copilotkit.ai/claude-sdk-python/headless",
       "https://docs.copilotkit.ai/claude-sdk-python/headless-threads",
+      "https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop",
       "https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/governed-actions",
       "https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/headless",
       "https://docs.copilotkit.ai/claude-sdk-python/human-in-the-loop/useInterrupt",

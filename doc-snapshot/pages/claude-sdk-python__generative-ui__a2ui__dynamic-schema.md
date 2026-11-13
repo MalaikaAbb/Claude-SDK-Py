@@ -180,9 +180,9 @@ export const myRenderers: CatalogRenderers<MyDefinitions> = {
     const arrow = trend === "up" ? "↑" : trend === "down" ? "↓" : "";
     const trendClass =
       trend === "up"
-        ? "text-emerald-600"
+        ? "text-emerald-600 dark:text-emerald-400"
         : trend === "down"
-          ? "text-rose-600"
+          ? "text-rose-600 dark:text-rose-400"
           : "text-[var(--foreground)]";
     return (
       // `flex-1 min-w-[120px]` lets a row of Metrics distribute evenly
