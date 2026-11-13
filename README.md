@@ -6,7 +6,7 @@ A navigable, working test harness for the CopilotKit ↔ Claude Agent SDK (Pytho
 |---|---|
 | **Doc sync date** | Machine-maintained — `doc-snapshot/manifest.json` → `syncedAt`, rewritten on every sync |
 | **Doc root tracked** | <https://docs.copilotkit.ai/claude-sdk-python> |
-| **Frontend packages** | `@copilotkit/react-core` `@copilotkit/runtime` `@copilotkit/a2ui-renderer` `@copilotkit/voice` `^1.69.0` · `maplibre-gl` `^5` (§9.20) · `@json-render/*` `0.18.0` + `zod4` · `@hashbrownai/*` `0.5.0-beta.4` · `@ag-ui/client` `@ag-ui/core` `^0.0.57` · Next `16.3.0` · React `19.2.8` |
+| **Frontend packages** | `@copilotkit/react-core` `@copilotkit/runtime` `@copilotkit/a2ui-renderer` `@copilotkit/voice` `^1.69.0` · `maplibre-gl` `^5` (§9.20) · `@json-render/*` `0.18.0` + `zod4` · `@hashbrownai/*` `0.5.0-beta.4` · `@ag-ui/client` `@ag-ui/core` `1.0.2` (exact, plus npm `overrides`; §9.23) · Next `16.3.0` · React `19.2.8` |
 | **Backend packages** | `ag-ui-claude-sdk>=0.1.5` · `claude-agent-sdk>=0.2.132` · `ag-ui-protocol>=0.1.19` · `anthropic>=0.68.0` |
 | **Routes** | 41 total — 18 ✅ working · 5 ⚠️ partial · 6 ❌ broken · 2 reference · 10 🚧 not yet run live |
 | **CI** | none |
@@ -369,7 +369,7 @@ Legend: ✅ Working · ⚠️ Partial · ❌ Broken · 📖 Reference · 🚧 Im
 | Doc page | Route | Status | Notes |
 |---|---|---|---|
 | [Introduction](https://docs.copilotkit.ai/claude-sdk-python) | `/` | 📖 | Landing page — orientation and the agent roster. |
-| [Quickstart](https://docs.copilotkit.ai/claude-sdk-python/quickstart?agent=bring-your-own) | `/quickstart` | ✅ | Page now pins `@ag-ui/client@1.0.2`; `package.json` still `^1.0.3` (§9.23). |
+| [Quickstart](https://docs.copilotkit.ai/claude-sdk-python/quickstart?agent=bring-your-own) | `/quickstart` | ✅ | Page pins `@ag-ui/client@1.0.2`; `package.json` now matches, with `overrides` (§9.23). |
 | [CopilotChat](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/chat) | `/prebuilt-components/chat` | ✅ | Page resolves but is absent from the doc sidebar. |
 | [CopilotSidebar](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/sidebar) | `/prebuilt-components/sidebar` | ✅ | Off-sidebar. `MainContent`/`Suggestions` supplied locally. |
 | [CopilotPopup](https://docs.copilotkit.ai/claude-sdk-python/prebuilt-components/popup) | `/prebuilt-components/popup` | ✅ | Off-sidebar. |
@@ -624,9 +624,10 @@ Three things come along with the showcase files:
 - **Lint.** `charts/pie-chart.tsx` fails this repo's lint in both demos (`react-hooks/immutability`: a running total is reassigned inside `.map`). It renders fine and `next build` does not lint, so it is left as published.
 - **Version drift.** The showcase pins `recharts` `^2.15`, and this app uses `^3.7`. The chart components type-check against 3.x.
 
-### 9.23 The Quickstart pins `@ag-ui/client@1.0.2`; this repo asks for `^1.0.3`
+### 9.23 The Quickstart pins `@ag-ui/client@1.0.2` (resolved)
 
-The [Quickstart](https://docs.copilotkit.ai/claude-sdk-python/quickstart) install line is now `npm install @copilotkit/runtime @copilotkit/react-core @ag-ui/client@1.0.2`. 1.0.2 is the exact version `@copilotkit/react-core` and `@copilotkit/runtime` 1.83.0 depend on. `frontend/package.json` declares `@ag-ui/client` and `@ag-ui/core` as `^1.0.3`, so `package-lock.json` holds a root 1.0.3 plus nested 1.0.2 copies under each `@copilotkit/*` package. That is the duplicate-copy setup that can break `AbstractAgent` types. The pin was not changed in the doc sync because it needs a reinstall; aligning it to the page means setting both to `1.0.2` and reinstalling.
+The [Quickstart](https://docs.copilotkit.ai/claude-sdk-python/quickstart) install line is `npm install @copilotkit/runtime @copilotkit/react-core @ag-ui/client@1.0.2`. 1.0.2 is the exact version `@copilotkit/react-core` and `@copilotkit/runtime` 1.83.0 depend on. `frontend/package.json` used to declare `@ag-ui/client` and `@ag-ui/core` as `^1.0.3`, which installed a root 1.0.3 next to nested 1.0.2 copies, and `tsc` failed in every runtime route with "Types have separate declarations of a private property '_debug'" (`HttpAgent` not assignable to `AbstractAgent`). Both are now pinned to exactly `1.0.2`, and an `overrides` block forces `@ag-ui/client`, `core`, `encoder` and `proto` to 1.0.2 so only one copy is installed. On every CopilotKit bump, set these to whatever `node_modules/@copilotkit/react-core/package.json` pins. (`@hashbrownai/*` 0.5.0-beta.4 has no `@ag-ui` dependency, so it needs no nested override.)
+
 ### 9.23 Components as Tools' headless snippet is a fragment
 
 [Components as Tools](https://docs.copilotkit.ai/claude-sdk-python/generative-ui/tool-based) now shows `<CopilotChatToolCallsView message={assistantMessage} messages={allMessages} />` for headless chats. Neither variable is defined on the page, so `/generative-ui/tool-based` shows it as text; its demo uses `CopilotChat`, which renders tool calls itself.
